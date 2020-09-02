@@ -66,7 +66,7 @@ public class ImageUtil {
 			return baos.toByteArray();
 		} catch (Exception e) {
 			e.printStackTrace();
-			return srcImageData;
+			return srcImage;
 		}
 	}
 }
