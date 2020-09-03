@@ -12,7 +12,7 @@ import web.com.bean.Member;
 */
 
 public interface MemberDao {
-		int insert(Member member ,byte[] photo , byte[] backgroundImage) ;
+		int insert(Member member ) ;
 		
 		int update(Member member ,byte[] photo , byte[] backgroundImage) ;
 		

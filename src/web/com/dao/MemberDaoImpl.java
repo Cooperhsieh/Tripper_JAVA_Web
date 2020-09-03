@@ -26,21 +26,20 @@ public class MemberDaoImpl implements MemberDao{
 	}
 
 	@Override
-	public int insert(Member member, byte[] photo, byte[] backgroundImage) {
+	public int insert(Member member) {
 		int count = 0;
-		String sql = "INSERT INTO Member"+"(MEMBER_ID,ACCOUNT_ID,PASSWORD,EMAIL,NICKNAME,LOGIN_TYPE,P_PIC,B_PIC,TOKEN_ID,C_DATETIME,L_DATETIME)"
-		+"VALUES(?,?,?,?,?,?,?,?,?);";
+		String sql = "INSERT INTO Member"+"(MEMBER_ID,ACCOUNT_ID,PASSWORD,NICKNAME)"
+		+"VALUES(?,?,?,?);";
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql)) {
 			ps.setInt(1,member.getId());
 			ps.setString(2,member.getAccount());
 			ps.setString(3,member.getPassword());
-			ps.setString(4,member.getMail());
-			ps.setString(5,member.getNickName());
-			ps.setInt(6,member.getLoginType());
-			ps.setBytes(7, photo);
-			ps.setBytes(8, backgroundImage);
-			ps.setString(9, member.getToken());
+			ps.setString(4,member.getNickName());
+//			ps.setInt(6,member.getLoginType());
+//			ps.setBytes(7, photo);
+//			ps.setBytes(8, backgroundImage);
+//			ps.setString(9, member.getToken());
 			
 			count = ps.executeUpdate();
 
