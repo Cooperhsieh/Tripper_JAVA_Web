@@ -78,7 +78,7 @@ public class LocationImpl implements LocationDao{
 					"ADDRESS    = ?, " +
 					"LOC_TYPE   = ?, " +
 					"CITY       = ?, " +
-					"INFO       = ?, " + //5
+					"INFO       = ?, " + // 5
 					"LONGITUDE  = ?, " +
 					"LATITUDE   = ?, " +
 					"M_USER_ID  = ?, " + 
