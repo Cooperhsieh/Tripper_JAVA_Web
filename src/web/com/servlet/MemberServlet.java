@@ -8,16 +8,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class test
- */
-@WebServlet("/test")
-public class test extends HttpServlet {
+* 類別說明：會員Servlet
+* @author zhitin 
+* @version 建立時間:Sep 3, 2020 
+* 
+*/
+@WebServlet("/MemberServlet")
+public class MemberServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public test() {
+    public MemberServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
