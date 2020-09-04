@@ -22,6 +22,6 @@ public interface Trip_D_Dao {
 
 	Trip_D findTransId(String transId);
 
-	List<Trip_D> getall();
+	List<Trip_D> getAll();
 
 }
