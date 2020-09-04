@@ -18,7 +18,7 @@ import com.google.gson.JsonObject;
 
 import web.com.bean.Member;
 import web.com.dao.MemberDao;
-import web.com.dao.MemberDaoImpl;
+import web.com.impl.MemberDaoImpl;
 
 
 /**

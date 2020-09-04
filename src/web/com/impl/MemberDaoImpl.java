@@ -1,4 +1,4 @@
-package web.com.dao;
+package web.com.impl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,6 +11,7 @@ import javax.sql.DataSource;
 
 import web.com.util.ServiceLocator;
 import web.com.bean.Member;
+import web.com.dao.MemberDao;
 
 /**
 * 類別說明：會員DaoImpl檔
