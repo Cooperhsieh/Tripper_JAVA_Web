@@ -12,17 +12,22 @@ import web.com.bean.Member;
 */
 
 public interface MemberDao {
+	//新增帳號
 		int insert(Member member ) ;
 		
-		int update(Member member ,byte[] photo , byte[] backgroundImage) ;
+		int update(Member member ,byte[] photo ) ;
 		
 		int delete(int id);
 		
-		Member findByKey(String account,String password) ;
+		Member findByAccount(String account) ;
 		
 		List<Member> selectAll();
+	//檢查帳號是否存在	
+		int selectAccount(Member member);
 		
 		byte[] getphoto(int id);
 		
 		byte[] getbackground(int id);
+	//檢查密碼
+		int selectAandP(Member member);
 }
