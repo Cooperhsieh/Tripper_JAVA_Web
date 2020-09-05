@@ -22,6 +22,6 @@ public interface Trip_Group_Dao {
 
 	Trip_Group findGroupTransId(String groupTransId);
 
-	List<Trip_Group> getall();
+	List<Trip_Group> getAll();
 
 }
