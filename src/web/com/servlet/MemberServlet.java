@@ -108,14 +108,14 @@ public class MemberServlet extends HttpServlet {
 
 			if (action.equals("memberInsert")) {
 				count = memberDao.insert(member);
-				writeText(response, String.valueOf(count));
+//				writeText(response, String.valueOf(count));
 			} else if (action.equals("memberUpdate")) {
 				count = memberDao.update(member, image);
-				writeText(response, String.valueOf(count));
+//				writeText(response, String.valueOf(count));
 			}
-				
+			writeText(response, String.valueOf(count));
 			
-
+		}
 //		} else if (action.equals("bookDelete")) {
 //			int bookId = jsonObject.get("bookId").getAsInt();
 //			int count = bookDao.delete(bookId);
@@ -126,7 +126,7 @@ public class MemberServlet extends HttpServlet {
 //			Book book = bookDao.findById(id);
 //			writeText(response, gson.toJson(book));
 //		} 
-		}else {
+		else {
 				writeText(response, "");
 			}
 		}
