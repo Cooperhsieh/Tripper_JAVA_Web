@@ -57,20 +57,19 @@ public class MemberDaoImpl implements MemberDao {
 		int count = 0;
 		String sql = "";
 		if (photo != null) {
-			sql = "UPDATE Member SET PASSWORD = ?, NICKNAME = ?,P_PIC = ?, " + "WHERE MEMBER_ID = ?;";
+			sql = "UPDATE Member SET NICKNAME = ?,P_PIC = ? " + "WHERE MEMBER_ID = ?;";
 		} else {
-			sql = "UPDATE Member SET PASSWORD = ?, NICKNAME = ?," + "WHERE MEMBER_ID = ?;"; // 不分支可能導致新增時沒加照片，導致原本的圖檔被覆蓋成空值
+			sql = "UPDATE Member SET NICKNAME = ?" + "WHERE MEMBER_ID = ?;"; // 不分支可能導致新增時沒加照片，導致原本的圖檔被覆蓋成空值
 		}
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql);) {
-			ps.setString(1, member.getPassword());
-			ps.setString(2, member.getNickName());
+			ps.setString(1, member.getNickName());
 
 			if (photo != null) {
-				ps.setBytes(3, photo);
-				ps.setInt(4, member.getId());
-			} else {
+				ps.setBytes(2, photo);
 				ps.setInt(3, member.getId());
+			} else {
+				ps.setInt(2, member.getId());
 			}
 			count = ps.executeUpdate();
 		} catch (SQLException e) {

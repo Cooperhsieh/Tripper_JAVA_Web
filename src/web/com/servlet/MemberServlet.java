@@ -108,12 +108,13 @@ public class MemberServlet extends HttpServlet {
 
 			if (action.equals("memberInsert")) {
 				count = memberDao.insert(member);
-
-//			} else if (action.equals("bookUpdate")) {
-//				count = bookDao.update(book, image);
-//			}
+				writeText(response, String.valueOf(count));
+			} else if (action.equals("memberUpdate")) {
+				count = memberDao.update(member, image);
 				writeText(response, String.valueOf(count));
 			}
+				
+			
 
 //		} else if (action.equals("bookDelete")) {
 //			int bookId = jsonObject.get("bookId").getAsInt();
@@ -125,11 +126,11 @@ public class MemberServlet extends HttpServlet {
 //			Book book = bookDao.findById(id);
 //			writeText(response, gson.toJson(book));
 //		} 
-			else {
+		}else {
 				writeText(response, "");
 			}
 		}
-	}
+	
 
 	private void writeText(HttpServletResponse response, String outText) throws IOException {
 		response.setContentType(CONTENT_TYPE);
