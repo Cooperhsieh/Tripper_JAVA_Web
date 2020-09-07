@@ -35,6 +35,14 @@ public class Member implements Serializable {
 		this.account = account;
 
 	}
+	
+	public Member(int id,String account,String password,String nickName) {
+		super();
+		this.id = id;
+		this.account = account;
+		this.password = password;
+		this.nickName = nickName;
+	}
 
 
 	public Member(int id, String account, String password, String mail, String nickName, String token,
