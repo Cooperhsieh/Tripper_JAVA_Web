@@ -18,9 +18,9 @@ public interface Trip_D_Dao {
 
 	int update(Trip_D tripD);
 
-	int delete(String transId);
+	int delete(String tripId);
 
-	Trip_D findTransId(String transId);
+	Trip_D findTransId(String tripId);
 
 	List<Trip_D> getAll();
 

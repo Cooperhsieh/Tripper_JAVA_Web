@@ -66,13 +66,13 @@ public class Trip_D_Servlet extends HttpServlet {
 			writeText(response, String.valueOf(tripD));
 
 		} else if (action.equals("tripDDelete")) {
-			String transId = jsonObject.get("transId").getAsString();
-			int count = tripDDao.delete(transId);
+			String tripId = jsonObject.get("tripId").getAsString();
+			int count = tripDDao.delete(tripId);
 			writeText(response, gson.toJson(count));
 
 		} else if (action.equals("findTransId")) {
-			String transId = jsonObject.get("transId").getAsString();
-			Trip_D tripD = tripDDao.findTransId(transId);
+			String tripId = jsonObject.get("tripId").getAsString();
+			Trip_D tripD = tripDDao.findTransId(tripId);
 			writeText(response, gson.toJson(tripD));
 
 		} else {
@@ -95,7 +95,7 @@ public class Trip_D_Servlet extends HttpServlet {
 		response.setContentType(SettingUtil.CONTENT_TYPE);
 		PrintWriter out = response.getWriter();
 		out.print(json);
-		// TODO for debug
+	
 		System.out.println("response json: " + json);
 		out.close();
 	}

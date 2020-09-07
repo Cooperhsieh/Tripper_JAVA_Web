@@ -31,6 +31,7 @@ import web.com.util.SettingUtil;
 public class Trip_Group_Servlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	Trip_Group_Dao tripGroupDao = null;
+	
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -65,13 +66,14 @@ public class Trip_Group_Servlet extends HttpServlet {
 			writeText(response, String.valueOf(tripGroup));
 
 		} else if (action.equals("tripGroupDelete")) {
-			String groupTransId = jsonObject.get("groupTransId").getAsString();
-			int count = tripGroupDao.delete(groupTransId);
+			String tripId = jsonObject.get("tripId").getAsString();
+			int memberId = jsonObject.getAsInt();
+			int count = tripGroupDao.delete(tripId, memberId);
 			writeText(response, String.valueOf(count));
 
-		} else if (action.equals("findGroupTransId")) {
-			String groupTransId = jsonObject.get("groupTransId").getAsString();
-			Trip_Group tripGroup = tripGroupDao.findGroupTransId(groupTransId);
+		} else if (action.equals("findGroupTripId")) {
+			String tripId = jsonObject.get("tripId").getAsString();
+			Trip_Group tripGroup = tripGroupDao.findGroupTripId(tripId);
 			writeText(response, String.valueOf(tripGroup));
 
 		} else {

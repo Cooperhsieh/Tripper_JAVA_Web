@@ -18,9 +18,9 @@ public interface Trip_Group_Dao {
 
 	int update(Trip_Group tripGroup);
 
-	int delete(String groupTransId);
+	int delete(String tripId, int memberId);
 
-	Trip_Group findGroupTransId(String groupTransId);
+	Trip_Group findGroupTripId(String groupTripId);
 
 	List<Trip_Group> getAll();
 
