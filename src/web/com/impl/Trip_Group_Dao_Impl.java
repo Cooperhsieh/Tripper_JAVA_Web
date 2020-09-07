@@ -37,15 +37,16 @@ public class Trip_Group_Dao_Impl implements Trip_Group_Dao {
 	public int insert(Trip_Group tripGroup) {
 		int count = 0 ;
 		String sql = " insert into Trip_Group " +
-		"( TRIP_ID, C_DATETIME, MEMBER_ID )" +
+		"( GROUP_TRANS_ID, TRIP_ID, C_DATETIME, MEMBER_ID )" +
 		"values (? , ?, ?)" ;
 		
 		try (Connection connection = datasource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql);) {
 			
-			ps.setString(1, tripGroup.getTripId());
-			ps.setTimestamp(2, Timestamp.valueOf(tripGroup.getCreateDateTime()));
-			ps.setInt(3, tripGroup.getMemberId());
+			ps.setString(1, tripGroup.getGroupTransId());
+			ps.setString(2, tripGroup.getTripId());
+			ps.setTimestamp(3, Timestamp.valueOf(tripGroup.getCreateDateTime()));
+			ps.setInt(4, tripGroup.getMemberId());
 			
 			count = ps.executeUpdate();
 		} catch (SQLException e) {
@@ -56,14 +57,33 @@ public class Trip_Group_Dao_Impl implements Trip_Group_Dao {
 
 	@Override
 	public int update(Trip_Group tripGroup) {
+		return 0;
+//		int count = 0 ;
+//		String sql = "update Trip_Group set MEMBER_ID = ?, " +
+//		"where GROUP_TRANS_ID = ? ; " ;
+//		
+//		try (Connection connection = datasource.getConnection();
+//				PreparedStatement ps = connection.prepareStatement(sql); ) {
+//			
+//			ps.setInt(1, tripGroup.getMemberId());
+//			count = ps.executeUpdate();
+//			
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+//		return count;
+	}
+
+	@Override
+	public int delete(String tripId, int memberId) {
 		int count = 0 ;
-		String sql = "update Trip_Group set MEMBER_ID = ?, " +
-		"where GROUP_TRANS_ID = ? ; " ;
+		String sql = "delete from Trip_Group where TRIP_ID = ? and MEMBER_ID = ? ; " ;
 		
 		try (Connection connection = datasource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql); ) {
 			
-			ps.setInt(1, tripGroup.getMemberId());
+			ps.setString(1, tripId);
+			ps.setInt(2, memberId);
 			count = ps.executeUpdate();
 			
 		} catch (SQLException e) {
@@ -73,33 +93,16 @@ public class Trip_Group_Dao_Impl implements Trip_Group_Dao {
 	}
 
 	@Override
-	public int delete(String groupTransId) {
-		int count = 0 ;
-		String sql = "delete from Trip_Group where GROUP_TRANS_ID = ? ; " ;
-		
-		try (Connection connection = datasource.getConnection();
-				PreparedStatement ps = connection.prepareStatement(sql); ) {
-			
-			ps.setString(1, groupTransId);
-			count = ps.executeUpdate();
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return count;
-	}
-
-	@Override
-	public Trip_Group findGroupTransId(String groupTransId) {
+	public Trip_Group findGroupTripId(String groupTripId) {
 		Trip_Group tripGroup = null;
 		String sql = " select " +
 		"TRIP_ID, C_DATETIME, MEMBER_ID" +
-		"where GROUP_TRANS_ID = ? " ;
+		"where TRIP_ID = ? " ;
 		
 		try (Connection connection = datasource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql); ){
 			
-			ps.setString(1, groupTransId);
+			ps.setString(1, groupTripId);
 			ResultSet rs = ps.executeQuery();
 			
 			if (rs.next()) {
@@ -143,5 +146,7 @@ public class Trip_Group_Dao_Impl implements Trip_Group_Dao {
 		}
 		return tripGroups;
 	}
+
+
 
 }
