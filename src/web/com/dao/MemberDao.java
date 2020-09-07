@@ -21,13 +21,15 @@ public interface MemberDao {
 		
 		Member findByAccount(String account) ;
 		
-		List<Member> selectAll();
+		Member findById(int id);
+		
+//		List<Member> selectAll();
 	//檢查帳號是否存在	
 		int selectAccount(Member member);
 		
-		byte[] getphoto(int id);
+		byte[] getP_picById(int id);
 		
-		byte[] getbackground(int id);
+		byte[] getB_picById(int id);
 	//檢查密碼
 		int selectAandP(Member member);
 }

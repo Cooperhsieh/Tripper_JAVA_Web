@@ -26,7 +26,7 @@ public class MemberDaoImpl implements MemberDao {
 	public MemberDaoImpl() {
 		dataSource = ServiceLocator.getInstance().getDataSource();
 	}
-
+//註冊帳號
 	@Override
 	public int insert(Member member) {
 		int confirm = selectAccount(member) ;
@@ -51,12 +51,12 @@ public class MemberDaoImpl implements MemberDao {
 		}
 		return count; //成功註冊回傳1
 	}
-
+//新增or修改大頭貼
 	@Override
-	public int update(Member member, byte[] photo) {
+	public int update(Member member, byte[] p_pic) {
 		int count = 0;
 		String sql = "";
-		if (photo != null) {
+		if (p_pic != null) {
 			sql = "UPDATE Member SET NICKNAME = ?,P_PIC = ? " + "WHERE MEMBER_ID = ?;";
 		} else {
 			sql = "UPDATE Member SET NICKNAME = ?" + "WHERE MEMBER_ID = ?;"; // 不分支可能導致新增時沒加照片，導致原本的圖檔被覆蓋成空值
@@ -65,8 +65,8 @@ public class MemberDaoImpl implements MemberDao {
 				PreparedStatement ps = connection.prepareStatement(sql);) {
 			ps.setString(1, member.getNickName());
 
-			if (photo != null) {
-				ps.setBytes(2, photo);
+			if (p_pic != null) {
+				ps.setBytes(2, p_pic);
 				ps.setInt(3, member.getId());
 			} else {
 				ps.setInt(2, member.getId());
@@ -107,59 +107,83 @@ public class MemberDaoImpl implements MemberDao {
 		}
 		return member;
 	}
-
+//透過ID查找資訊	
 	@Override
-	public List<Member> selectAll() {
-		String sql = "SELECT * FROM Member;";
-		List<Member> memberList = new ArrayList<Member>();
+	public Member findById(int id) {
+		String sql = "SELECT * FROM Member WHERE MEMBER_ID = ?;";
+		Member member = null ;
 		try (Connection connection = dataSource.getConnection();
-				PreparedStatement ps = connection.prepareStatement(sql);) {
+				PreparedStatement ps = connection.prepareStatement(sql);){
+			
+			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
-			while (rs.next()) {
-				int id = rs.getInt(1);
-				String account = rs.getString(2);
-				Member member = new Member(id, account);
-				memberList.add(member);
+			if (rs.next()) {
+				id = rs.getInt(1);
+				String accountid = rs.getString(2);
+				String password = rs.getString(3);
+				String nickname = rs.getString(5);
+				member  = new Member(id,accountid,password,nickname);
 			}
-			return memberList;
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return memberList;
+		return member;
 	}
 
+//	@Override
+//	public List<Member> selectAll() {
+//		String sql = "SELECT * FROM Member;";
+//		List<Member> memberList = new ArrayList<Member>();
+//		try (Connection connection = dataSource.getConnection();
+//				PreparedStatement ps = connection.prepareStatement(sql);) {
+//			ResultSet rs = ps.executeQuery();
+//			while (rs.next()) {
+//				int id = rs.getInt(1);
+//				String account = rs.getString(2);
+//				Member member = new Member(id, account);
+//				memberList.add(member);
+//			}
+//			return memberList;
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+//		return memberList;
+//	}
+
+//透過id抓大頭貼照
 	@Override
-	public byte[] getphoto(int id) {
+	public byte[] getP_picById(int id) {
 		String sql = "SELECT P_PIC FROM Member WHERE MEMBER_ID = ?;";
-		byte[] photo = null;
+		byte[] p_pic = null;
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql);) {
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
-				photo = rs.getBytes(1);
+				p_pic = rs.getBytes(1);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return photo;
+		return p_pic;
 	}
-
+//透過id抓封面照
 	@Override
-	public byte[] getbackground(int id) {
+	public byte[] getB_picById(int id) {
 		String sql = "SELECT B_PIC FROM Member WHERE MEMBER_ID = ?;";
-		byte[] image = null;
+		byte[] b_pic = null;
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql);) {
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
-				image = rs.getBytes(1);
+				b_pic = rs.getBytes(1);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return image;
+		return b_pic;
 	}
 //搜尋帳號是否有重複
 	@Override
@@ -201,4 +225,5 @@ public class MemberDaoImpl implements MemberDao {
 		}
 		return count;  //帳號密碼正確回傳1
 	}
+	
 }

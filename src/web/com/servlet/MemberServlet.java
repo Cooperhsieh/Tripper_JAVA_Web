@@ -54,15 +54,15 @@ public class MemberServlet extends HttpServlet {
 
 		String action = jsonObject.get("action").getAsString();
 //搜尋動作
-		if (action.equals("selectAll")) {
-			List<Member> books = memberDao.selectAll();
-			writeText(response, gson.toJson(books));
+//		if (action.equals("selectAll")) {
+//			List<Member> books = memberDao.selectAll();
+//			writeText(response, gson.toJson(books));
 //取得大頭貼
-		} else if (action.equals("getImage")) {
+		 if (action.equals("getImage")) {
 			OutputStream os = response.getOutputStream();
 			int id = jsonObject.get("id").getAsInt();
 			int imageSize = jsonObject.get("imageSize").getAsInt();
-			byte[] photo = memberDao.getphoto(id);
+			byte[] photo = memberDao.getP_picById(id);
 			if (photo != null) {
 				photo = ImageUtil.shrink(photo, imageSize);
 				response.setContentType("image/jpeg"); // 傳送圖片格式
@@ -146,7 +146,7 @@ public class MemberServlet extends HttpServlet {
 		if (memberDao == null) {
 			memberDao = new MemberDaoImpl();
 		}
-		List<Member> members = memberDao.selectAll();
-		writeText(response, new Gson().toJson(members));
+//		List<Member> members = memberDao.selectAll();
+//		writeText(response, new Gson().toJson(members));
 	}
 }
