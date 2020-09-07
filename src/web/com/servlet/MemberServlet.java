@@ -58,7 +58,7 @@ public class MemberServlet extends HttpServlet {
 			List<Member> books = memberDao.selectAll();
 			writeText(response, gson.toJson(books));
 //取得大頭貼
-		} else if (action.equals("getPhoto")) {
+		} else if (action.equals("getImage")) {
 			OutputStream os = response.getOutputStream();
 			int id = jsonObject.get("id").getAsInt();
 			int imageSize = jsonObject.get("imageSize").getAsInt();
