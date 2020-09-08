@@ -2,19 +2,9 @@
 <Context docBase="Tripper_JAVA_Web" path="/Tripper_JAVA_Web"
 	reloadable="true">
 	
-	<Resource name="jdbc/Tripper" 
-		auth="Container"
-		type="javax.sql.DataSource" 
-		driverClassName="com.mysql.cj.jdbc.Driver"
-		url="jdbc:mysql://localhost:3306/Tripper?useUnicode=yes&amp;characterEncoding=utf8&amp;useSSL=false&amp;serverTimezone=Asia/Taipei" 
-		username="root"
-		password="password" 
-		
-		maxTotal="20" 
-		maxIdle="10" 
-		maxWaitMillis="5000"/>
 
-	<Resource name="jdbc/Tripper" 
+
+	<Resource name="jdbc/TRIPPER" 
 		auth="Container"
 		type="javax.sql.DataSource"  
 		driverClassName="com.mysql.cj.jdbc.Driver"
@@ -27,17 +17,6 @@
 		maxWaitMillis="5000"/>
 		
 		
-	<Resource name="jdbc/Tripper" 
-		auth="Container"
-		type="javax.sql.DataSource" 
-		driverClassName="com.mysql.cj.jdbc.Driver"
-		url="jdbc:mysql://localhost:3306/Tripper?useUnicode=yes&amp;characterEncoding=utf8&amp;useSSL=false&amp;serverTimezone=Asia/Taipei"
-		
-		username="root" 
-		password="Coo190216" 
-		
-		maxTotal="20" 
-		maxIdle="10"
-		maxWaitMillis="5000" />
+	
 
 </Context>

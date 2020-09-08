@@ -92,7 +92,7 @@ public class MemberServlet extends HttpServlet {
 			writeText(response, gson.toJson(member));
 		}
 //新增帳號or修改帳號
-		else if (action.equals("memberInsert") || action.equals("memberUpdate")) {
+		else if (action.equals("memberInsert") || action.equals("memberUpdate")||action.equals("memberGBInsert")) {
 			String memberJson = jsonObject.get("member").getAsString();
 			System.out.println("memberJson = " + memberJson); // 先get外部的json，再get內部的json取得spot物件
 			Member member = gson.fromJson(memberJson, Member.class);
@@ -112,6 +112,8 @@ public class MemberServlet extends HttpServlet {
 			} else if (action.equals("memberUpdate")) {
 				count = memberDao.update(member, image);
 //				writeText(response, String.valueOf(count));
+			}else if (action.equals("memberGBInsert")) {
+				count = memberDao.insertGB(member);
 			}
 			writeText(response, String.valueOf(count));
 			

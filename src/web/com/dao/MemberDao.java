@@ -15,6 +15,8 @@ public interface MemberDao {
 	//新增帳號
 		int insert(Member member ) ;
 		
+		int insertGB(Member member);
+		
 		int update(Member member ,byte[] photo ) ;
 		
 		int delete(int id);

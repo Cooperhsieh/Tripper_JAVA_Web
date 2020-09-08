@@ -51,6 +51,32 @@ public class MemberDaoImpl implements MemberDao {
 		}
 		return count; //成功註冊回傳1
 	}
+	
+	//第三方註冊帳號
+		@Override
+		public int insertGB(Member member) {
+			int count = 0;
+			String sql = "INSERT INTO Member" + "(MEMBER_ID,ACCOUNT_ID,PASSWORD,NICKNAME,LOGIN_TYPE)" + "VALUES(?,?,?,?,?);";
+			try (Connection connection = dataSource.getConnection();
+					PreparedStatement ps = connection.prepareStatement(sql)) {
+		
+				ps.setInt(1, member.getId());
+				ps.setString(2, member.getAccount());
+				ps.setString(3, member.getPassword());
+				ps.setString(4, member.getNickName());
+				ps.setInt(5,member.getLoginType());
+//				ps.setBytes(7, photo);
+//				ps.setBytes(8, backgroundImage);
+//				ps.setString(9, member.getToken());
+
+				count = ps.executeUpdate();
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return count; //成功註冊回傳1
+		}
+		
 //新增or修改大頭貼
 	@Override
 	public int update(Member member, byte[] p_pic) {
@@ -99,7 +125,9 @@ public class MemberDaoImpl implements MemberDao {
 				String accountid = rs.getString(2);
 				String password = rs.getString(3);
 				String nickname = rs.getString(5);
+				int Login_type = rs.getInt(6);
 				member  = new Member(id,accountid,password,nickname);
+				member.setLoginType(Login_type);
 			}
 			
 		} catch (SQLException e) {
