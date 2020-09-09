@@ -1,22 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Context docBase="Tripper_JAVA_Web" path="/Tripper_JAVA_Web"
+<Context docBase="/Tripper_JAVA_Web" path="/Tripper_JAVA_Web"
 	reloadable="true">
 	
+<<<<<<< HEAD
+	<Resource name="jdbc/TRIPPER" 
+		auth="Container"
+		type="javax.sql.DataSource" 
+=======
 
 
 	<Resource name="jdbc/TRIPPER" 
 		auth="Container"
 		type="javax.sql.DataSource"  
+>>>>>>> 082237359d5d822d4d20bd377f88b36c1c32981b
 		driverClassName="com.mysql.cj.jdbc.Driver"
 		url="jdbc:mysql://localhost:3306/TRIPPER?useUnicode=yes&amp;characterEncoding=utf8&amp;useSSL=false&amp;serverTimezone=Asia/Taipei" 
 		username="root"
-		password="19970826" 
-		
+		password="0000" 
 		maxTotal="20" 
 		maxIdle="10" 
 		maxWaitMillis="5000"/>
+<<<<<<< HEAD
+
+=======
 		
 		
+>>>>>>> 082237359d5d822d4d20bd377f88b36c1c32981b
 	
 
 </Context>
