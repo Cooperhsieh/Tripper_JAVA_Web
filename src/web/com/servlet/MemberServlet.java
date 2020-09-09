@@ -54,15 +54,15 @@ public class MemberServlet extends HttpServlet {
 
 		String action = jsonObject.get("action").getAsString();
 //搜尋動作
-		if (action.equals("selectAll")) {
-			List<Member> books = memberDao.selectAll();
-			writeText(response, gson.toJson(books));
+//		if (action.equals("selectAll")) {
+//			List<Member> books = memberDao.selectAll();
+//			writeText(response, gson.toJson(books));
 //取得大頭貼
-		} else if (action.equals("getImage")) {
+		 if (action.equals("getImage")) {
 			OutputStream os = response.getOutputStream();
 			int id = jsonObject.get("id").getAsInt();
 			int imageSize = jsonObject.get("imageSize").getAsInt();
-			byte[] photo = memberDao.getphoto(id);
+			byte[] photo = memberDao.getP_picById(id);
 			if (photo != null) {
 				photo = ImageUtil.shrink(photo, imageSize);
 				response.setContentType("image/jpeg"); // 傳送圖片格式
@@ -92,7 +92,7 @@ public class MemberServlet extends HttpServlet {
 			writeText(response, gson.toJson(member));
 		}
 //新增帳號or修改帳號
-		else if (action.equals("memberInsert") || action.equals("memberUpdate")) {
+		else if (action.equals("memberInsert") || action.equals("memberUpdate")||action.equals("memberGBInsert")) {
 			String memberJson = jsonObject.get("member").getAsString();
 			System.out.println("memberJson = " + memberJson); // 先get外部的json，再get內部的json取得spot物件
 			Member member = gson.fromJson(memberJson, Member.class);
@@ -112,6 +112,8 @@ public class MemberServlet extends HttpServlet {
 			} else if (action.equals("memberUpdate")) {
 				count = memberDao.update(member, image);
 //				writeText(response, String.valueOf(count));
+			}else if (action.equals("memberGBInsert")) {
+				count = memberDao.insertGB(member);
 			}
 			writeText(response, String.valueOf(count));
 			
@@ -146,7 +148,7 @@ public class MemberServlet extends HttpServlet {
 		if (memberDao == null) {
 			memberDao = new MemberDaoImpl();
 		}
-		List<Member> members = memberDao.selectAll();
-		writeText(response, new Gson().toJson(members));
+//		List<Member> members = memberDao.selectAll();
+//		writeText(response, new Gson().toJson(members));
 	}
 }
