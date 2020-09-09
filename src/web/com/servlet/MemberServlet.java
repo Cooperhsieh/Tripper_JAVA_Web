@@ -51,12 +51,9 @@ public class MemberServlet extends HttpServlet {
 		if (memberDao == null) {
 			memberDao = new MemberDaoImpl();
 		}
-
+//----------------------------------------------------------------------------------
 		String action = jsonObject.get("action").getAsString();
-//搜尋動作
-//		if (action.equals("selectAll")) {
-//			List<Member> books = memberDao.selectAll();
-//			writeText(response, gson.toJson(books));
+
 //取得大頭貼
 		 if (action.equals("getImage")) {
 			OutputStream os = response.getOutputStream();
@@ -97,6 +94,7 @@ public class MemberServlet extends HttpServlet {
 			System.out.println("memberJson = " + memberJson); // 先get外部的json，再get內部的json取得spot物件
 			Member member = gson.fromJson(memberJson, Member.class);
 			byte[] image = null;
+			
 			// 檢查是否有上傳圖片
 			if (jsonObject.get("imageBase64") != null) {
 				String imageBase64 = jsonObject.get("imageBase64").getAsString();
@@ -108,21 +106,17 @@ public class MemberServlet extends HttpServlet {
 
 			if (action.equals("memberInsert")) {
 				count = memberDao.insert(member);
-//				writeText(response, String.valueOf(count));
+
 			} else if (action.equals("memberUpdate")) {
 				count = memberDao.update(member, image);
-//				writeText(response, String.valueOf(count));
+
 			}else if (action.equals("memberGBInsert")) {
 				count = memberDao.insertGB(member);
 			}
 			writeText(response, String.valueOf(count));
 			
 		}
-//		} else if (action.equals("bookDelete")) {
-//			int bookId = jsonObject.get("bookId").getAsInt();
-//			int count = bookDao.delete(bookId);
-//			writeText(response, String.valueOf(count));
-//			
+			
 //		} else if (action.equals("findById")) {
 //			int id = jsonObject.get("id").getAsInt();
 //			Book book = bookDao.findById(id);
@@ -133,7 +127,6 @@ public class MemberServlet extends HttpServlet {
 			}
 		}
 	
-
 	private void writeText(HttpServletResponse response, String outText) throws IOException {
 		response.setContentType(CONTENT_TYPE);
 		PrintWriter out = response.getWriter();

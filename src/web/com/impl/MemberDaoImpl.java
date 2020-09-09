@@ -103,14 +103,8 @@ public class MemberDaoImpl implements MemberDao {
 		}
 		return count;
 	}
-
-	@Override
-	public int delete(int id) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-//透過帳號資訊
 	
+//透過帳號查找資訊	
 	@Override
 	public Member findByAccount(String account) {
 		String sql = "SELECT * FROM Member WHERE ACCOUNT_ID = ?;";
@@ -135,7 +129,7 @@ public class MemberDaoImpl implements MemberDao {
 		}
 		return member;
 	}
-//透過ID查找資訊	
+//透過ID找本帳號資訊(ID,ACCOUNT,PASSWORD,NICKNAME)	
 	@Override
 	public Member findById(int id) {
 		String sql = "SELECT * FROM Member WHERE MEMBER_ID = ?;";
@@ -159,25 +153,6 @@ public class MemberDaoImpl implements MemberDao {
 		return member;
 	}
 
-//	@Override
-//	public List<Member> selectAll() {
-//		String sql = "SELECT * FROM Member;";
-//		List<Member> memberList = new ArrayList<Member>();
-//		try (Connection connection = dataSource.getConnection();
-//				PreparedStatement ps = connection.prepareStatement(sql);) {
-//			ResultSet rs = ps.executeQuery();
-//			while (rs.next()) {
-//				int id = rs.getInt(1);
-//				String account = rs.getString(2);
-//				Member member = new Member(id, account);
-//				memberList.add(member);
-//			}
-//			return memberList;
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		}
-//		return memberList;
-//	}
 
 //透過id抓大頭貼照
 	@Override

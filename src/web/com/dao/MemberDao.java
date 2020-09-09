@@ -1,7 +1,5 @@
 package web.com.dao;
 
-import java.util.List;
-
 import web.com.bean.Member;
 
 /**
@@ -14,23 +12,19 @@ import web.com.bean.Member;
 public interface MemberDao {
 	//新增帳號
 		int insert(Member member ) ;
-		
+	//新增第三方的帳號	
 		int insertGB(Member member);
-		
+	//修改會員資料	
 		int update(Member member ,byte[] photo ) ;
-		
-		int delete(int id);
-		
+	//透過帳號查找資訊			
 		Member findByAccount(String account) ;
-		
-		Member findById(int id);
-		
-//		List<Member> selectAll();
+	//透過ID找本帳號資訊(ID,ACCOUNT,PASSWORD,NICKNAME)			
+		Member findById(int id);		
 	//檢查帳號是否存在	
 		int selectAccount(Member member);
-		
+	//透過id抓大頭貼照	
 		byte[] getP_picById(int id);
-		
+	//透過id抓封面照	
 		byte[] getB_picById(int id);
 	//檢查密碼
 		int selectAandP(Member member);
