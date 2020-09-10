@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.sql.DataSource;
+
 import web.com.bean.Trip_M;
 import web.com.dao.Trip_M_Dao;
 import web.com.util.ServiceLocator;
@@ -126,30 +127,27 @@ public class Trip_M_Dao_Impl implements Trip_M_Dao {
 	@Override
 	public List<Trip_M> getAll() {
 		List<Trip_M> tripMs = new ArrayList<Trip_M>();
-		Trip_M tripM = null;
-		String sql = "select" +
-		"TRIP_ID, MEMBER_ID, TRIP_TITLE, S_DATE, S_TIME," + //5
-		"D_COUNT, C_DATETIME, P_MAX, STATUS " + //4
-		"C_DATETIME order by C_DATETIME desc ";
-		
+
+		String sql = "SELECT * FROM TRIPPER.Trip_M;";
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql);) {
+			
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				String tripId = rs.getString(1);
 				int memberId = rs.getInt(2);
 				String tripTitle = rs.getString(3);
-				String startDate = String.valueOf((rs.getDate(4)));
-				String startTime = String.valueOf((rs.getTime(5)));
-				int dayCount = rs.getInt(6);
-				String createDateTime = String.valueOf((rs.getDate(7)));
-				int pMax = rs.getInt(8);
-				int status = rs.getInt(9);
+//				String startDate = String.valueOf((rs.getDate(4)));
+//				String startTime = String.valueOf((rs.getTime(5)));
+//				int dayCount = rs.getInt(6);
+//				String createDateTime = String.valueOf((rs.getDate(7)));
+				int pMax = rs.getInt(9);
+//				int status = rs.getInt(9);
 				
-				tripM = new Trip_M(tripId, memberId, tripTitle, startDate, 
-						startTime, dayCount, createDateTime, pMax, status);
+				Trip_M tripM = new Trip_M(tripId, memberId, tripTitle , pMax);
 				tripMs.add(tripM);
 			}
+			return tripMs;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -157,5 +155,20 @@ public class Trip_M_Dao_Impl implements Trip_M_Dao {
 	}
 
 	
-
+	@Override
+	public byte[] getImage(int id) {
+		String sql = "SELECT image FROM TRIPPER.Trip_M WHERE MEMBER_ID = ?;";
+		byte[] image = null;
+		try (Connection connection = dataSource.getConnection();
+				PreparedStatement ps = connection.prepareStatement(sql);) {
+			ps.setInt(1, id);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				image = rs.getBytes(1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} 
+		return image;
+	}
 }
