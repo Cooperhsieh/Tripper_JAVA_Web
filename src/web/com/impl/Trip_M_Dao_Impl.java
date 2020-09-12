@@ -128,7 +128,7 @@ public class Trip_M_Dao_Impl implements Trip_M_Dao {
 	public List<Trip_M> getAll() {
 		List<Trip_M> tripMs = new ArrayList<Trip_M>();
 
-		String sql = "SELECT * FROM TRIPPER.Trip_M;";
+		String sql = "SELECT * FROM Trip_M left join Trip_Group on Trip_M.TRIP_ID = Trip_Group.TRIP_ID ;";
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql);) {
 			
@@ -137,14 +137,15 @@ public class Trip_M_Dao_Impl implements Trip_M_Dao {
 				String tripId = rs.getString(1);
 				int memberId = rs.getInt(2);
 				String tripTitle = rs.getString(3);
-//				String startDate = String.valueOf((rs.getDate(4)));
+				String startDate = String.valueOf((rs.getDate(4)));
 //				String startTime = String.valueOf((rs.getTime(5)));
 //				int dayCount = rs.getInt(6);
 //				String createDateTime = String.valueOf((rs.getDate(7)));
 				int pMax = rs.getInt(9);
 //				int status = rs.getInt(9);
+				int mCount = rs.getInt(16);
 				
-				Trip_M tripM = new Trip_M(tripId, memberId, tripTitle , pMax);
+				Trip_M tripM = new Trip_M(tripId, memberId, tripTitle ,startDate, pMax,mCount);
 				tripMs.add(tripM);
 			}
 			return tripMs;
