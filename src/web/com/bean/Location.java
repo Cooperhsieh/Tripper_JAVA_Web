@@ -1,6 +1,7 @@
 package web.com.bean;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 
 /**
@@ -21,10 +22,10 @@ public class Location implements Serializable{
 	private double latitude;
 	private int createId;
 	private int useId;
-	private String createDateTime;
+	private Timestamp createDateTime;
 	
 	public Location(String locId, String name, String address, String locType, String city, String info,
-			double longitude, double latitude, int createId, int useId, String createDateTime) {
+			double longitude, double latitude, int createId, int useId, Timestamp createDateTime) {
 		super();
 		this.locId = locId;
 		this.name = name;
@@ -42,7 +43,7 @@ public class Location implements Serializable{
 	
 
 	public Location(String name, String address, String locType, String city, String info, double longitude,
-			double latitude, int createId, int useId, String createDateTime) {
+			double latitude, int createId, int useId, Timestamp createDateTime) {
 		super();
 		this.name = name;
 		this.address = address;
@@ -138,11 +139,11 @@ public class Location implements Serializable{
 		this.useId = useId;
 	}
 
-	public String getCreateDateTime() {
+	public Timestamp getCreateDateTime() {
 		return createDateTime;
 	}
 
-	public void setCreateDateTime(String createDateTime) {
+	public void setCreateDateTime(Timestamp createDateTime) {
 		this.createDateTime = createDateTime;
 	}
 	

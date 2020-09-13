@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.logging.SimpleFormatter;
 
 import javax.sql.DataSource;
+import javax.swing.text.SimpleAttributeSet;
 
 import web.com.bean.Location;
 import web.com.dao.LocationDao;
@@ -31,7 +32,7 @@ public class LocationImpl implements LocationDao{
 	}
 	
 	@Override
-	public int insert(Location loc, byte[] image) {
+	public int insert(Location loc, byte[] image) {		
 		int count = 0;
 		String sql = "insert into LOCATION ( " +
 				"LOC_ID, NAME, ADDRESS, LOC_PIC, LOC_TYPE, " // 5
@@ -51,8 +52,6 @@ public class LocationImpl implements LocationDao{
 			ps.setDouble(9, loc.getLatitude());
 			ps.setInt(10, loc.getCreateId());
 			ps.setInt(11, loc.getUseId());
-		
-			System.out.println("sql::" + sql);
 			count = ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -149,7 +148,7 @@ public class LocationImpl implements LocationDao{
 				double latitude = rs.getDouble(7);
 				int createId = rs.getInt(8);
 				int useId = rs.getInt(9);
-				String createDateTime = String.valueOf((rs.getDate(10)));
+				Timestamp createDateTime = rs.getTimestamp(10);
 				loc = new Location(name, address, locType, city, info, longitude, latitude, createId, useId, createDateTime);	
 				
 			}
@@ -181,10 +180,11 @@ public class LocationImpl implements LocationDao{
 				double latitude = rs.getDouble(8);
 				int createId = rs.getInt(9);
 				int useId = rs.getInt(10);
-				String createDateTime = String.valueOf((rs.getDate(11)));
+				Timestamp createDateTime = rs.getTimestamp(11);
 				loc = new Location(locId, name, address, locType, city, info, longitude, latitude, createId, useId, createDateTime);
 				locations.add(loc);
 			}
+			return locations;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
