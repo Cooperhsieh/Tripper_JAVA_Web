@@ -5,10 +5,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.SimpleFormatter;
 
 import javax.sql.DataSource;
+import javax.swing.text.SimpleAttributeSet;
 
 import web.com.bean.Location;
 import web.com.dao.LocationDao;
@@ -28,14 +32,16 @@ public class LocationImpl implements LocationDao{
 	}
 	
 	@Override
-	public int insert(Location loc, byte[] image) {
+	public int insert(Location loc, byte[] image) {		
 		int count = 0;
-		String sql = "insert int to LOCATION ( " +
-				"LOC_ID, NAME, ADDRESS, LOC_PIC, LOC_TYPE, CITY, INFO, LONGITUDE, LATITUDE, CREATE_ID, M_USER_ID, C_DATETIME" + 
-				") values ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
+		String sql = "insert into LOCATION ( " +
+				"LOC_ID, NAME, ADDRESS, LOC_PIC, LOC_TYPE, " // 5
+				+ "CITY, INFO, LONGITUDE, LATITUDE, CREATE_ID, " // 10
+				+ "M_USER_ID" + 
+				") values ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
 		try(Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql);) {
-			ps.setString(1, loc.getLogId());
+			ps.setString(1, loc.getLocId());
 			ps.setString(2, loc.getName());
 			ps.setString(3, loc.getAddress());
 			ps.setBytes(4, image);
@@ -46,7 +52,6 @@ public class LocationImpl implements LocationDao{
 			ps.setDouble(9, loc.getLatitude());
 			ps.setInt(10, loc.getCreateId());
 			ps.setInt(11, loc.getUseId());
-			ps.setTimestamp(12, Timestamp.valueOf(loc.getCreateDateTime()));
 			count = ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -69,7 +74,7 @@ public class LocationImpl implements LocationDao{
 						"LONGITUDE  = ?, " +
 						"LATITUDE   = ?, " +
 						"M_USER_ID  = ?, " + 
-						"LOC_PIC    = ?, " + 
+						"LOC_PIC    = ?" + 
 				   " where LOC_ID = ? ;" ; // 10
 		}else {
 			// 不更新image
@@ -81,7 +86,7 @@ public class LocationImpl implements LocationDao{
 					"INFO       = ?, " + // 5
 					"LONGITUDE  = ?, " +
 					"LATITUDE   = ?, " +
-					"M_USER_ID  = ?, " + 
+					"M_USER_ID  = ?" + 
 			   " where LOC_ID = ? ;" ; // 9
 		}
 		try(Connection connection = dataSource.getConnection();
@@ -96,13 +101,14 @@ public class LocationImpl implements LocationDao{
 			ps.setInt(8, loc.getUseId());
 			if(image != null) {
 				ps.setBytes(9, image);
-				ps.setString(10, loc.getLogId());
+				ps.setString(10, loc.getLocId());
 			}else {
-				ps.setString(9, loc.getLogId());
+				ps.setString(9, loc.getLocId());
 			}
+			System.out.println("##:"+ps.toString());
 			count  = ps.executeUpdate();
 		} catch (SQLException e) {
-			
+			e.printStackTrace();
 		}
 		return count;
 	}
@@ -142,7 +148,7 @@ public class LocationImpl implements LocationDao{
 				double latitude = rs.getDouble(7);
 				int createId = rs.getInt(8);
 				int useId = rs.getInt(9);
-				String createDateTime = String.valueOf((rs.getDate(10)));
+				Timestamp createDateTime = rs.getTimestamp(10);
 				loc = new Location(name, address, locType, city, info, longitude, latitude, createId, useId, createDateTime);	
 				
 			}
@@ -157,9 +163,9 @@ public class LocationImpl implements LocationDao{
 		List<Location> locations = new ArrayList<Location>();
 		Location loc = null;
 		String sql = " select " +
-				" LOC_ID, NAME, ADDRESS, LOC_TYPE, CITY, ," + // 5
+				" LOC_ID, NAME, ADDRESS, LOC_TYPE, CITY, " + // 5
 				" INFO, LONGITUDE, LATITUDE, CREATE_ID, M_USER_ID,  " + // 10
-				" C_DATETIME order by C_DATETIME desc ";
+				" C_DATETIME from LOCATION order by M_DATETIME desc ";
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql);) {
 			ResultSet rs = ps.executeQuery();
@@ -174,10 +180,11 @@ public class LocationImpl implements LocationDao{
 				double latitude = rs.getDouble(8);
 				int createId = rs.getInt(9);
 				int useId = rs.getInt(10);
-				String createDateTime = String.valueOf((rs.getDate(11)));
+				Timestamp createDateTime = rs.getTimestamp(11);
 				loc = new Location(locId, name, address, locType, city, info, longitude, latitude, createId, useId, createDateTime);
 				locations.add(loc);
 			}
+			return locations;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

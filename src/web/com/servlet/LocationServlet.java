@@ -44,7 +44,7 @@ public class LocationServlet extends HttpServlet {
 			jsonIn.append(line);
 		}
 		// TODO when finish remember to mark
-		System.out.println("input: " + jsonIn);
+		System.out.println("jsonIn input: " + jsonIn);
 		
 		JsonObject jsonObject = gson.fromJson(jsonIn.toString(), JsonObject.class);
 		
@@ -52,16 +52,27 @@ public class LocationServlet extends HttpServlet {
 			locDao = new LocationImpl();
 		}
 		
-		String action = jsonObject.get("action").toString();
+		String action = jsonObject.get("action").getAsString();
+<<<<<<< HEAD
+		System.out.println("get action::" + action);
+=======
 		
+>>>>>>> Location
 		if(action.equals("getAll")) {
 			List<Location> locations = locDao.getAll();
 			writeText(response, gson.toJson(locations));
 		}else if(action.equals("getImage")) {
+			System.out.println("enter getImage");
 			OutputStream os = response.getOutputStream();
-			String locId = jsonObject.get("locId").getAsString();
+			String locId = jsonObject.get("id").getAsString();
 			int imageSize = jsonObject.get("imageSize").getAsInt();
+			System.out.println("imageSize::" + imageSize);
 			byte[] image = locDao.getImageById(locId);
+<<<<<<< HEAD
+			System.out.println("image size ::" + image.length);
+=======
+			System.out.println("1111 locId::" + locId);
+>>>>>>> Location
 			if(image != null) {
 				image = ImageUtil.shrink(image, imageSize);
 				response.setContentType(SettingUtil.IMAGE_JPEG);
@@ -69,13 +80,15 @@ public class LocationServlet extends HttpServlet {
 				os.write(image);
 			}
 		}else if(action.equals("locationInsert") || action.equals("locationUpdate"))	{
+			System.out.println("enter insert or update");
 			String locationJson = jsonObject.get("location").getAsString();
 			// TODO when finish remember to mark
-			System.out.println("locJson: " + locationJson);
+			System.out.println("insert or update locJson: " + locationJson);
 			Location loc = gson.fromJson(locationJson, Location.class);
 			byte[] locImage = null;
 			// 檢查是否有圖片
 			if( jsonObject.get("imageBase64") != null) {
+				System.out.println("enter get base64");
 				String imageBase64 = jsonObject.get("imageBase64").getAsString();
 				// 確認有圖片decode
 				if(imageBase64 != null && !imageBase64.isEmpty()) {
@@ -84,17 +97,19 @@ public class LocationServlet extends HttpServlet {
 			}
 			int count = 0;
 			if(action.equals("locationInsert")) {
+				System.out.println("enter insert");
 				count = locDao.insert(loc, locImage);
 			}else if(action.equals("locationUpdate")){
+				System.out.println("enter update");
 				count = locDao.update(loc, locImage);
 			}
 			writeText(response, String.valueOf(count));
 		}else if(action.equals("locationDelete")) {
-			String locId = jsonObject.get("locId").getAsString();
+			String locId = jsonObject.get("id").getAsString();
 			int count = locDao.delete(locId);
 			writeText(response, String.valueOf(count));
 		}else if(action.equals("locationFindById")) {
-			String locId = jsonObject.get("locId").getAsString();
+			String locId = jsonObject.get("id").getAsString();
 			Location loc = locDao.getLocById(locId);
 			writeText(response, gson.toJson(loc));
 		}else {
