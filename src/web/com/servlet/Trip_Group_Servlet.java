@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import web.com.bean.TripGroupMember;
 import web.com.bean.Trip_Group;
 import web.com.dao.Trip_Group_Dao;
 import web.com.impl.Trip_Group_Dao_Impl;
@@ -51,7 +52,7 @@ public class Trip_Group_Servlet extends HttpServlet {
 			tripGroupDao = new Trip_Group_Dao_Impl();
 		}
 
-		String action = jsonObject.get("action").toString();
+		String action = jsonObject.get("action").getAsString();
 
 		if (action.equals("getAll")) {
 			List<Trip_Group> tripGroups = tripGroupDao.getAll();
@@ -67,14 +68,14 @@ public class Trip_Group_Servlet extends HttpServlet {
 
 		} else if (action.equals("tripGroupDelete")) {
 			String tripId = jsonObject.get("tripId").getAsString();
-			int memberId = jsonObject.getAsInt();
+			int memberId = jsonObject.get("memberId").getAsInt();
 			int count = tripGroupDao.delete(tripId, memberId);
 			writeText(response, String.valueOf(count));
 
 		} else if (action.equals("findGroupTripId")) {
 			String tripId = jsonObject.get("tripId").getAsString();
-			Trip_Group tripGroup = tripGroupDao.findGroupTripId(tripId);
-			writeText(response, String.valueOf(tripGroup));
+			List<TripGroupMember> tripGroups = tripGroupDao.findGroupTripId(tripId);
+			writeText(response, gson.toJson(tripGroups));
 
 		} else {
 			writeText(response, "");

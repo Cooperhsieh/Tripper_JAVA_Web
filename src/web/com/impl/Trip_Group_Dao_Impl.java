@@ -12,7 +12,7 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-
+import web.com.bean.TripGroupMember;
 import web.com.bean.Trip_Group;
 import web.com.dao.Trip_Group_Dao;
 import web.com.util.ServiceLocator;
@@ -77,8 +77,7 @@ public class Trip_Group_Dao_Impl implements Trip_Group_Dao {
 	@Override
 	public int delete(String tripId, int memberId) {
 		int count = 0 ;
-		String sql = "delete from Trip_Group where TRIP_ID = ? and MEMBER_ID = ? ; " ;
-		
+		String sql = "delete from Trip_Group where TRIP_ID = ? and MEMBER_ID = ? ; " ;	
 		try (Connection connection = datasource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql); ) {
 			
@@ -93,30 +92,30 @@ public class Trip_Group_Dao_Impl implements Trip_Group_Dao {
 	}
 
 	@Override
-	public Trip_Group findGroupTripId(String groupTripId) {
-		Trip_Group tripGroup = null;
+	public List<TripGroupMember> findGroupTripId(String groupTripId) {
+		List<TripGroupMember> tripGroups = new ArrayList<>();
 		String sql = " select " +
-		"TRIP_ID, C_DATETIME, MEMBER_ID" +
-		"where TRIP_ID = ? " ;
+		"a.TRIP_ID, a.MEMBER_ID, b.NICKNAME " +
+		"from TRIP_GROUP a inner join MEMBER b " +
+		"on a.MEMBER_ID = b.MEMBER_ID "+
+		"where TRIP_ID  = ? " ;
 		
 		try (Connection connection = datasource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql); ){
 			
 			ps.setString(1, groupTripId);
+			System.out.println("###findGroupTripId sql:: " + ps.toString());
 			ResultSet rs = ps.executeQuery();
-			
-			if (rs.next()) {
+			while(rs.next()) {
 				String tripId = rs.getString(1);
-				String createDateTime = String.valueOf((rs.getDate(2)));
-				int memberId = rs.getInt(3);
-				
-				tripGroup = new Trip_Group(tripId, createDateTime, memberId);
+				int memberId = rs.getInt(2);
+				String nickName = rs.getString(3);
+				tripGroups.add(new TripGroupMember(tripId, memberId, nickName));
 			}
-			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return tripGroup;
+		return tripGroups;
 	}
 
 	@Override
