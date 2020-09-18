@@ -2,6 +2,7 @@ package web.com.dao;
 
 import java.util.List;
 
+import web.com.bean.TripGroupMember;
 import web.com.bean.Trip_Group;
 
 /**
@@ -20,7 +21,7 @@ public interface Trip_Group_Dao {
 
 	int delete(String tripId, int memberId);
 
-	Trip_Group findGroupTripId(String groupTripId);
+	List<TripGroupMember> findGroupTripId(String groupTripId);
 
 	List<Trip_Group> getAll();
 

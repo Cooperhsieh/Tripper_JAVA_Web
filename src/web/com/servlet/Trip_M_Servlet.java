@@ -2,6 +2,7 @@ package web.com.servlet;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import web.com.util.ImageUtil;
 import web.com.bean.Trip_M;
 import web.com.dao.Trip_M_Dao;
 import web.com.impl.Trip_M_Dao_Impl;
@@ -51,7 +53,7 @@ public class Trip_M_Servlet extends HttpServlet {
 			tripMDao = new Trip_M_Dao_Impl();
 		}
 
-		String action = jsonObject.get("action").toString();
+		String action = jsonObject.get("action").getAsString();
 
 		if (action.equals("getAll")) {
 			List<Trip_M> tripMs = tripMDao.getAll();
@@ -75,9 +77,23 @@ public class Trip_M_Servlet extends HttpServlet {
 			String tripId = jsonObject.get("tripId").getAsString();
 			Trip_M tripM = tripMDao.getTripId(tripId);
 			writeText(response, gson.toJson(tripM));
-
-		} else {
-			writeText(response, "");
+		
+			
+				
+		} else if (action.equals("getImage")) {
+			OutputStream os = response.getOutputStream();
+			int id = jsonObject.get("id").getAsInt();
+			int imageSize = jsonObject.get("imageSize").getAsInt();
+			byte[] image = tripMDao.getImage(id);
+			if (image != null) {
+				image = ImageUtil.shrink(image, imageSize);
+				response.setContentType("image/jpeg");    //傳送圖片格式
+				response.setContentLength(image.length);  //圖片佔的大小
+				os.write(image);
+			}
+		}
+			else {
+			writeText(response, "fuck");
 		}
 	}
 

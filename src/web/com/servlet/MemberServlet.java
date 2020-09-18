@@ -84,8 +84,14 @@ public class MemberServlet extends HttpServlet {
 		}
 //取得此帳號資訊		
 		else if(action.equals("getProfile")) {
-			String account = jsonObject.get("account").getAsString();
+			String account = jsonObject.get("account").getAsString();		
 			Member member = memberDao.findByAccount(account);
+			writeText(response, gson.toJson(member));
+		}
+		 
+		else if (action.equals("getProfileById")){
+			String memberId = jsonObject.get("memberId").getAsString();
+			Member member = memberDao.findById(Integer.parseInt(memberId));
 			writeText(response, gson.toJson(member));
 		}
 //新增帳號or修改帳號
