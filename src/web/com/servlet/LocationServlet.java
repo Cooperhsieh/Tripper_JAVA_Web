@@ -53,6 +53,7 @@ public class LocationServlet extends HttpServlet {
 		}
 		
 		String action = jsonObject.get("action").getAsString();
+
 		if(action.equals("getAll")) {
 			List<Location> locations = locDao.getAll();
 			writeText(response, gson.toJson(locations));
