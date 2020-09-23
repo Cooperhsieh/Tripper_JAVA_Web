@@ -63,8 +63,8 @@ public class TripServlet extends HttpServlet {
 		
 		//取得該會員所有行程資料,
 		if (action.equals("getAll")) {
-			String tripId = jsonObject.get("tripId").getAsString();
-			List<Trip_M> tripMasters = tripMasterDao.getTripId(tripId);
+			String memberId = jsonObject.get("memberId").getAsString();
+			List<Trip_M> tripMasters = tripMasterDao.getTripId(memberId);
 			writeText(response, gson.toJson(tripMasters));
 		} else if(action.equals("insert") || action.equals("update") ) {
 			

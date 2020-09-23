@@ -20,7 +20,7 @@ public interface Trip_M_Dao {
 
 	int delete(String tripId);
 
-	List<Trip_M> getTripId(String tripId);
+	List<Trip_M> getTripId(String memberId);
 
 	List<Trip_M> getAll();
 

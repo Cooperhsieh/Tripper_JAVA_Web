@@ -118,27 +118,28 @@ public class Trip_M_Dao_Impl implements Trip_M_Dao {
 	}
 
 	@Override
-	public List<Trip_M> getTripId(String tripId) {
+	public List<Trip_M> getTripId(String memberId) {
 		List<Trip_M> tripMasters = new ArrayList<Trip_M>();
 		Trip_M tripM = null;
 		String sql = "select" +
-		"MEMBER_ID, TRIP_TITLE, S_DATE, S_TIME," + // 4
-		"D_COUNT, P_MAX " + // 2
-		"where TRIP_ID = ? ";
+		"TRIP_ID, TRIP_TITLE, S_DATE, S_TIME, " + // 4
+		"D_COUNT, P_MAX, STATUS " + // 2
+		"where MEMBER_ID = ? ";
 		
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql);) {
-			ps.setString(1, tripId);
+			ps.setInt(1, Integer.parseInt(memberId));
 			System.out.println("getTripId sql :" + sql);
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()) {
-				int memberId = rs.getInt(1);
+				String tripId = rs.getString(1);
 				String tripTitle = rs.getString(2);
 				String startDate = String.valueOf((rs.getDate(3)));
 				String startTime = String.valueOf((rs.getTime(4)));
 				int dayCount = rs.getInt(5);
 				int pMax = rs.getInt(6);
-				tripM = new Trip_M(memberId, tripTitle, startDate, startTime, dayCount, pMax);
+				int status = rs.getInt(7);
+				tripM = new Trip_M(tripId, tripTitle, startDate, startTime, dayCount, pMax, status);
 				tripMasters.add(tripM);
 			}
 			
