@@ -13,7 +13,7 @@ public interface ExploreDao {
 
 	int delete(int id);
 
-	Explore findById(int id);
+//	Explore findById(int id);
 
 	List<Explore> getAll();
 
