@@ -42,7 +42,7 @@ public class TripServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Trip_M_Dao tripMasterDao = null;
 	private Trip_D_Dao tripDetailDao = null;
-	private Location_D locationDetailDao = null;
+	//private Location_D locationDetailDao = null;
 	private Trip_Group_Dao tripGroupDao = null;
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
