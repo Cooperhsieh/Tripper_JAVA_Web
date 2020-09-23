@@ -20,6 +20,18 @@ public class Trip_D implements Serializable {
 	private String startTime;
 	private String stayTime;
 	private String memo;
+	
+	
+
+	public Trip_D(String transId, String tripId, int seqNo, String locId, String stayTime, String memo) {
+		super();
+		this.transId = transId;
+		this.tripId = tripId;
+		this.seqNo = seqNo;
+		this.locId = locId;
+		this.stayTime = stayTime;
+		this.memo = memo;
+	}
 
 	public Trip_D(String transId, String tripId, int seqNo, String locId, String startDate, String startTime,
 			String stayTime, String memo) {

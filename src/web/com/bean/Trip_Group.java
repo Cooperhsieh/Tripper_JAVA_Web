@@ -24,16 +24,16 @@ public class Trip_Group implements Serializable {
 		this.createDateTime = createDateTime;
 		this.memberId = memberId;
 	}
-
-	public Trip_Group(String tripId, String createDateTime, int memberId) {
-		super();
-		this.tripId = tripId;
-		this.createDateTime = createDateTime;
-		this.memberId = memberId;
-	}
 	
 	public Trip_Group(String tripId, int memberId) {
 		super();
+		this.tripId = tripId;
+		this.memberId = memberId;
+	}
+	
+	public Trip_Group(String groupTransId, String tripId, int memberId) {
+		super();
+		this.groupTransId = groupTransId;
 		this.tripId = tripId;
 		this.memberId = memberId;
 	}

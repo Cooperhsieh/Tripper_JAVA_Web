@@ -75,8 +75,8 @@ public class Trip_M_Servlet extends HttpServlet {
 
 		} else if (action.equals("getTripId")) {
 			String tripId = jsonObject.get("tripId").getAsString();
-			Trip_M tripM = tripMDao.getTripId(tripId);
-			writeText(response, gson.toJson(tripM));
+//			Trip_M tripM = tripMDao.getTripId(tripId);
+//			writeText(response, gson.toJson(tripM));
 		
 			
 				

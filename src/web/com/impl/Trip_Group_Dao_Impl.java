@@ -75,16 +75,13 @@ public class Trip_Group_Dao_Impl implements Trip_Group_Dao {
 	}
 
 	@Override
-	public int delete(String tripId, int memberId) {
+	public int delete(String tripId) {
 		int count = 0 ;
-		String sql = "delete from Trip_Group where TRIP_ID = ? and MEMBER_ID = ? ; " ;	
+		String sql = "delete from Trip_Group where TRIP_ID = ? ; " ;	
 		try (Connection connection = datasource.getConnection();
-				PreparedStatement ps = connection.prepareStatement(sql); ) {
-			
+				PreparedStatement ps = connection.prepareStatement(sql); ) {	
 			ps.setString(1, tripId);
-			ps.setInt(2, memberId);
 			count = ps.executeUpdate();
-			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
