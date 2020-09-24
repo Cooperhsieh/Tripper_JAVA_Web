@@ -30,24 +30,25 @@ public class Trip_M_Dao_Impl implements Trip_M_Dao {
 	}
 	
 	@Override
-	public int insert(Trip_M tripM) {
+	public int insert(Trip_M tripM, byte[] image) {
 		int count = 0;
 		String sql = "insert into Trip_M" +
 		"( TRIP_ID, MEMBER_ID, TRIP_TITLE, S_DATE, S_TIME, " + // 5
-		"D_COUNT, C_DATETIME, P_MAX, STATUS )" + // 4
+		"D_COUNT, P_MAX, STATUS, B_PIC )" + // 4
 		"values ( ?, ?, ?, ?, ?, ?, ?, ?, ? )";
 		
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql);) {
+			System.out.println("insert tripM sql::" + ps.toString());
 			ps.setString(1, tripM.getTripId());
 			ps.setInt(2, tripM.getMemberId());
 			ps.setString(3, tripM.getTripTitle());
 			ps.setTimestamp(4, Timestamp.valueOf(tripM.getStartDate()));
 			ps.setTimestamp(5, Timestamp.valueOf(tripM.getStartTime()));
 			ps.setInt(6, tripM.getDayCount());
-			ps.setTimestamp(7, Timestamp.valueOf(tripM.getCreateDateTime()));
-			ps.setInt(8, tripM.getpMax());
-			ps.setInt(9, tripM.getStatus());
+			ps.setInt(7, tripM.getpMax());
+			ps.setInt(8, tripM.getStatus());
+			ps.setBytes(9, tripM.getbPic());
 			count = ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -56,24 +57,44 @@ public class Trip_M_Dao_Impl implements Trip_M_Dao {
 	}
 
 	@Override
-	public int update(Trip_M tripM) {
+	public int update(Trip_M tripM, byte[] image) {
 		int count = 0;
-		String sql = " update Trip_M set " + 
-		"TRIP_TITLE = ?, "     +
-		"S_DATE     = ?, "	   +
-		"S_TIME     = ?, "     +
-		"D_COUNT    = ?, "     +
-		"P_MAX      = ?, "     + //5
-		"where TRIP_ID = ?; " ;
-		
+		String sql = "";
+		if(image != null) {
+			sql = " update Trip_M set " + 
+					"TRIP_TITLE = ?, "     +
+					"S_DATE     = ?, "	   +
+					"S_TIME     = ?, "     +
+					"D_COUNT    = ?, "     +
+					"P_MAX      = ?, "     + //5
+					"STATUS     = ?, "     +
+					"B_PIC      = ?, "     +
+					"where TRIP_ID = ?; " ;
+		}else {
+			sql = " update Trip_M set " + 
+					"TRIP_TITLE = ?, "     +
+					"S_DATE     = ?, "	   +
+					"S_TIME     = ?, "     +
+					"D_COUNT    = ?, "     +
+					"P_MAX      = ?, "     + //5
+					"STATUS     = ?, "     +
+					"where TRIP_ID = ?; " ;
+		}
 		try (Connection connection = dataSource.getConnection();
-				PreparedStatement ps = connection.prepareStatement(sql);) {
+				PreparedStatement ps = connection.prepareStatement(sql);) {	
 			ps.setString(1, tripM.getTripTitle());
 			ps.setTimestamp(2, Timestamp.valueOf(tripM.getStartDate()));
 			ps.setTimestamp(3, Timestamp.valueOf(tripM.getStartTime()));
 			ps.setInt(4, tripM.getDayCount());
 			ps.setInt(5, tripM.getpMax());
-			
+			ps.setInt(6, tripM.getStatus());
+			if(image != null) {
+				ps.setBytes(7, tripM.getbPic());
+				ps.setString(8, tripM.getTripId());
+			}else {
+				ps.setString(7, tripM.getTripId());
+			}
+			System.out.println("update Trip_M sql :: " + ps.toString());
 			count = ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -97,31 +118,35 @@ public class Trip_M_Dao_Impl implements Trip_M_Dao {
 	}
 
 	@Override
-	public Trip_M getTripId(String tripId) {
+	public List<Trip_M> getTripId(String memberId) {
+		List<Trip_M> tripMasters = new ArrayList<Trip_M>();
 		Trip_M tripM = null;
 		String sql = "select" +
-		"MEMBER_ID, TRIP_TITLE, S_DATE, S_TIME," + // 4
-		"D_COUNT, P_MAX " + // 2
-		"where TRIP_ID = ? ";
+		"TRIP_ID, TRIP_TITLE, S_DATE, S_TIME, " + // 4
+		"D_COUNT, P_MAX, STATUS " + // 2
+		"where MEMBER_ID = ? ";
 		
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql);) {
-			ps.setString(1, tripId);
+			ps.setInt(1, Integer.parseInt(memberId));
+			System.out.println("getTripId sql :" + sql);
 			ResultSet rs = ps.executeQuery();
-			if (rs.next()) {
-				int memberId = rs.getInt(1);
+			while(rs.next()) {
+				String tripId = rs.getString(1);
 				String tripTitle = rs.getString(2);
 				String startDate = String.valueOf((rs.getDate(3)));
 				String startTime = String.valueOf((rs.getTime(4)));
 				int dayCount = rs.getInt(5);
 				int pMax = rs.getInt(6);
-				
-				tripM = new Trip_M(memberId, tripTitle, startDate, startTime, dayCount, pMax);
+				int status = rs.getInt(7);
+				tripM = new Trip_M(tripId, tripTitle, startDate, startTime, dayCount, pMax, status);
+				tripMasters.add(tripM);
 			}
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return tripM;
+		return tripMasters;
 	}
 
 	@Override

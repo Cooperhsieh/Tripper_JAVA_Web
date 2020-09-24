@@ -24,32 +24,32 @@ public class ExploreImpl implements ExploreDao{
 		// TODO Auto-generated method stub
 		return 0;
 	}
-	@Override
-	public Explore findById(int id) {
-		
-		String sql = "SELECT BLOG_TITLE, BLOG_ID FROM Blog_M WHERE USER_ID = ?";
-		Explore explore = null;
-		try(
-				Connection connection  = dataSource.getConnection();
-				PreparedStatement ps = connection.prepareStatement(sql);
-				) {
-			ps.setInt(1, id);
-			ResultSet rs = ps.executeQuery();
-			if(rs.next()) {
-				String titleName = rs.getString(3);
-				String blogID = rs.getString(6);
-				explore = new Explore(id, titleName, blogID);
-				}
-		} catch (SQLException e) {
-			
-		}
-		return explore;
-		
-	}
+//	@Override
+//	public Explore findById(int id) {
+//		
+//		String sql = "SELECT BLOG_TITLE, BLOG_ID FROM Blog_M WHERE USER_ID = ?";
+//		Explore explore = null;
+//		try(
+//				Connection connection  = dataSource.getConnection();
+//				PreparedStatement ps = connection.prepareStatement(sql);
+//				) {
+//			ps.setInt(1, id);
+//			ResultSet rs = ps.executeQuery();
+//			if(rs.next()) {
+//				String titleName = rs.getString(3);
+//				String blogID = rs.getString(6);
+//				explore = new Explore(id, titleName, blogID);
+//				}
+//		} catch (SQLException e) {
+//			
+//		}
+//		return explore;
+//		
+//	}
 
 	@Override
 	public List<Explore> getAll() {
-		String sql = "SELECT * FROM Blog_M;";
+		String sql = "SELECT Blog_M.BLOG_TITLE, Blog_M.USER_ID,Blog_M.BLOG_ID, Member.NICKNAME FROM  Blog_M	INNER JOIN Member ON  Blog_M.USER_ID = Member.MEMBER_ID;";
 		List<Explore> exploreslList = new ArrayList<>();
 		try(    
 				Connection connection = dataSource.getConnection();
@@ -58,10 +58,15 @@ public class ExploreImpl implements ExploreDao{
 			
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
-				int id = rs.getInt(1);
-				String titleName = rs.getString(3);
-				String userName = rs.getString(6);
-				Explore explore = new Explore(id, titleName, userName);
+				
+				String titleName = rs.getString(1);
+				int userID = rs.getInt(2);
+				int blogID = rs.getInt(3);
+				String nickName = rs.getString(4);
+				
+				
+	
+				Explore explore = new Explore(blogID, userID, nickName, titleName);
 				exploreslList.add(explore);
 			}
 			return exploreslList;
@@ -73,7 +78,7 @@ public class ExploreImpl implements ExploreDao{
 
 	@Override
 	public byte[] getImage(int id) {
-		String sql = "SELECT PIC  FROM Blog_M WHERE BLOG_ID = ?;";
+		String sql = "SELECT PIC  FROM Blog_M WHERE USER_ID = ?;";
 		byte [] pic = null;
 		try (
 				Connection connection = dataSource.getConnection();

@@ -42,6 +42,14 @@ public class Location implements Serializable{
 	
 	
 
+	public Location(String name, String address) {
+		super();
+		this.name = name;
+		this.address = address;
+	}
+
+
+
 	public Location(String name, String address, String locType, String city, String info, double longitude,
 			double latitude, int createId, int useId, Timestamp createDateTime) {
 		super();

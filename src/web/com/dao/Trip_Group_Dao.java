@@ -19,7 +19,7 @@ public interface Trip_Group_Dao {
 
 	int update(Trip_Group tripGroup);
 
-	int delete(String tripId, int memberId);
+	int delete(String tripId);
 
 	List<TripGroupMember> findGroupTripId(String groupTripId);
 

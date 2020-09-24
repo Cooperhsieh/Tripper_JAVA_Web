@@ -72,8 +72,8 @@ public class Trip_D_Servlet extends HttpServlet {
 
 		} else if (action.equals("findTransId")) {
 			String tripId = jsonObject.get("tripId").getAsString();
-			Trip_D tripD = tripDDao.findTransId(tripId);
-			writeText(response, gson.toJson(tripD));
+			//Trip_D tripD = tripDDao.findTransId(tripId);
+			//writeText(response, gson.toJson(tripD));
 
 		} else {
 			writeText(response, "");

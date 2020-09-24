@@ -20,10 +20,23 @@ public class Trip_M implements Serializable {
 	private String createDateTime;
 	private int pMax;
 	private int status;
-	private int mCount ;
+	private byte[] bPic;
 	
 	
-
+	
+	public Trip_M(String tripId, int memberId, String tripTitle, String startDate, String startTime, int dayCount,
+			int pMax, int status, byte[] bPic) {
+		super();
+		this.tripId = tripId;
+		this.memberId = memberId;
+		this.tripTitle = tripTitle;
+		this.startDate = startDate;
+		this.startTime = startTime;
+		this.dayCount = dayCount;
+		this.pMax = pMax;
+		this.status = status;
+		this.bPic = bPic;
+	}
 
 
 
@@ -34,7 +47,6 @@ public class Trip_M implements Serializable {
 		this.startDate = startDate;
 		this.tripTitle = tripTitle;
 		this.pMax = pMax;
-		this.mCount = mCount;
 	}
 	
 	
@@ -79,8 +91,24 @@ public class Trip_M implements Serializable {
 	}
 	
 	
+	
+	
 
 	
+
+	public Trip_M(String tripId, String tripTitle, String startDate, String startTime, int dayCount,
+			 int pMax, int status) {
+		super();
+		this.tripId = tripId;
+		this.tripTitle = tripTitle;
+		this.startDate = startDate;
+		this.startTime = startTime;
+		this.dayCount = dayCount;
+		this.pMax = pMax;
+		this.status = status;
+	}
+
+
 
 	public String getTripId() {
 		return tripId;
@@ -153,15 +181,15 @@ public class Trip_M implements Serializable {
 	public void setStatus(int status) {
 		this.status = status;
 	}
-	
-	public int getmCount() {
-		return mCount;
+
+	public byte[] getbPic() {
+		return bPic;
 	}
 
 
 
-	public void setmCount(int mCount) {
-		this.mCount = mCount;
+	public void setbPic(byte[] bPic) {
+		this.bPic = bPic;
 	}
 
 

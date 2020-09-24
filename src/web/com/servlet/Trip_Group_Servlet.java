@@ -69,7 +69,7 @@ public class Trip_Group_Servlet extends HttpServlet {
 		} else if (action.equals("tripGroupDelete")) {
 			String tripId = jsonObject.get("tripId").getAsString();
 			int memberId = jsonObject.get("memberId").getAsInt();
-			int count = tripGroupDao.delete(tripId, memberId);
+			int count = tripGroupDao.delete(tripId);
 			writeText(response, String.valueOf(count));
 
 		} else if (action.equals("findGroupTripId")) {
