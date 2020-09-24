@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context docBase="/Tripper_JAVA_Web" path="/Tripper_JAVA_Web"
 	reloadable="true">
+<<<<<<< HEAD
 
 	<Resource name="jdbc/TRIPPER" 
+=======
+	
+<Resource name="jdbc/TRIPPER" 
+>>>>>>> parent of 14820b4... no message
 		auth="Container"
 		type="javax.sql.DataSource"  
 		driverClassName="com.mysql.cj.jdbc.Driver"
