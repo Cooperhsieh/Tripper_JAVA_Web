@@ -2,6 +2,7 @@ package web.com.servlet;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.lang.reflect.Type;
 import java.util.Base64;
@@ -29,6 +30,7 @@ import web.com.dao.Trip_M_Dao;
 import web.com.impl.Trip_D_Dao_Impl;
 import web.com.impl.Trip_Group_Dao_Impl;
 import web.com.impl.Trip_M_Dao_Impl;
+import web.com.util.ImageUtil;
 import web.com.util.SettingUtil;
 
 /**
@@ -64,8 +66,22 @@ public class TripServlet extends HttpServlet {
 		//取得該會員所有行程資料,
 		if (action.equals("getAll")) {
 			String memberId = jsonObject.get("memberId").getAsString();
+			// 依會員ID
 			List<Trip_M> tripMasters = tripMasterDao.getTripId(memberId);
 			writeText(response, gson.toJson(tripMasters));
+		}else if(action.equals("getImage")) {
+			System.out.println("enter getImage");
+			OutputStream os = response.getOutputStream();
+			String tripId = jsonObject.get("id").getAsString();
+			int imageSize = jsonObject.get("imageSize").getAsInt();
+			System.out.println("imageSize::" + imageSize);
+			byte[] image = tripMasterDao.getImage(tripId);
+			if(image != null) {
+				image = ImageUtil.shrink(image, imageSize);
+				response.setContentType(SettingUtil.IMAGE_JPEG);
+				response.setContentLength(image.length);
+				os.write(image);
+			}
 		} else if(action.equals("insert") || action.equals("update") ) {
 			
 			// 主檔 
@@ -77,7 +93,7 @@ public class TripServlet extends HttpServlet {
 			System.out.println("locationDJson:: " + locationDJson);
 			Type type = new TypeToken<Map<String, List<Location_D>>>(){}.getType();
 			
-			Map<String, List<Location_D>> maps = new Gson().fromJson(jsonIn.toString(), type);
+			Map<String, List<Location_D>> maps = new Gson().fromJson(locationDJson.toString(), type);
 			Trip_M tripMaster = gson.fromJson(tripMasterJson, Trip_M.class);
 			
 			 int groupStat = tripMaster.getStatus();
@@ -92,6 +108,7 @@ public class TripServlet extends HttpServlet {
 			// 新增
 			if(action.equals("insert")) {
 				// 主檔資料
+				//count = tripMasterDao.insert(tripMaster, backgroudPic);
 				count = tripMasterDao.insert(tripMaster, backgroudPic);
 				// insert 失敗直接傳回null
 				if(count <= 0) {
@@ -129,7 +146,8 @@ public class TripServlet extends HttpServlet {
 			// 修改
 			}else if (action.equals("update")) {
 				// 主檔修改
-				count = tripMasterDao.update(tripMaster, backgroudPic);
+				// count = tripMasterDao.update(tripMaster, backgroudPic);
+				count = tripMasterDao.update(tripMaster, null);
 				if(groupStat != 1) {
 					count = tripGroupDao.delete(tripMaster.getTripId());
 					if(count <= 0) {

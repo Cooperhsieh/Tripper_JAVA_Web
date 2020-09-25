@@ -42,8 +42,9 @@ public class Location implements Serializable{
 	
 	
 
-	public Location(String name, String address) {
+	public Location(String name, String address, String locId) {
 		super();
+		this.locId = locId;
 		this.name = name;
 		this.address = address;
 	}

@@ -39,16 +39,17 @@ public class Trip_M_Dao_Impl implements Trip_M_Dao {
 		
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql);) {
-			System.out.println("insert tripM sql::" + ps.toString());
+			
 			ps.setString(1, tripM.getTripId());
 			ps.setInt(2, tripM.getMemberId());
 			ps.setString(3, tripM.getTripTitle());
-			ps.setTimestamp(4, Timestamp.valueOf(tripM.getStartDate()));
-			ps.setTimestamp(5, Timestamp.valueOf(tripM.getStartTime()));
+			ps.setString(4, tripM.getStartDate());
+			ps.setString(5, tripM.getStartTime());
 			ps.setInt(6, tripM.getDayCount());
 			ps.setInt(7, tripM.getpMax());
 			ps.setInt(8, tripM.getStatus());
 			ps.setBytes(9, tripM.getbPic());
+			System.out.println("insert tripM sql::" + ps.toString());
 			count = ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -121,21 +122,22 @@ public class Trip_M_Dao_Impl implements Trip_M_Dao {
 	public List<Trip_M> getTripId(String memberId) {
 		List<Trip_M> tripMasters = new ArrayList<Trip_M>();
 		Trip_M tripM = null;
-		String sql = "select" +
+		String sql = "select " +
 		"TRIP_ID, TRIP_TITLE, S_DATE, S_TIME, " + // 4
-		"D_COUNT, P_MAX, STATUS " + // 2
+		"D_COUNT, P_MAX, STATUS " + 
+		"from TRIP_M " +
 		"where MEMBER_ID = ? ";
 		
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql);) {
 			ps.setInt(1, Integer.parseInt(memberId));
-			System.out.println("getTripId sql :" + sql);
+			System.out.println("getTripId sql :" + ps.toString());
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()) {
 				String tripId = rs.getString(1);
 				String tripTitle = rs.getString(2);
-				String startDate = String.valueOf((rs.getDate(3)));
-				String startTime = String.valueOf((rs.getTime(4)));
+				String startDate = rs.getString(3);
+				String startTime = rs.getString(4);
 				int dayCount = rs.getInt(5);
 				int pMax = rs.getInt(6);
 				int status = rs.getInt(7);
@@ -153,7 +155,7 @@ public class Trip_M_Dao_Impl implements Trip_M_Dao {
 	public List<Trip_M> getAll() {
 		List<Trip_M> tripMs = new ArrayList<Trip_M>();
 
-		String sql = "SELECT * FROM Trip_M left join Trip_Group on Trip_M.TRIP_ID = Trip_Group.TRIP_ID ;";
+		String sql = "select * from Trip_M ;";
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql);) {
 			
@@ -182,12 +184,12 @@ public class Trip_M_Dao_Impl implements Trip_M_Dao {
 
 	
 	@Override
-	public byte[] getImage(int id) {
-		String sql = "SELECT image FROM TRIPPER.Trip_M WHERE MEMBER_ID = ?;";
+	public byte[] getImage(String id) {
+		String sql = "select B_PIC from TRIP_M where TRIP_ID = ?; ";
 		byte[] image = null;
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql);) {
-			ps.setInt(1, id);
+			ps.setString(1, id);
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
 				image = rs.getBytes(1);

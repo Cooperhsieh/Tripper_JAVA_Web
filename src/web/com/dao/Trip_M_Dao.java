@@ -24,6 +24,6 @@ public interface Trip_M_Dao {
 
 	List<Trip_M> getAll();
 
-	byte[] getImage(int id);
+	byte[] getImage(String id);
 
 }
