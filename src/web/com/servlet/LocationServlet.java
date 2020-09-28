@@ -64,21 +64,7 @@ public class LocationServlet extends HttpServlet {
 			int imageSize = jsonObject.get("imageSize").getAsInt();
 			System.out.println("imageSize::" + imageSize);
 			byte[] image = locDao.getImageById(locId);
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> master
 
-
-
-<<<<<<< HEAD
-=======
-=======
->>>>>>> 459cb5bf6922cfd5e8297a5cb4c9338121d7bff8
->>>>>>> parent of 14820b4... no message
->>>>>>> master
 			if(image != null) {
 				image = ImageUtil.shrink(image, imageSize);
 				response.setContentType(SettingUtil.IMAGE_JPEG);
