@@ -38,6 +38,18 @@ public class Trip_M implements Serializable {
 		this.bPic = bPic;
 	}
 
+	
+	public Trip_M(int memberId, String tripTitle, String startDate, String startTime, int dayCount,
+			  int pMax, int status) {
+		super();
+		this.memberId = memberId;
+		this.tripTitle = tripTitle;
+		this.startDate = startDate;
+		this.startTime = startTime;
+		this.dayCount = dayCount;
+		this.pMax = pMax;
+		this.status = status;
+	}
 
 
 	public Trip_M(String tripId, int memberId, String tripTitle,String startDate, int pMax,int mCount) {

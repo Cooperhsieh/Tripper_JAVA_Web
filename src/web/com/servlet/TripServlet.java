@@ -99,17 +99,21 @@ public class TripServlet extends HttpServlet {
 			 int groupStat = tripMaster.getStatus();
 			
 			// 確認是否有圖片
-			String imageBase64 = jsonObject.get("imageBase64").getAsString();
-			byte[] backgroudPic = null;
-			if(imageBase64 != null && !imageBase64.isEmpty()) {
-				backgroudPic = Base64.getMimeDecoder().decode(imageBase64);
-			}
+//			String imageBase64 = jsonObject.get("imageBase64").getAsString();
+//			byte[] backgroudPic = null;
+//			if(imageBase64 != null && !imageBase64.isEmpty()) {
+//				backgroudPic = Base64.getMimeDecoder().decode(imageBase64);
+//			}
 			int count = 0;
 			// 新增
 			if(action.equals("insert")) {
+				
 				// 主檔資料
+				
+				String tripId = SettingUtil.getTransId();
+				tripMaster.setTripId(tripId);
 				//count = tripMasterDao.insert(tripMaster, backgroudPic);
-				count = tripMasterDao.insert(tripMaster, backgroudPic);
+				count = tripMasterDao.insert(tripMaster, null);
 				// insert 失敗直接傳回null
 				if(count <= 0) {
 					writeText(response, String.valueOf(count));
@@ -126,15 +130,17 @@ public class TripServlet extends HttpServlet {
 				// 附檔資料
 				tripDetailDao = new Trip_D_Dao_Impl();
 				List<Location_D> locationDs = null;
+				int timeAdd = 1;
 				for(int i = 1; i <= maps.size(); i++) {
 					int seq = 1;
 					locationDs = maps.get(i + "");
 					for(Location_D locD: locationDs) { 
 						Trip_D tripD =  new Trip_D(
-								locD.getTransId(), tripMaster.getTripId(), seq, locD.getLocId(), locD.getStartDate(),
+								(Long.parseLong(SettingUtil.getTransId())+timeAdd)+"", tripMaster.getTripId(), seq, locD.getLocId(), locD.getStartDate(),
 								locD.getStartTime(), locD.getStayTimes(), locD.getMemos());
 						count = tripDetailDao.insert(tripD);
 						seq++;
+						timeAdd++;
 					}
 					// insert 失敗直接傳回null
 					if(count <= 0) {
