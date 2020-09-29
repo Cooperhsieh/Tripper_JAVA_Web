@@ -154,12 +154,7 @@ public class Trip_M_Dao_Impl implements Trip_M_Dao {
 	@Override
 	public List<Trip_M> getAll() {
 		List<Trip_M> tripMs = new ArrayList<Trip_M>();
-
-<<<<<<< HEAD
 		String sql = "SELECT * FROM Trip_M left join Trip_Group on Trip_M.TRIP_ID = Trip_Group.TRIP_ID where STATUS = 1;";
-=======
-		String sql = "select * from Trip_M ;";
->>>>>>> 627367066a1c5251c18cecfa3766604565afa139
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql);) {
 			
@@ -203,4 +198,6 @@ public class Trip_M_Dao_Impl implements Trip_M_Dao {
 		} 
 		return image;
 	}
+	
+	
 }
