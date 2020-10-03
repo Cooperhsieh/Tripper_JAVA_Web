@@ -1,7 +1,6 @@
 package web.com.bean;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 
 public class Location_D extends Location implements Serializable {
 

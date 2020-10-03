@@ -1,15 +1,14 @@
 package web.com.impl;
 
-import java.security.interfaces.RSAKey;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.PseudoColumnUsage;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.sql.DataSource;
+
 import web.com.bean.Blog;
 import web.com.dao.BlogDao;
 import web.com.util.ServiceLocator;

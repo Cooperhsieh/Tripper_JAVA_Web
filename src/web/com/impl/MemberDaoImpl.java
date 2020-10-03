@@ -4,14 +4,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.sql.DataSource;
 
-import web.com.util.ServiceLocator;
 import web.com.bean.Member;
 import web.com.dao.MemberDao;
+import web.com.util.ServiceLocator;
 
 /**
  * 類別說明：會員DaoImpl檔
@@ -98,6 +96,7 @@ public class MemberDaoImpl implements MemberDao {
 			} else {
 				ps.setInt(2, member.getId());
 			}
+			System.out.println("update Member sql :: " + ps.toString());
 			count = ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();

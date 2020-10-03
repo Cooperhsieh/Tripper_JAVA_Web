@@ -1,14 +1,11 @@
 package web.com.impl;
 
 import java.sql.Connection;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-
 
 import javax.sql.DataSource;
 
@@ -58,13 +55,14 @@ public class Trip_Group_Dao_Impl implements Trip_Group_Dao {
 	public int update(Trip_Group tripGroup) {
 		return 0;
 //		int count = 0 ;
-//		String sql = "update Trip_Group set MEMBER_ID = ?, " +
+//		String sql = "update Trip_Group set MEMBER_ID = ? " +
 //		"where GROUP_TRANS_ID = ? ; " ;
 //		
 //		try (Connection connection = datasource.getConnection();
 //				PreparedStatement ps = connection.prepareStatement(sql); ) {
-//			
+//	
 //			ps.setInt(1, tripGroup.getMemberId());
+//			System.out.println("tripGroup:: " + ps.toString());
 //			count = ps.executeUpdate();
 //			
 //		} catch (SQLException e) {
