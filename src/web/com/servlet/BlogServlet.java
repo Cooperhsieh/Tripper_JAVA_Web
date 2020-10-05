@@ -17,6 +17,7 @@ import com.google.gson.JsonObject;
 
 import io.grpc.netty.shaded.io.netty.channel.unix.Buffer;
 import web.com.bean.Blog;
+import web.com.bean.Blog_Note;
 import web.com.bean.Explore;
 import web.com.dao.BlogDao;
 import web.com.impl.BlogImpl;
@@ -32,7 +33,7 @@ public class BlogServlet extends HttpServlet {
     
     
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	
+		request.setCharacterEncoding("UTF-8");
 		Gson gson = new Gson();
 		BufferedReader br = request.getReader();
 		StringBuilder jsonIn = new StringBuilder();
@@ -50,10 +51,20 @@ public class BlogServlet extends HttpServlet {
 		}
 		String action = jsonObject.get("action").getAsString();
 		
+		
 		if(action.equals("getAll")) {
 			List<Blog> blogs = blogDao.getAll();
 			writeText(response, gson.toJson(blogs));
-		}else if(action.equals("getImage")){
+//網誌新增註解
+		}else if(action.equals("insertBlogNote")) {
+			String b_noteJson = jsonObject.get("blog_note").getAsString();
+			System.out.println("Blog_Note ::"+ b_noteJson);
+			Blog_Note blog_Note = gson.fromJson(b_noteJson, Blog_Note.class);
+			int count = 0 ;
+			count = blogDao.insertB_Note(blog_Note);
+			writeText(response, String.valueOf(count));
+		}	
+		else if(action.equals("getImage")){
 			OutputStream os = response.getOutputStream();
 			int id = jsonObject.get("id").getAsInt();
 			int imageSize = jsonObject.get("imageSize").getAsInt();

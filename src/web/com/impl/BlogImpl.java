@@ -11,6 +11,7 @@ import java.util.List;
 
 import javax.sql.DataSource;
 import web.com.bean.Blog;
+import web.com.bean.Blog_Note;
 import web.com.dao.BlogDao;
 import web.com.util.ServiceLocator;
 
@@ -100,6 +101,25 @@ public class BlogImpl implements BlogDao{
 			e.printStackTrace();
 		}
 		return blog;
+	}
+
+	@Override
+	public int insertB_Note(Blog_Note blog_Note) {
+		int count = 0;
+		String sql = "";
+		sql = "insert into Blog_Spot_Pic (LOC_ID, LOC_NOTE,BLOG_ID) values (? , ? , ? ) ;"; 
+		try (Connection connection = dataSource.getConnection();
+				PreparedStatement ps = connection.prepareStatement(sql); ){
+			ps.setString(1, blog_Note.getLoc_Id());
+			ps.setString(2, blog_Note.getLoc_Note());
+			ps.setString(3, blog_Note.getBlog_Id());
+			
+			System.out.println("insert Blog_Note sql::" + ps.toString());
+			count = ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return count;
 	}
 
 }
