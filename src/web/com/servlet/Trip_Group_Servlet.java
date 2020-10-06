@@ -34,6 +34,7 @@ public class Trip_Group_Servlet extends HttpServlet {
 	Trip_Group_Dao tripGroupDao = null;
 	
 
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
@@ -69,7 +70,7 @@ public class Trip_Group_Servlet extends HttpServlet {
 		} else if (action.equals("tripGroupDelete")) {
 			String tripId = jsonObject.get("tripId").getAsString();
 			int memberId = jsonObject.get("memberId").getAsInt();
-			int count = tripGroupDao.delete(tripId, memberId);
+			int count = tripGroupDao.delete(tripId);
 			writeText(response, String.valueOf(count));
 
 		} else if (action.equals("findGroupTripId")) {
@@ -83,6 +84,7 @@ public class Trip_Group_Servlet extends HttpServlet {
 
 	}
 
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		if (tripGroupDao == null) {

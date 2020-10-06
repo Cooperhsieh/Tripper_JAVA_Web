@@ -15,10 +15,10 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
-import web.com.util.ImageUtil;
 import web.com.bean.Trip_M;
 import web.com.dao.Trip_M_Dao;
 import web.com.impl.Trip_M_Dao_Impl;
+import web.com.util.ImageUtil;
 import web.com.util.SettingUtil;
 
 /**
@@ -34,6 +34,7 @@ public class Trip_M_Servlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	Trip_M_Dao tripMDao = null;
 
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
@@ -75,14 +76,14 @@ public class Trip_M_Servlet extends HttpServlet {
 
 		} else if (action.equals("getTripId")) {
 			String tripId = jsonObject.get("tripId").getAsString();
-			Trip_M tripM = tripMDao.getTripId(tripId);
-			writeText(response, gson.toJson(tripM));
+//			Trip_M tripM = tripMDao.getTripId(tripId);
+//			writeText(response, gson.toJson(tripM));
 		
 			
 				
 		} else if (action.equals("getImage")) {
 			OutputStream os = response.getOutputStream();
-			int id = jsonObject.get("id").getAsInt();
+			String id = jsonObject.get("id").getAsString();
 			int imageSize = jsonObject.get("imageSize").getAsInt();
 			byte[] image = tripMDao.getImage(id);
 			if (image != null) {
@@ -97,6 +98,7 @@ public class Trip_M_Servlet extends HttpServlet {
 		}
 	}
 
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		if (tripMDao == null) {

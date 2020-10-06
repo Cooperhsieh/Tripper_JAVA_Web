@@ -1,9 +1,7 @@
 package web.com.impl;
 
-import java.security.interfaces.RSAKey;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.PseudoColumnUsage;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -11,11 +9,15 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+<<<<<<< HEAD
 import com.google.cloud.Date;
 
 import web.com.bean.BlogD;
 import web.com.bean.BlogM;
 import web.com.bean.Blog_Day;
+=======
+import web.com.bean.Blog;
+>>>>>>> 25d2c3dd0ba5d1b6307c5022a9714586e8937554
 import web.com.dao.BlogDao;
 import web.com.util.ServiceLocator;
 

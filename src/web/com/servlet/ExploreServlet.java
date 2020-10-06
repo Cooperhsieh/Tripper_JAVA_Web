@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
-
 import web.com.bean.Explore;
 import web.com.bean.Member;
 import web.com.dao.ExploreDao;
@@ -31,6 +30,7 @@ public class ExploreServlet extends HttpServlet {
     ExploreDao exploreDao = null;
 	
 	
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Gson gson = new Gson();
 	    BufferedReader br = request.getReader();
@@ -80,6 +80,7 @@ public class ExploreServlet extends HttpServlet {
 		 System.out.println("output: " + outText);
 	}
 
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		if (exploreDao == null) {

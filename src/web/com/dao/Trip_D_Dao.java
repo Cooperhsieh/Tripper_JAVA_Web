@@ -2,6 +2,8 @@ package web.com.dao;
 
 import java.util.List;
 
+import web.com.bean.Blog_SpotInfo;
+import web.com.bean.DateAndId;
 import web.com.bean.Trip_D;
 
 /**
@@ -20,8 +22,10 @@ public interface Trip_D_Dao {
 
 	int delete(String tripId);
 
-	Trip_D findTransId(String tripId);
+	List<Trip_D> findTransId(String tripId);
 
 	List<Trip_D> getAll();
+
+	List<Blog_SpotInfo> getSpotName(DateAndId dateAndId);
 
 }

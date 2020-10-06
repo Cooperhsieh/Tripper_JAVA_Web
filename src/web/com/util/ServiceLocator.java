@@ -35,7 +35,7 @@ public class ServiceLocator {
 		DataSource dataSource = null;
 		try {
 			Context cxt = (Context) initContext.lookup("java:comp/env");
-			dataSource = (DataSource) cxt.lookup("jdbc/TRIPPER");
+			dataSource = (DataSource) cxt.lookup("jdbc/Tripper");
 		} catch (Exception e) {
 			System.out.println(TAG + "getDataSource fail:" + e.getMessage());
 		}

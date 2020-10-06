@@ -10,7 +10,6 @@ import java.util.List;
 import javax.sql.DataSource;
 
 import web.com.bean.Friends;
-import web.com.bean.Member;
 import web.com.dao.FriendsDao;
 import web.com.util.ServiceLocator;
 

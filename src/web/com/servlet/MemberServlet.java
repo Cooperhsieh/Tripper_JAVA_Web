@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.Base64;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -34,6 +33,7 @@ public class MemberServlet extends HttpServlet {
 	private final static String CONTENT_TYPE = "text/html; charset=utf-8";
 	MemberDao memberDao = null;
 
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
@@ -141,6 +141,7 @@ public class MemberServlet extends HttpServlet {
 		 System.out.println("output: " + outText);
 	}
 
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 

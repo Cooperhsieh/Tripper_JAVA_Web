@@ -14,16 +14,16 @@ import web.com.bean.Trip_M;
 
 public interface Trip_M_Dao {
 
-	int insert(Trip_M tripM);
+	int insert(Trip_M tripM, byte[] image);
 
-	int update(Trip_M tripM);
+	int update(Trip_M tripM, byte[] image);
 
 	int delete(String tripId);
 
-	Trip_M getTripId(String tripId);
+	List<Trip_M> getTripId(String memberId);
 
 	List<Trip_M> getAll();
 
-	byte[] getImage(int id);
+	byte[] getImage(String id);
 
 }
