@@ -53,12 +53,11 @@ public class LocationServlet extends HttpServlet {
 		}
 		
 		String action = jsonObject.get("action").getAsString();
-<<<<<<< HEAD
+
 
 		System.out.println("get action::" + action);
 
-=======
->>>>>>> 459cb5bf6922cfd5e8297a5cb4c9338121d7bff8
+
 		if(action.equals("getAll")) {
 			List<Location> locations = locDao.getAll();
 			writeText(response, gson.toJson(locations));
@@ -69,14 +68,13 @@ public class LocationServlet extends HttpServlet {
 			int imageSize = jsonObject.get("imageSize").getAsInt();
 			System.out.println("imageSize::" + imageSize);
 			byte[] image = locDao.getImageById(locId);
-<<<<<<< HEAD
+
 
 			System.out.println("image size ::" + image.length);
 
 			System.out.println("1111 locId::" + locId);
 
-=======
->>>>>>> 459cb5bf6922cfd5e8297a5cb4c9338121d7bff8
+
 			if(image != null) {
 				image = ImageUtil.shrink(image, imageSize);
 				response.setContentType(SettingUtil.IMAGE_JPEG);

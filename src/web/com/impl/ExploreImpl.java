@@ -49,7 +49,7 @@ public class ExploreImpl implements ExploreDao{
 
 	@Override
 	public List<Explore> getAll() {
-		String sql = "SELECT Blog_M.BLOG_TITLE, Blog_M.USER_ID,Blog_M.BLOG_ID, Member.NICKNAME FROM  Blog_M	INNER JOIN Member ON  Blog_M.USER_ID = Member.MEMBER_ID;";
+		String sql = "SELECT Blog_M.BLOG_TITLE, Blog_M.USER_ID,Blog_M.BLOG_ID, Member.NICKNAME,Blog_M.BLOG_DESC FROM  Blog_M	INNER JOIN Member ON  Blog_M.USER_ID = Member.MEMBER_ID";
 		List<Explore> exploreslList = new ArrayList<>();
 		try(    
 				Connection connection = dataSource.getConnection();
@@ -62,11 +62,12 @@ public class ExploreImpl implements ExploreDao{
 				String titleName = rs.getString(1);
 				int userID = rs.getInt(2);
 				int blogID = rs.getInt(3);
+			    String blogDesc = rs.getString(5);
 				String nickName = rs.getString(4);
 				
 				
 	
-				Explore explore = new Explore(blogID, userID, nickName, titleName);
+				Explore explore = new Explore(blogID, userID, nickName, titleName,blogDesc);
 				exploreslList.add(explore);
 			}
 			return exploreslList;
