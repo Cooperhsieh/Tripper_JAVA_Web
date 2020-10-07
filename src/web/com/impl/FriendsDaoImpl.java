@@ -3,11 +3,14 @@ package web.com.impl;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.sql.DataSource;
+
+import com.google.firebase.database.Transaction.Result;
 
 import web.com.bean.Friends;
 import web.com.bean.Member;
@@ -23,60 +26,36 @@ import web.com.util.ServiceLocator;
 */
 public class FriendsDaoImpl implements FriendsDao {
 	DataSource dataSource ;
-	
+	private static final int NOT_FRIEND = 0;
+	private static final int CHECKING = 1;
+	private static final int FRIEND = 2;
 	public FriendsDaoImpl() {
 		dataSource = ServiceLocator.getInstance().getDataSource();	
 	}
-
+	
 	@Override
-	public int insert(Friends friends) {
-		int count = 0;
-		String sql = "insert into Friends" +
-				"(MEMBER_ID, FRIEND_ID) " + // TODO
-				"values(?, ?);";
+	public List<Member> getAll(int key) {
+		String sql = " select b.* "
+				+ " from FRIENDS a inner join MEMBER b "
+				+ " where ( a.FRIEND_ID = b.MEMBER_ID ) "
+				+ " and a.MEMBER_ID = ? "
+				+ " and a.F_STATUS = ? ;";
+		List<Member> friends = new ArrayList<Member>();
+		Member member = null;
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql);) {
-			ps.setInt(1, friends.getMemberId());
-			ps.setInt(2, friends.getFriendId());
-			count = ps.executeUpdate();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return count;
-	}
-
-	@Override
-	public int delete(int memberId, int friendId) {
-		int count = 0;
-		String sql = "delete from Friends where MEMBER_ID = ?, FRIEND_ID = ?;";
-		try (Connection connection = dataSource.getConnection();
-				PreparedStatement ps = connection.prepareStatement(sql);) {
-			ps.setInt(1, memberId);
-			ps.setInt(2, friendId);
-			count = ps.executeUpdate();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return count;
-	}
-
-	@Override
-	public Friends findFriendTransId(String friendTransId) {
-		String sql = "select MEMBER_ID, FRIEND_ID, F_STATUS, DATE_TIME from Friends where TRANS_ID = ?";
-		Friends friends = null;
-		try (Connection connection = dataSource.getConnection();
-				PreparedStatement ps = connection.prepareStatement(sql);) {
-			ps.setString(1, friendTransId);
-			/* 當Statement關閉，ResultSet也會自動關閉，
-			 * 可以不需要將ResultSet宣告置入try with resources小括號內，參看ResultSet說明
-			 */
+			ps.setInt(1, key);
+			ps.setInt(2, FRIEND);
 			ResultSet rs = ps.executeQuery();
-			if (rs.next()) {
-				int memberId = rs.getInt(1);
-				int friendId = rs.getInt(2);
-				int friendStatus = rs.getInt(3);
-				Timestamp applyDateTime = rs.getTimestamp(4); // TODO
-				friends = new Friends(memberId, friendId, friendStatus, applyDateTime);
+			while (rs.next()) {
+				int memberId = rs.getInt("member_id");
+				String accountId = rs.getString("account_id");
+				String email = rs.getString("email");
+				String nickname = rs.getString("nickname");
+				int loginType = rs.getInt("login_type");
+				String tokenId = rs.getString("token_id");
+				member = new Member(memberId, accountId, email, nickname, loginType, tokenId);
+				friends.add(member);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -85,45 +64,75 @@ public class FriendsDaoImpl implements FriendsDao {
 	}
 
 	@Override
-	public List<Friends> getAll() {
-		String sql = "select Trans_ID, MEMBER_ID, FRIEND_ID, F_STATUS, DATE_TIME "
-				+ "from Friends order by DATE_TIME desc";
-		List<Friends> friendsList = new ArrayList<Friends>();
-		Friends friends = null;
-		try (Connection connection = dataSource.getConnection();
-				PreparedStatement ps = connection.prepareStatement(sql);) {
+	public Friends findSearchFriend(int memberId, String account) {
+		Friends friend = null;
+		int friendMemeberId = 0;
+		String friendAccount = "";
+		String mail = "";
+		String nickName = "";
+		int loginType = 0;
+		String token = "";
+		int status = 0;
+		String sql = " select * from MEMBER  "
+				   + " where UPPER(ACCOUNT_ID) = ? ;";
+		try(Connection connection = dataSource.getConnection();
+				PreparedStatement ps = connection.prepareStatement(sql)) {
+			ps.setString(1, account);
+			System.out.println("getSearchFriend sql::" + ps.toString() );
 			ResultSet rs = ps.executeQuery();
-			while (rs.next()) {
-				String friendTransId = rs.getString(1);
-				int memberId = rs.getInt(2);
-				int friendId = rs.getInt(3);
-				int friendStatus = rs.getInt(4);
-				Timestamp applyDateTime = rs.getTimestamp(5);
-				friends = new Friends(friendTransId, memberId, friendId, friendStatus, applyDateTime);
-				friendsList.add(friends);
+			if(rs.next()) {
+				//int id, String account, String mail, String nickName, int loginType, String token, int status)
+				friendMemeberId = rs.getInt("member_id");
+				friendAccount = rs.getString("account_id");
+				mail = rs.getString("email");
+				nickName = rs.getString("nickname");
+				loginType = rs.getInt("login_type");
+				token = rs.getString("token_id");
+			} else {
+				return null;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return friendsList;
+		sql = " select F_STATUS from FRIENDS " 
+			+ " where MEMBER_ID = ? "
+			+ " and FRIEND_ID = ? ;";
+		try(Connection connection = dataSource.getConnection();
+				PreparedStatement ps = connection.prepareStatement(sql)) {
+			ps.setInt(1, memberId);
+			ps.setInt(2, friendMemeberId );
+			System.out.println("getSearchFriend sql::" + ps.toString() );
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()) {
+				status = rs.getInt(1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		friend = new Friends(friendMemeberId, friendAccount, mail, nickName, loginType, token, status);
+		return friend;
 	}
 
-	// TODO
 	@Override
-	public byte[] getPhoto(int id) {
-		String sql = "select P_PIC from Member where MEMBER_ID = ?;";
-		byte[] photo = null;
-		try (Connection connection = dataSource.getConnection();
-				PreparedStatement ps = connection.prepareStatement(sql);) {
-			ps.setInt(1, id);
-			ResultSet rs = ps.executeQuery();
-			if (rs.next()) {
-				photo = rs.getBytes(1);
-			}
-		} catch (Exception e) {
+	public int insert(int memberId, int friendId) {
+		int count = 0;
+		String sql = " insert into FRIENDS "
+				   + " ( "
+				   + " MEMBER_ID, FRIEND_ID, F_STATUS "
+				   + " ) values ( "
+				   + " ?, ? ,? "
+				   + " ) ;";
+		try(Connection connection = dataSource.getConnection();
+				PreparedStatement ps = connection.prepareStatement(sql)) {
+			ps.setInt(1, memberId);
+			ps.setInt(2, friendId);
+			ps.setInt(3, CHECKING);
+			count = ps.executeUpdate();
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return photo;
+		
+		return count;
 	}
-	
+
 }

@@ -3,6 +3,7 @@ package web.com.dao;
 import java.util.List;
 
 import web.com.bean.Friends;
+import web.com.bean.Member;
 
 /**
 * 類別說明：好友資料Dao檔
@@ -12,16 +13,7 @@ import web.com.bean.Friends;
 * 
 */
 public interface FriendsDao {
-	
-	int insert(Friends friends);
-	
-//	int update(Friends friends, byte[] photo);
-	
-	int delete(int memberId, int friendId);
-	
-	Friends findFriendTransId(String friendTransId);
-	
-	List<Friends> getAll();
-	
-	byte[] getPhoto(int id); // TODO
+	List<Member> getAll(int memberId);
+	Friends findSearchFriend(int memberId, String account);
+	int insert(int memberId, int friendId);
 }
