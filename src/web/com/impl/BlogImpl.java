@@ -122,4 +122,22 @@ public class BlogImpl implements BlogDao{
 		return count;
 	}
 
+	@Override
+	public int updateImage(byte[] image,String blogId,String locId) {
+		int count = 0;
+		String sql = "insert into Blog_Spot_Pic (LOC_ID,BLOG_ID,PIC1) values (?,?,?);";
+		try (Connection connection = dataSource.getConnection();
+				PreparedStatement ps = connection.prepareStatement(sql); ){
+			ps.setString(1, locId);
+			ps.setString(2, blogId);
+			ps.setBytes(3, image);
+			
+			System.out.println("insert Blog_Spot_Pic sql::" + ps.toString());
+			count = ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return count;
+	}
+
 }

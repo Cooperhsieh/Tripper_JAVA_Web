@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.util.Base64;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -64,6 +65,22 @@ public class BlogServlet extends HttpServlet {
 			count = blogDao.insertB_Note(blog_Note);
 			writeText(response, String.valueOf(count));
 		}	
+//檢查是否有上傳圖片
+		
+		else if (action.equals("imageUpdate")) {
+			if(jsonObject.get("imageBase64") != null) {
+			byte[] image = null;
+			String imageBase64 = jsonObject.get("imageBase64").getAsString();
+			if (imageBase64 != null && !imageBase64.isEmpty()) {
+				image = Base64.getMimeDecoder().decode(imageBase64);
+			}
+			int count = 0 ;
+			String blogId = jsonObject.get("blogId").getAsString();
+			String locId = jsonObject.get("locId").getAsString();
+			count = blogDao.updateImage(image,blogId,locId);
+			writeText(response, String.valueOf(count));
+			}
+		}
 		else if(action.equals("getImage")){
 			OutputStream os = response.getOutputStream();
 			int id = jsonObject.get("id").getAsInt();

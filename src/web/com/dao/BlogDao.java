@@ -16,5 +16,7 @@ public interface BlogDao {
 	Blog findById(int id);
 	
 	int insertB_Note (Blog_Note blog_Note);
+	
+	int updateImage(byte[] image,String blogId,String tripId);
 
 }
