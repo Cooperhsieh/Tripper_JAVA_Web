@@ -3,6 +3,7 @@ package web.com.servlet;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -13,7 +14,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.protobuf.StringValue;
 
+import web.com.bean.Blog_SpotInfo;
+import web.com.bean.DateAndId;
 import web.com.bean.Trip_D;
 import web.com.dao.Trip_D_Dao;
 import web.com.impl.Trip_D_Dao_Impl;
@@ -32,6 +36,7 @@ public class Trip_D_Servlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	Trip_D_Dao tripDDao = null;
 
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
@@ -51,7 +56,7 @@ public class Trip_D_Servlet extends HttpServlet {
 			tripDDao = new Trip_D_Dao_Impl();
 		}
 
-		String action = jsonObject.get("action").toString();
+		String action = jsonObject.get("action").getAsString();
 
 		if (action.equals("getAll")) {
 			List<Trip_D> tripDs = tripDDao.getAll();
@@ -64,23 +69,37 @@ public class Trip_D_Servlet extends HttpServlet {
 
 			Trip_D tripD = gson.fromJson(tripDJson, Trip_D.class);
 			writeText(response, String.valueOf(tripD));
+//抓取景點名稱 建立網誌用
+		}  else if (action.equals("getSpotName")) {
+			String dateId = jsonObject.get("dateAndId").getAsString();
+			System.out.println("dateAndId" + dateId);
+			DateAndId dateAndId = gson.fromJson(dateId, DateAndId.class);
 
-		} else if (action.equals("tripDDelete")) {
+			List<Blog_SpotInfo> spotNames = new ArrayList<Blog_SpotInfo>();
+
+			spotNames = tripDDao.getSpotName(dateAndId);
+			System.out.println("spotNames::" + spotNames);
+			writeText(response,gson.toJson(spotNames));
+
+		}
+
+		else if (action.equals("tripDDelete")) {
 			String tripId = jsonObject.get("tripId").getAsString();
 			int count = tripDDao.delete(tripId);
 			writeText(response, gson.toJson(count));
 
 		} else if (action.equals("findTransId")) {
 			String tripId = jsonObject.get("tripId").getAsString();
-			//Trip_D tripD = tripDDao.findTransId(tripId);
-			//writeText(response, gson.toJson(tripD));
+			// Trip_D tripD = tripDDao.findTransId(tripId);
+			// writeText(response, gson.toJson(tripD));
 
-		} else {
-			writeText(response, "");
+		} else {			
+			writeText(response,"");
 		}
 
 	}
 
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		if (tripDDao == null) {
@@ -95,7 +114,7 @@ public class Trip_D_Servlet extends HttpServlet {
 		response.setContentType(SettingUtil.CONTENT_TYPE);
 		PrintWriter out = response.getWriter();
 		out.print(json);
-	
+
 		System.out.println("response json: " + json);
 		out.close();
 	}

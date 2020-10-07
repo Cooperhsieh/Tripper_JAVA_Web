@@ -48,7 +48,8 @@ public class Trip_M_Dao_Impl implements Trip_M_Dao {
 			ps.setInt(6, tripM.getDayCount());
 			ps.setInt(7, tripM.getpMax());
 			ps.setInt(8, tripM.getStatus());
-			ps.setBytes(9, tripM.getbPic());
+			ps.setBytes(9, image);
+//			ps.setBytes(9, tripM.getbPic());
 			System.out.println("insert tripM sql::" + ps.toString());
 			count = ps.executeUpdate();
 		} catch (SQLException e) {
@@ -69,7 +70,7 @@ public class Trip_M_Dao_Impl implements Trip_M_Dao {
 					"D_COUNT    = ?, "     +
 					"P_MAX      = ?, "     + //5
 					"STATUS     = ?, "     +
-					"B_PIC      = ?, "     +
+					"B_PIC      = ? "     +
 					"where TRIP_ID = ?; " ;
 		}else {
 			sql = " update Trip_M set " + 
@@ -78,19 +79,19 @@ public class Trip_M_Dao_Impl implements Trip_M_Dao {
 					"S_TIME     = ?, "     +
 					"D_COUNT    = ?, "     +
 					"P_MAX      = ?, "     + //5
-					"STATUS     = ?, "     +
+					"STATUS     = ? "     +
 					"where TRIP_ID = ?; " ;
 		}
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql);) {	
 			ps.setString(1, tripM.getTripTitle());
-			ps.setTimestamp(2, Timestamp.valueOf(tripM.getStartDate()));
-			ps.setTimestamp(3, Timestamp.valueOf(tripM.getStartTime()));
+			ps.setString(2, tripM.getStartDate());
+			ps.setString(3, tripM.getStartTime());
 			ps.setInt(4, tripM.getDayCount());
 			ps.setInt(5, tripM.getpMax());
 			ps.setInt(6, tripM.getStatus());
 			if(image != null) {
-				ps.setBytes(7, tripM.getbPic());
+				ps.setBytes(7, image);
 				ps.setString(8, tripM.getTripId());
 			}else {
 				ps.setString(7, tripM.getTripId());
@@ -111,6 +112,7 @@ public class Trip_M_Dao_Impl implements Trip_M_Dao {
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql);) {
 			ps.setString(1, tripId);
+//			System.out.println(ps.toString());
 			count = ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -126,7 +128,8 @@ public class Trip_M_Dao_Impl implements Trip_M_Dao {
 		"TRIP_ID, TRIP_TITLE, S_DATE, S_TIME, " + // 4
 		"D_COUNT, P_MAX, STATUS " + 
 		"from TRIP_M " +
-		"where MEMBER_ID = ? ";
+		"where MEMBER_ID = ? " +
+		"order by M_DATETIME desc";
 		
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql);) {
@@ -154,8 +157,15 @@ public class Trip_M_Dao_Impl implements Trip_M_Dao {
 	@Override
 	public List<Trip_M> getAll() {
 		List<Trip_M> tripMs = new ArrayList<Trip_M>();
-
-		String sql = "select * from Trip_M ;";
+<<<<<<< HEAD
+		String sql = "SELECT * FROM Tripper.Trip_M "
+				+ "left join Trip_Group on Trip_M.TRIP_ID = Trip_Group.TRIP_ID "
+				+ "where STATUS = 1 " +
+				"order by M_DATETIME desc" ;
+				
+=======
+		String sql = "SELECT * FROM Trip_M left join Trip_Group on Trip_M.TRIP_ID = Trip_Group.TRIP_ID where STATUS = 1;";
+>>>>>>> 24f5ce7686b6726406dd00621553a19f87dcc832
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql);) {
 			
@@ -185,7 +195,8 @@ public class Trip_M_Dao_Impl implements Trip_M_Dao {
 	
 	@Override
 	public byte[] getImage(String id) {
-		String sql = "select B_PIC from TRIP_M where TRIP_ID = ?; ";
+		String sql = "select B_PIC from TRIP_M where TRIP_ID = ? " +
+						"order by M_DATETIME desc";
 		byte[] image = null;
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql);) {
@@ -199,4 +210,6 @@ public class Trip_M_Dao_Impl implements Trip_M_Dao {
 		} 
 		return image;
 	}
+	
+	
 }

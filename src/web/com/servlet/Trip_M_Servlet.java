@@ -15,10 +15,10 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
-import web.com.util.ImageUtil;
 import web.com.bean.Trip_M;
 import web.com.dao.Trip_M_Dao;
 import web.com.impl.Trip_M_Dao_Impl;
+import web.com.util.ImageUtil;
 import web.com.util.SettingUtil;
 
 /**
@@ -34,6 +34,7 @@ public class Trip_M_Servlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	Trip_M_Dao tripMDao = null;
 
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
@@ -97,6 +98,7 @@ public class Trip_M_Servlet extends HttpServlet {
 		}
 	}
 
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		if (tripMDao == null) {

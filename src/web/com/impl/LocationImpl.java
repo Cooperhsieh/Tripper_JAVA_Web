@@ -5,14 +5,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.SimpleFormatter;
 
 import javax.sql.DataSource;
-import javax.swing.text.SimpleAttributeSet;
 
 import web.com.bean.Location;
 import web.com.dao.LocationDao;
@@ -105,7 +101,7 @@ public class LocationImpl implements LocationDao{
 			}else {
 				ps.setString(9, loc.getLocId());
 			}
-			System.out.println("##:"+ps.toString());
+			System.out.println("Location Update:: " + ps.toString());
 			count  = ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();

@@ -10,7 +10,10 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import web.com.bean.Blog_SpotInfo;
+import web.com.bean.DateAndId;
 import web.com.bean.Trip_D;
+import web.com.bean.Trip_M;
 import web.com.dao.Trip_D_Dao;
 import web.com.util.ServiceLocator;
 
@@ -67,7 +70,7 @@ public class Trip_D_Dao_Impl implements Trip_D_Dao {
 		"S_DATE = ? , "  +  // 5
 		"S_TIME = ? , "  +
 		"STAYTIME = ? ," +
-		"MEMO = ? ,"     +  
+		"MEMO = ? "     +  
 		"where TRIP_ID = ?; " ;
 		
 		try (Connection connection = dataSource.getConnection();
@@ -76,9 +79,9 @@ public class Trip_D_Dao_Impl implements Trip_D_Dao {
 			ps.setString(2, tripD.getTripId());
 			ps.setInt(3, tripD.getSeqNo());
 			ps.setString(4, tripD.getLocId());
-			ps.setTimestamp(5, Timestamp.valueOf(tripD.getStartDate()));
-			ps.setTimestamp(6, Timestamp.valueOf(tripD.getStartTime()));
-			ps.setInt(7, Integer.parseInt(tripD.getStayTime()));
+			ps.setString(5, tripD.getStartDate());
+			ps.setString(6, tripD.getStartTime());
+			ps.setString(7, tripD.getStayTime());
 			ps.setString(8, tripD.getMemo());
 			count = ps.executeUpdate();
 			
@@ -167,6 +170,33 @@ public class Trip_D_Dao_Impl implements Trip_D_Dao {
 			e.printStackTrace();
 		}
 		return tripDs;
+	}
+	//創建網誌
+	@Override
+	public List<Blog_SpotInfo> getSpotName(DateAndId dateAndId) {
+		List<Blog_SpotInfo> spotNames = new ArrayList<Blog_SpotInfo>();		
+		String sql = "SELECT Location.LOC_ID,Trip_D.TRIP_ID,NAME FROM Location left join Trip_D on Location.LOC_ID = Trip_D.LOC_ID where S_DATE = ? and TRIP_ID = ?;";
+		try (Connection connection = dataSource.getConnection();
+				PreparedStatement ps = connection.prepareStatement(sql);) {
+			ps.setString(1, dateAndId.getS_Date());
+			ps.setString(2, dateAndId.getTrip_Id());
+			System.out.println("findspotNames :: " + ps.toString());
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+				String loc_Id = rs.getString(1);
+				String trip_Id = rs.getString(2);
+				String spotName = rs.getString(3);
+				
+				Blog_SpotInfo blog_SpotInfo = new Blog_SpotInfo(loc_Id, trip_Id, spotName) ;				
+				spotNames.add(blog_SpotInfo);
+			}
+			return spotNames;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return spotNames;
+		
 	}
 
 }
