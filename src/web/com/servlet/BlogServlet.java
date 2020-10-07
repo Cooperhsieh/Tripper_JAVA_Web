@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.util.Base64;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -15,8 +16,13 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import io.grpc.netty.shaded.io.netty.channel.unix.Buffer;
+<<<<<<< HEAD
+import web.com.bean.Blog;
+import web.com.bean.Blog_Note;
+=======
 import web.com.bean.BlogD;
 import web.com.bean.BlogM;
+>>>>>>> 5675a932d2115c492d2327e1342521fb6486b4ff
 import web.com.bean.Explore;
 import web.com.dao.BlogDao;
 import web.com.impl.BlogImpl;
@@ -32,7 +38,7 @@ public class BlogServlet extends HttpServlet {
     
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	
+		request.setCharacterEncoding("UTF-8");
 		Gson gson = new Gson();
 		BufferedReader br = request.getReader();
 		StringBuilder jsonIn = new StringBuilder();
@@ -50,10 +56,42 @@ public class BlogServlet extends HttpServlet {
 		}
 		String action = jsonObject.get("action").getAsString();
 		
+		
 		if(action.equals("getAll")) {
+<<<<<<< HEAD
+			List<Blog> blogs = blogDao.getAll();
+			writeText(response, gson.toJson(blogs));
+//網誌新增註解
+		}else if(action.equals("insertBlogNote")) {
+			String b_noteJson = jsonObject.get("blog_note").getAsString();
+			System.out.println("Blog_Note ::"+ b_noteJson);
+			Blog_Note blog_Note = gson.fromJson(b_noteJson, Blog_Note.class);
+			int count = 0 ;
+			count = blogDao.insertB_Note(blog_Note);
+			writeText(response, String.valueOf(count));
+		}	
+//檢查是否有上傳圖片
+		
+		else if (action.equals("imageUpdate")) {
+			if(jsonObject.get("imageBase64") != null) {
+			byte[] image = null;
+			String imageBase64 = jsonObject.get("imageBase64").getAsString();
+			if (imageBase64 != null && !imageBase64.isEmpty()) {
+				image = Base64.getMimeDecoder().decode(imageBase64);
+			}
+			int count = 0 ;
+			String blogId = jsonObject.get("blogId").getAsString();
+			String locId = jsonObject.get("locId").getAsString();
+			count = blogDao.updateImage(image,blogId,locId);
+			writeText(response, String.valueOf(count));
+			}
+		}
+		else if(action.equals("getImage")){
+=======
 //			List<BlogD> blogs = blogDao.findBlogById(id);
 //			writeText(response, gson.toJson(blogs));
 		}else if(action.equals("getImage")){
+>>>>>>> 5675a932d2115c492d2327e1342521fb6486b4ff
 			OutputStream os = response.getOutputStream();
 			int id = jsonObject.get("id").getAsInt();
 			int imageSize = jsonObject.get("imageSize").getAsInt();

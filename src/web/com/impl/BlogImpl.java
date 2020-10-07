@@ -8,12 +8,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.sql.DataSource;
+<<<<<<< HEAD
+import web.com.bean.Blog;
+import web.com.bean.Blog_Note;
+=======
 
 import com.google.cloud.Date;
 
 import web.com.bean.BlogD;
 import web.com.bean.BlogM;
 import web.com.bean.Blog_Day;
+>>>>>>> 5675a932d2115c492d2327e1342521fb6486b4ff
 import web.com.dao.BlogDao;
 import web.com.util.ServiceLocator;
 
@@ -158,10 +163,49 @@ public class BlogImpl implements BlogDao{
 		return bList;
 	}
 
+<<<<<<< HEAD
+	@Override
+	public int insertB_Note(Blog_Note blog_Note) {
+		int count = 0;
+		String sql = "";
+		sql = "insert into Blog_Spot_Pic (LOC_ID, LOC_NOTE,BLOG_ID) values (? , ? , ? ) ;"; 
+		try (Connection connection = dataSource.getConnection();
+				PreparedStatement ps = connection.prepareStatement(sql); ){
+			ps.setString(1, blog_Note.getLoc_Id());
+			ps.setString(2, blog_Note.getLoc_Note());
+			ps.setString(3, blog_Note.getBlog_Id());
+			
+			System.out.println("insert Blog_Note sql::" + ps.toString());
+			count = ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return count;
+	}
+
+	@Override
+	public int updateImage(byte[] image,String blogId,String locId) {
+		int count = 0;
+		String sql = "insert into Blog_Spot_Pic (LOC_ID,BLOG_ID,PIC1) values (?,?,?);";
+		try (Connection connection = dataSource.getConnection();
+				PreparedStatement ps = connection.prepareStatement(sql); ){
+			ps.setString(1, locId);
+			ps.setString(2, blogId);
+			ps.setBytes(3, image);
+			
+			System.out.println("insert Blog_Spot_Pic sql::" + ps.toString());
+			count = ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return count;
+	}
+=======
 //	@Override
 //	public BlogD findLocationById(int id) {
 //		
 //		return null;
 //	}
+>>>>>>> 5675a932d2115c492d2327e1342521fb6486b4ff
 
 }
