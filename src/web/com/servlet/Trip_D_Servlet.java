@@ -3,8 +3,11 @@ package web.com.servlet;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,11 +17,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import com.google.protobuf.StringValue;
 
 import web.com.bean.Blog_SpotInfo;
 import web.com.bean.DateAndId;
+import web.com.bean.Location_D;
 import web.com.bean.Trip_D;
+import web.com.bean.Trip_LocInfo;
 import web.com.dao.Trip_D_Dao;
 import web.com.impl.Trip_D_Dao_Impl;
 import web.com.util.SettingUtil;
@@ -70,7 +76,7 @@ public class Trip_D_Servlet extends HttpServlet {
 			Trip_D tripD = gson.fromJson(tripDJson, Trip_D.class);
 			writeText(response, String.valueOf(tripD));
 //抓取景點名稱 建立網誌用
-		}  else if (action.equals("getSpotName")) {
+		} else if (action.equals("getSpotName")) {
 			String dateId = jsonObject.get("dateAndId").getAsString();
 			System.out.println("dateAndId" + dateId);
 			DateAndId dateAndId = gson.fromJson(dateId, DateAndId.class);
@@ -79,8 +85,28 @@ public class Trip_D_Servlet extends HttpServlet {
 
 			spotNames = tripDDao.getSpotName(dateAndId);
 			System.out.println("spotNames::" + spotNames);
-			writeText(response,gson.toJson(spotNames));
+			writeText(response, gson.toJson(spotNames));
 
+//抓取行程完整的景點資料
+		} else if (action.equals("getLocName")) {
+			String dateId = jsonObject.get("dateAndId").getAsString();
+			System.out.println("dateAndId1: " + dateId);
+			DateAndId dateAndId = gson.fromJson(dateId, DateAndId.class);
+
+			List<Trip_LocInfo> LocNames = new ArrayList<Trip_LocInfo>();
+
+			LocNames = tripDDao.getLocName(dateAndId);
+			System.out.println("LocNames::" + LocNames);
+			writeText(response, gson.toJson(LocNames));
+			
+//編輯行程頁面顯示景點			
+		} else if (action.equals("showLocName")) {
+			String tripId = jsonObject.get("tripId").getAsString();
+			System.out.println("編輯頁面秀行程ID: " + tripId);
+					
+			Map<String, List<Trip_LocInfo>> map = new TreeMap<String, List<Trip_LocInfo>>();
+			map = (Map<String, List<Trip_LocInfo>>) tripDDao.showLocName(tripId);	
+			writeText(response, gson.toJson(map));
 		}
 
 		else if (action.equals("tripDDelete")) {
@@ -93,8 +119,8 @@ public class Trip_D_Servlet extends HttpServlet {
 			// Trip_D tripD = tripDDao.findTransId(tripId);
 			// writeText(response, gson.toJson(tripD));
 
-		} else {			
-			writeText(response,"");
+		} else {
+			writeText(response, "");
 		}
 
 	}
