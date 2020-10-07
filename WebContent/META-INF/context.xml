@@ -5,12 +5,11 @@
 		auth="Container"
 		type="javax.sql.DataSource" 
 		driverClassName="com.mysql.cj.jdbc.Driver"
-		url="jdbc:mysql://localhost:3306/Tripper?useUnicode=yes&amp;characterEncoding=utf8&amp;useSSL=false&amp;serverTimezone=Asia/Taipei" 
+
+		url="jdbc:mysql://localhost:3306/TRIPPER?allowPublicKeyRetrieval=true" 
 		username="root"
-		password="19970826" 
-		maxTotal="20" 
-		maxIdle="10" 
-		maxWaitMillis="5000"/>
+		password="00000000" 
+/>
 
 
 </Context>

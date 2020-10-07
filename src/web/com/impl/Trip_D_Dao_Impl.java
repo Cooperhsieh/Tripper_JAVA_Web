@@ -70,7 +70,7 @@ public class Trip_D_Dao_Impl implements Trip_D_Dao {
 		"S_DATE = ? , "  +  // 5
 		"S_TIME = ? , "  +
 		"STAYTIME = ? ," +
-		"MEMO = ? ,"     +  
+		"MEMO = ? "     +  
 		"where TRIP_ID = ?; " ;
 		
 		try (Connection connection = dataSource.getConnection();
@@ -79,9 +79,9 @@ public class Trip_D_Dao_Impl implements Trip_D_Dao {
 			ps.setString(2, tripD.getTripId());
 			ps.setInt(3, tripD.getSeqNo());
 			ps.setString(4, tripD.getLocId());
-			ps.setTimestamp(5, Timestamp.valueOf(tripD.getStartDate()));
-			ps.setTimestamp(6, Timestamp.valueOf(tripD.getStartTime()));
-			ps.setInt(7, Integer.parseInt(tripD.getStayTime()));
+			ps.setString(5, tripD.getStartDate());
+			ps.setString(6, tripD.getStartTime());
+			ps.setString(7, tripD.getStayTime());
 			ps.setString(8, tripD.getMemo());
 			count = ps.executeUpdate();
 			

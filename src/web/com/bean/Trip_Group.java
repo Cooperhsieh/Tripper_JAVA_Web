@@ -24,13 +24,18 @@ public class Trip_Group implements Serializable {
 		this.createDateTime = createDateTime;
 		this.memberId = memberId;
 	}
-	
+
+	public Trip_Group(int memberId) {
+		super();
+		this.memberId = memberId;
+	}
+
 	public Trip_Group(String tripId, int memberId) {
 		super();
 		this.tripId = tripId;
 		this.memberId = memberId;
 	}
-	
+
 	public Trip_Group(String groupTransId, String tripId, int memberId) {
 		super();
 		this.groupTransId = groupTransId;
@@ -41,8 +46,6 @@ public class Trip_Group implements Serializable {
 	public String getGroupTransId() {
 		return groupTransId;
 	}
-
-	
 
 	public void setGroupTransId(String groupTransId) {
 		this.groupTransId = groupTransId;
