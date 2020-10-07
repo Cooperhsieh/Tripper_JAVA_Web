@@ -16,13 +16,13 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import io.grpc.netty.shaded.io.netty.channel.unix.Buffer;
-<<<<<<< HEAD
+
 import web.com.bean.Blog;
 import web.com.bean.Blog_Note;
-=======
+
 import web.com.bean.BlogD;
 import web.com.bean.BlogM;
->>>>>>> 5675a932d2115c492d2327e1342521fb6486b4ff
+
 import web.com.bean.Explore;
 import web.com.dao.BlogDao;
 import web.com.impl.BlogImpl;
@@ -58,9 +58,9 @@ public class BlogServlet extends HttpServlet {
 		
 		
 		if(action.equals("getAll")) {
-<<<<<<< HEAD
-			List<Blog> blogs = blogDao.getAll();
-			writeText(response, gson.toJson(blogs));
+
+//			List<Blog> blogs = blogDao.getAll;
+//			writeText(response, gson.toJson(blogs));
 //網誌新增註解
 		}else if(action.equals("insertBlogNote")) {
 			String b_noteJson = jsonObject.get("blog_note").getAsString();
@@ -87,11 +87,11 @@ public class BlogServlet extends HttpServlet {
 			}
 		}
 		else if(action.equals("getImage")){
-=======
+
 //			List<BlogD> blogs = blogDao.findBlogById(id);
 //			writeText(response, gson.toJson(blogs));
 		}else if(action.equals("getImage")){
->>>>>>> 5675a932d2115c492d2327e1342521fb6486b4ff
+
 			OutputStream os = response.getOutputStream();
 			int id = jsonObject.get("id").getAsInt();
 			int imageSize = jsonObject.get("imageSize").getAsInt();
@@ -102,17 +102,18 @@ public class BlogServlet extends HttpServlet {
 				response.setContentType("image/jpeg");
 				os.write(image);
 		}
-		}else if(action.equals("findById")) {
-			int id = jsonObject.get("id").getAsInt();
-			List<BlogD> blist = blogDao.findById(id);
-			writeText(response, gson.toJson(blist));
-		}else if(action.equals("findDateId")) {
-			int id = jsonObject.get("id").getAsInt();
-			List<BlogD> blist = blogDao.findById(id);
-			writeText(response, gson.toJson(blist));}
+//		}else if(action.equals("findById")) {
+//			int id = jsonObject.get("id").getAsInt();
+//			List<BlogD> blist = blogDao.findById(id);
+//			writeText(response, gson.toJson(blist));
+//		}else if(action.equals("findDateId")) {
+//			int id = jsonObject.get("id").getAsInt();
+////			List<BlogD> blist = blogDao.findById(id);
+//			writeText(response, gson.toJson(blist));}
 		else {
 				writeText(response, "");
 			}
+		}
 	}
    
 		
