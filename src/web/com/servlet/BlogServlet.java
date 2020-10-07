@@ -14,15 +14,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-
-<<<<<<< HEAD
 import io.grpc.netty.shaded.io.netty.channel.unix.Buffer;
 import web.com.bean.BlogD;
 import web.com.bean.BlogM;
 import web.com.bean.Explore;
-=======
-import web.com.bean.Blog;
->>>>>>> 25d2c3dd0ba5d1b6307c5022a9714586e8937554
 import web.com.dao.BlogDao;
 import web.com.impl.BlogImpl;
 import web.com.util.ImageUtil;

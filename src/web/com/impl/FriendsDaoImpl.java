@@ -13,6 +13,7 @@ import javax.sql.DataSource;
 import com.google.firebase.database.Transaction.Result;
 
 import web.com.bean.Friends;
+import web.com.bean.Member;
 import web.com.dao.FriendsDao;
 import web.com.util.ServiceLocator;
 
