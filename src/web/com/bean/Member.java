@@ -12,6 +12,8 @@ import com.google.cloud.Timestamp;
 */
 
 public class Member implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 	private int id ;
 	private String account ;
 	private String password ;
@@ -23,12 +25,24 @@ public class Member implements Serializable {
 	private Timestamp modifyTime ;
 	private Timestamp lastTime ;
 	
+	
 	public Member(String account,String password) {
 		this.account = account;
 		this.password = password ;
 	}
 	
-	
+	// for 加好友功能 
+	public Member(int id, String account, String mail, String nickName, int loginType, String token) {
+		super();
+		this.id = id;
+		this.account = account;
+		this.mail = mail;
+		this.nickName = nickName;
+		this.token = token;
+		this.loginType = loginType;
+	}
+
+
 	public Member(int id, String account) {
 		super();
 		this.id = id;

@@ -16,7 +16,9 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 
 import web.com.bean.Friends;
+import web.com.bean.Member;
 import web.com.dao.FriendsDao;
+import web.com.dao.MemberDao;
 import web.com.impl.FriendsDaoImpl;
 import web.com.util.SettingUtil;
 
@@ -30,8 +32,8 @@ import web.com.util.SettingUtil;
 @WebServlet("/FriendsServlet")
 public class FriendsServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private final static String CONTENT_TYPE = "text/html; charset=UTF-8";
-    FriendsDao friendsDao = null;   
+    FriendsDao friendsDao = null;
+    MemberDao memberDao = null;
 
     @Override
 		protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -42,8 +44,7 @@ public class FriendsServlet extends HttpServlet {
 		String line = null;
 		while ((line = br.readLine()) != null) {
 			jsonIn.append(line);
-		}
-		
+		}	
 		System.out.println("input: " + jsonIn);
 		
 		JsonObject jsonObject = gson.fromJson(jsonIn.toString(), JsonObject.class);
@@ -51,31 +52,22 @@ public class FriendsServlet extends HttpServlet {
 		if (friendsDao == null) {
 			friendsDao = new FriendsDaoImpl();
 		}
-		String action = jsonObject.get("action").toString();
+		
+		String action = jsonObject.get("action").getAsString();
 		if (action.equals("getAll")) {
-			List<Friends> friends = friendsDao.getAll();
+			int MemberId = jsonObject.get("memberId").getAsInt();
+			List<Member> friends = friendsDao.getAll(MemberId);
 			writeText(response, gson.toJson(friends));
-			
-		} else if (action.equals("friendsInsert")) {
-			String friendsJson = jsonObject.get("Friends").getAsString();
-			
-			System.out.println("friends: " + friendsJson);
-			
-			Friends friends = gson.fromJson(friendsJson, Friends.class);
-			writeText(response, String.valueOf(friends));
-		// TODO	
-		} else if (action.equals("friendsDelete")) {
+		} else if (action.equals("search")) {
+			int memberId = jsonObject.get("memberId").getAsInt();
+			String account = jsonObject.get("account").getAsString();	
+			Friends friend = friendsDao.findSearchFriend(memberId, account);
+			writeText(response, gson.toJson(friend));
+		} else if(action.equals("insert")) {
 			int memberId = jsonObject.get("memberId").getAsInt();
 			int friendId = jsonObject.get("friendId").getAsInt();
-			int count = friendsDao.delete(memberId, friendId);
-			
-		} else if (action.equals("findFriendTransId")) {
-			String friendTransId = jsonObject.get("friendTransId").getAsString();
-			Friends friends = friendsDao.findFriendTransId(friendTransId);
-			writeText(response, gson.toJson(friends));
-			
-		} else {
-			writeText(response, "");
+			int count = friendsDao.insert(memberId, friendId);
+			writeText(response, gson.toJson(count));
 		}
 	}
     
@@ -83,7 +75,6 @@ public class FriendsServlet extends HttpServlet {
 		response.setContentType(SettingUtil.CONTENT_TYPE);
 		PrintWriter out = response.getWriter();
 		out.print(json);
-		// TODO for debug
 		System.out.println("response json: " + json);
 		out.close();
 	}
@@ -93,7 +84,9 @@ public class FriendsServlet extends HttpServlet {
 		if (friendsDao == null) {
 			friendsDao = new FriendsDaoImpl();
 		}
-		List<Friends> friends = friendsDao.getAll();
+		JsonObject jsonObject = new JsonObject();
+		int MemberId = jsonObject.get("MemberId").getAsInt();
+		List<Member> friends = friendsDao.getAll(MemberId);
 		writeText(response, new Gson().toJson(friends));
 	}
 }

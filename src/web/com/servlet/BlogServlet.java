@@ -14,8 +14,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-
-import web.com.bean.Blog;
+import io.grpc.netty.shaded.io.netty.channel.unix.Buffer;
+import web.com.bean.BlogD;
+import web.com.bean.BlogM;
+import web.com.bean.Explore;
 import web.com.dao.BlogDao;
 import web.com.impl.BlogImpl;
 import web.com.util.ImageUtil;
@@ -49,8 +51,8 @@ public class BlogServlet extends HttpServlet {
 		String action = jsonObject.get("action").getAsString();
 		
 		if(action.equals("getAll")) {
-			List<Blog> blogs = blogDao.getAll();
-			writeText(response, gson.toJson(blogs));
+//			List<BlogD> blogs = blogDao.findBlogById(id);
+//			writeText(response, gson.toJson(blogs));
 		}else if(action.equals("getImage")){
 			OutputStream os = response.getOutputStream();
 			int id = jsonObject.get("id").getAsInt();
@@ -64,9 +66,13 @@ public class BlogServlet extends HttpServlet {
 		}
 		}else if(action.equals("findById")) {
 			int id = jsonObject.get("id").getAsInt();
-			Blog blog = blogDao.findById(id);
-			writeText(response, gson.toJson(blog));
-		}else {
+			List<BlogD> blist = blogDao.findById(id);
+			writeText(response, gson.toJson(blist));
+		}else if(action.equals("findDateId")) {
+			int id = jsonObject.get("id").getAsInt();
+			List<BlogD> blist = blogDao.findById(id);
+			writeText(response, gson.toJson(blist));}
+		else {
 				writeText(response, "");
 			}
 	}
@@ -90,8 +96,8 @@ public class BlogServlet extends HttpServlet {
 		if (blogDao == null) {
 			blogDao = new BlogImpl();
 		}
-		List<Blog> blogs = blogDao.getAll();
-		writeText(response, new Gson().toJson(blogs));
+//		List<BlogD> blogs = blogDao.getAll();
+//		writeText(response, new Gson().toJson(blogs));
 	}
 
 }
