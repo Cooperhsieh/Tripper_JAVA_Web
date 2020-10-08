@@ -4,10 +4,17 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+<<<<<<< HEAD
 
 import java.util.ArrayList;
 
 import java.util.Base64;
+=======
+import java.util.ArrayList;
+
+import java.util.Base64;
+
+>>>>>>> Member
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -21,10 +28,9 @@ import com.google.gson.JsonObject;
 
 import io.grpc.netty.shaded.io.netty.channel.unix.Buffer;
 import web.com.bean.Blog_Note;
-<<<<<<< HEAD
-=======
+
 import web.com.bean.Blog_Pic;
->>>>>>> Member
+
 import web.com.bean.BlogD;
 import web.com.bean.BlogM;
 import web.com.bean.Blog_Day;
@@ -138,7 +144,11 @@ public class BlogServlet extends HttpServlet {
 //			System.out.println("spotNames:" + spotNames);
 			writeText(response,gson.toJson(spotNames));
 				
+<<<<<<< HEAD
 		}else {
+=======
+		}
+>>>>>>> Member
 
 //		}else if(action.equals("findById")) {
 //			int id = jsonObject.get("id").getAsInt();
@@ -148,12 +158,21 @@ public class BlogServlet extends HttpServlet {
 //			int id = jsonObject.get("id").getAsInt();
 ////			List<BlogD> blist = blogDao.findById(id);
 //			writeText(response, gson.toJson(blist));}
+<<<<<<< HEAD
 		
 
 				writeText(response, "");
 			}
 		}
 	
+=======
+		else {
+
+				writeText(response, "");
+			}
+		
+	}
+>>>>>>> Member
    
 		
 		

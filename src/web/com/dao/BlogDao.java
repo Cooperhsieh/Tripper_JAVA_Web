@@ -37,7 +37,10 @@ public interface BlogDao {
 	
 	public List<Blog_Day> findDateById(int blodId);
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> Member
 	public List<Blog_SpotInformation> getSpotName(String s_Date, int blogId) ;
 
 }
