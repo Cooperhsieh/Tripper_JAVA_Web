@@ -51,7 +51,7 @@ public class ExploreImpl implements ExploreDao{
 
 	@Override
 	public List<Explore> getAll() {
-		String sql = "SELECT Blog_M.BLOG_TITLE, Blog_M.USER_ID,Blog_M.BLOG_ID, Member.NICKNAME,Blog_M.BLOG_DESC FROM  Blog_M	INNER JOIN Member ON  Blog_M.USER_ID = Member.MEMBER_ID";
+		String sql = "SELECT Blog_M.BLOG_TITLE, Blog_M.USER_ID,Blog_M.BLOG_ID, Member.NICKNAME,Blog_M.BLOG_DESC FROM  Blog_M	INNER JOIN Member ON  Blog_M.USER_ID = Member.MEMBER_ID;";
 		List<Explore> exploreslList = new ArrayList<>();
 		try(    
 				Connection connection = dataSource.getConnection();
