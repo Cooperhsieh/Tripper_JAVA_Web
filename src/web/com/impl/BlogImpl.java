@@ -10,23 +10,20 @@ import java.util.List;
 import javax.sql.DataSource;
 import web.com.bean.Blog_Note;
 
-<<<<<<< HEAD
+
 import com.fasterxml.jackson.core.TSFBuilder;
-=======
->>>>>>> 55a727c47f9fb4ff30d086257a1e7a9fbd9642d0
+
 import com.google.cloud.Date;
 
 import web.com.bean.Blog;
 import web.com.bean.BlogD;
 import web.com.bean.BlogM;
 import web.com.bean.Blog_Day;
-<<<<<<< HEAD
+
 import web.com.bean.Blog_SpotInfo;
 import web.com.bean.Blog_SpotInformation;
 import web.com.bean.DateAndId;
-=======
 
->>>>>>> 55a727c47f9fb4ff30d086257a1e7a9fbd9642d0
 import web.com.dao.BlogDao;
 import web.com.util.ServiceLocator;
 
@@ -190,8 +187,7 @@ public class BlogImpl implements BlogDao{
 				"	LEFT JOIN Blog_M ON Blog_M.BLOG_ID = Blog_D.BLOG_ID \n" + 
 				"	LEFT JOIN Location ON Location.LOC_ID = Blog_D.LOC_ID  \n" + 
 				"	WHERE Blog_D.BLOG_ID = ?  and Blog_D.S_DATE = ?\n" + 
-				"	Order By \n" + 
-				"	 S_DATE asc ";
+				"ORDER BY SEQ_NO ASC";
 		try (Connection connection = dataSource.getConnection();
 			PreparedStatement ps = connection.prepareStatement(sql);) {
 			ps.setInt(1, blogId);
@@ -211,8 +207,7 @@ public class BlogImpl implements BlogDao{
 		return spotNames;
 		
 	}
-<<<<<<< HEAD
-=======
+
 
 
 	@Override
@@ -258,11 +253,5 @@ public class BlogImpl implements BlogDao{
 		return null;
 	}
 
-//	@Override
-//	public BlogD findLocationById(int id) {
-//		
-//		return null;
-//	}
 
->>>>>>> 55a727c47f9fb4ff30d086257a1e7a9fbd9642d0
 }
