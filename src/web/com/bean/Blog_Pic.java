@@ -2,7 +2,7 @@ package web.com.bean;
 
 import java.io.Serializable;
 
-public class Blog_Pic implements Serializable {
+public class Blog_Pic  {
     private String blogId ;
     private String locId ;
     private String pic1 ;

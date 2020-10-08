@@ -214,12 +214,12 @@ public class BlogImpl implements BlogDao{
 <<<<<<< HEAD
 =======
 
-
+//上傳心得
 	@Override
 	public int insertB_Note(Blog_Note blog_Note) {
 		int count = 0;
 		String sql = "";
-		sql = "insert into Blog_Spot_Pic (LOC_ID, LOC_NOTE,BLOG_ID) values (? , ? , ? ) ;"; 
+		sql = "insert into Blog_D (LOC_ID, LOC_NOTE,BLOG_ID) values (? , ? , ? ) ;"; 
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql); ){
 			ps.setString(1, blog_Note.getLoc_Id());
@@ -233,16 +233,19 @@ public class BlogImpl implements BlogDao{
 		}
 		return count;
 	}
-
+//上傳景點照片
 	@Override
-	public int updateImage(byte[] image,String blogId,String locId) {
+	public int updateImage(byte[] image1,byte[] image2,byte[] image3,byte[] image4,String blogId,String locId) {
 		int count = 0;
-		String sql = "insert into Blog_Spot_Pic (LOC_ID,BLOG_ID,PIC1) values (?,?,?);";
+		String sql = "insert into Blog_Spot_Pic (LOC_ID,BLOG_ID,PIC1,PIC2,PIC3,PIC4) values (?,?,?,?,?,?);";
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql); ){
 			ps.setString(1, locId);
 			ps.setString(2, blogId);
-			ps.setBytes(3, image);
+			ps.setBytes(3, image1);
+			ps.setBytes(4, image2);
+			ps.setBytes(5, image3);
+			ps.setBytes(6, image4);
 			
 			System.out.println("insert Blog_Spot_Pic sql::" + ps.toString());
 			count = ps.executeUpdate();
