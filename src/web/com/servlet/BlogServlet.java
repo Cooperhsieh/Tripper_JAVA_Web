@@ -16,13 +16,9 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import io.grpc.netty.shaded.io.netty.channel.unix.Buffer;
-<<<<<<< HEAD
-import web.com.bean.Blog;
 import web.com.bean.Blog_Note;
-=======
 import web.com.bean.BlogD;
 import web.com.bean.BlogM;
->>>>>>> 5675a932d2115c492d2327e1342521fb6486b4ff
 import web.com.bean.Explore;
 import web.com.dao.BlogDao;
 import web.com.impl.BlogImpl;
