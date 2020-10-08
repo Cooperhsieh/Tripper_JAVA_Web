@@ -25,7 +25,7 @@ public interface BlogDao {
 	
 	int insertB_Note (Blog_Note blog_Note);
 	
-	int updateImage(byte[] image,String blogId,String tripId);
+	int updateImage(byte[] image1,byte[] image2,byte[] image3,byte[] image4,String blogId,String tripId);
 
 	List <BlogD> findById(int id);
 	
