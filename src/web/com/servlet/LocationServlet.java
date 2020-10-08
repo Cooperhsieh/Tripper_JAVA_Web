@@ -50,8 +50,7 @@ public class LocationServlet extends HttpServlet {
 		
 		if( locDao == null) {
 			locDao = new LocationImpl();
-		}
-		
+		}	
 		String action = jsonObject.get("action").getAsString();
 		if(action.equals("getAll")) {
 			List<Location> locations = locDao.getAll();
@@ -63,6 +62,16 @@ public class LocationServlet extends HttpServlet {
 			int imageSize = jsonObject.get("imageSize").getAsInt();
 			System.out.println("imageSize::" + imageSize);
 			byte[] image = locDao.getImageById(locId);
+
+
+
+
+
+
+			System.out.println("image size ::" + image.length);
+			System.out.println("1111 locId::" + locId);
+
+
 			if(image != null) {
 				image = ImageUtil.shrink(image, imageSize);
 				response.setContentType(SettingUtil.IMAGE_JPEG);

@@ -4,7 +4,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+
+
+import java.util.ArrayList;
+
 import java.util.Base64;
+
+
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -15,11 +21,20 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+
 import io.grpc.netty.shaded.io.netty.channel.unix.Buffer;
 import web.com.bean.Blog_Note;
+
+import web.com.bean.Blog_Pic;
+
 import web.com.bean.BlogD;
 import web.com.bean.BlogM;
+import web.com.bean.Blog_Day;
+import web.com.bean.Blog_SpotInfo;
+import web.com.bean.Blog_SpotInformation;
+import web.com.bean.DateAndId;
 import web.com.bean.Explore;
+
 import web.com.dao.BlogDao;
 import web.com.impl.BlogImpl;
 import web.com.util.ImageUtil;
@@ -69,18 +84,26 @@ public class BlogServlet extends HttpServlet {
 //檢查是否有上傳圖片
 		
 		else if (action.equals("imageUpdate")) {
-			if(jsonObject.get("imageBase64") != null) {
-			byte[] image = null;
-			String imageBase64 = jsonObject.get("imageBase64").getAsString();
-			if (imageBase64 != null && !imageBase64.isEmpty()) {
-				image = Base64.getMimeDecoder().decode(imageBase64);
-			}
+			String blogPic_json = jsonObject.get("blogPic").getAsString();
+			System.out.println("BlogPic ::"+ blogPic_json);
+			Blog_Pic blog_Pic = gson.fromJson(blogPic_json, Blog_Pic.class);			
 			int count = 0 ;
-			String blogId = jsonObject.get("blogId").getAsString();
-			String locId = jsonObject.get("locId").getAsString();
-			count = blogDao.updateImage(image,blogId,locId);
-			writeText(response, String.valueOf(count));
+			byte[] image1 = null,image2 = null ,image3 = null ,image4 = null ;
+			if(blog_Pic.getPic1() != null && !blog_Pic.getPic1().isEmpty()) {
+				 image1 = Base64.getMimeDecoder().decode(blog_Pic.getPic1());
 			}
+			if(blog_Pic.getPic2() != null && !blog_Pic.getPic2().isEmpty()) {
+				 image2 = Base64.getMimeDecoder().decode(blog_Pic.getPic2());
+			}
+			if(blog_Pic.getPic3() != null && !blog_Pic.getPic3().isEmpty()) {
+				 image3 = Base64.getMimeDecoder().decode(blog_Pic.getPic3());
+			}
+			if(blog_Pic.getPic4() != null && !blog_Pic.getPic4().isEmpty()) {
+				 image4 = Base64.getMimeDecoder().decode(blog_Pic.getPic4());
+			}
+			count = blogDao.updateImage(image1,image2,image3,image4,blog_Pic.getBlogId(),blog_Pic.getLocId());
+			writeText(response, String.valueOf(count));
+			
 		}
 		else if(action.equals("getImage")){
 
@@ -98,19 +121,60 @@ public class BlogServlet extends HttpServlet {
 				response.setContentType("image/jpeg");
 				os.write(image);
 		}
+
 		}else if(action.equals("findById")) {
 			int id = jsonObject.get("id").getAsInt();
 			List<BlogD> blist = blogDao.findById(id);
 			writeText(response, gson.toJson(blist));
-		}else if(action.equals("findDateId")) {
+		}else if(action.equals("findDateById")) {
 			int id = jsonObject.get("id").getAsInt();
-//			List<BlogD> blist = blogDao.findById(id);
-			writeText(response, gson.toJson(blist));}
-		else {
+			List<Blog_Day> blogDays= blogDao.findDateById(id);
+			writeText(response, gson.toJson(blogDays));
+		}else if (action.equals("getSpotName")) {
+			int id = jsonObject.get("id").getAsInt();
+			String date = jsonObject.get("dateD").getAsString();
+	
+//			System.out.println("dateAndId" + dateId);
+			
+			List<Blog_SpotInformation> spotNames = blogDao.getSpotName(date,id);
+//			System.out.println("spotNames:" + spotNames);
+			writeText(response,gson.toJson(spotNames));
+				
+
+		}else {
+
 				writeText(response, "");
 			}
 		}
-	}
+	
+
+
+		
+		
+		
+		
+//		else {
+		
+//		}else if(action.equals("findById")) {
+//			int id = jsonObject.get("id").getAsInt();
+//			List<BlogD> blist = blogDao.findById(id);
+//			writeText(response, gson.toJson(blist));
+//		}else if(action.equals("findDateId")) {
+//			int id = jsonObject.get("id").getAsInt();
+////			List<BlogD> blist = blogDao.findById(id);
+//			writeText(response, gson.toJson(blist));}
+
+//		
+//
+//				writeText(response, "");
+//			}
+//		}
+//	
+
+			
+		
+	
+
    
 		
 		

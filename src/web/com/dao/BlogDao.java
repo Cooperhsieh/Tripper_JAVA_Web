@@ -10,6 +10,9 @@ import web.com.bean.Blog_Note;
 import web.com.bean.BlogD;
 import web.com.bean.BlogM;
 import web.com.bean.Blog_Day;
+import web.com.bean.Blog_SpotInfo;
+import web.com.bean.Blog_SpotInformation;
+import web.com.bean.DateAndId;
 
 
 
@@ -25,13 +28,16 @@ public interface BlogDao {
 	
 	int insertB_Note (Blog_Note blog_Note);
 	
-	int updateImage(byte[] image,String blogId,String tripId);
+	int updateImage(byte[] image1,byte[] image2,byte[] image3,byte[] image4,String blogId,String tripId);
 
 	List <BlogD> findById(int id);
 	
 //	public BlogD findLocationById(int id);
 
-	public List<BlogD>findLocationById(int blodId, String datetime);
+	
+	public List<Blog_Day> findDateById(int blodId);
 
+
+	public List<Blog_SpotInformation> getSpotName(String s_Date, int blogId) ;
 
 }

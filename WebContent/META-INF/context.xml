@@ -5,11 +5,7 @@
 		auth="Container"
 		type="javax.sql.DataSource" 
 		driverClassName="com.mysql.cj.jdbc.Driver"
-
 		url="jdbc:mysql://localhost:3306/TRIPPER?allowPublicKeyRetrieval=true" 
 		username="root"
-		password="00000000" 
-/>
-
-
+		password="password"/>
 </Context>
