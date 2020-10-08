@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -15,14 +16,15 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
-<<<<<<< HEAD
 import io.grpc.netty.shaded.io.netty.channel.unix.Buffer;
 import web.com.bean.BlogD;
 import web.com.bean.BlogM;
+import web.com.bean.Blog_Day;
+import web.com.bean.Blog_SpotInfo;
+import web.com.bean.Blog_SpotInformation;
+import web.com.bean.DateAndId;
 import web.com.bean.Explore;
-=======
-import web.com.bean.Blog;
->>>>>>> 25d2c3dd0ba5d1b6307c5022a9714586e8937554
+
 import web.com.dao.BlogDao;
 import web.com.impl.BlogImpl;
 import web.com.util.ImageUtil;
@@ -73,11 +75,21 @@ public class BlogServlet extends HttpServlet {
 			int id = jsonObject.get("id").getAsInt();
 			List<BlogD> blist = blogDao.findById(id);
 			writeText(response, gson.toJson(blist));
-		}else if(action.equals("findDateId")) {
+		}else if(action.equals("findDateById")) {
 			int id = jsonObject.get("id").getAsInt();
-			List<BlogD> blist = blogDao.findById(id);
-			writeText(response, gson.toJson(blist));}
-		else {
+			List<Blog_Day> blogDays= blogDao.findDateById(id);
+			writeText(response, gson.toJson(blogDays));
+		}else if (action.equals("getSpotName")) {
+			int id = jsonObject.get("id").getAsInt();
+			String date = jsonObject.get("dateD").getAsString();
+	
+//			System.out.println("dateAndId" + dateId);
+			
+			List<Blog_SpotInformation> spotNames = blogDao.getSpotName(date,id);
+//			System.out.println("spotNames:" + spotNames);
+			writeText(response,gson.toJson(spotNames));
+				
+		}else {
 				writeText(response, "");
 			}
 	}

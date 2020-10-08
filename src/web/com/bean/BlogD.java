@@ -10,8 +10,27 @@ public class BlogD implements Serializable{
 	private String s_Date;
 	private int blogId;
 	private String stayTime;
+	private int tripId;
 	
 	
+	public String getS_Date() {
+		return s_Date;
+	}
+	public void setS_Date(String s_Date) {
+		this.s_Date = s_Date;
+	}
+	public String getStayTime() {
+		return stayTime;
+	}
+	public void setStayTime(String stayTime) {
+		this.stayTime = stayTime;
+	}
+	public int getTripId() {
+		return tripId;
+	}
+	public void setTripId(int tripId) {
+		this.tripId = tripId;
+	}
 	public void setBlogId(int blogId) {
 		this.blogId = blogId;
 	}
@@ -42,13 +61,14 @@ public class BlogD implements Serializable{
 		this.locationName = locationName;
 		this.blogNote = blogNote;
 	}
-	public BlogD(int blogId,int locationId, String locationName, String blogNote,String s_Date) {
+	public BlogD(int blogId,int locationId, String locationName, String blogNote,String s_Date,int tripId) {
 		super();
 		this.blogId = blogId;
 	    this.locationId = locationId;
 		this.locationName = locationName;
 		this.blogNote = blogNote;
 		this.s_Date = s_Date;
+		this.tripId = tripId;
 	}
 	public int getDayCount() {
 		return dayCount;
