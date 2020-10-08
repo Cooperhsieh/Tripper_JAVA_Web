@@ -98,14 +98,14 @@ public class BlogServlet extends HttpServlet {
 				response.setContentType("image/jpeg");
 				os.write(image);
 		}
-//		}else if(action.equals("findById")) {
-//			int id = jsonObject.get("id").getAsInt();
+		}else if(action.equals("findById")) {
+			int id = jsonObject.get("id").getAsInt();
+			List<BlogD> blist = blogDao.findById(id);
+			writeText(response, gson.toJson(blist));
+		}else if(action.equals("findDateId")) {
+			int id = jsonObject.get("id").getAsInt();
 //			List<BlogD> blist = blogDao.findById(id);
-//			writeText(response, gson.toJson(blist));
-//		}else if(action.equals("findDateId")) {
-//			int id = jsonObject.get("id").getAsInt();
-////			List<BlogD> blist = blogDao.findById(id);
-//			writeText(response, gson.toJson(blist));}
+			writeText(response, gson.toJson(blist));}
 		else {
 				writeText(response, "");
 			}
