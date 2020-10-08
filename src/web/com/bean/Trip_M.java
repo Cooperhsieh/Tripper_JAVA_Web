@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 /**
  * 類別說明：行程主檔_Master
+ * 
  * @author Cooper Hsieh
  * @version 建立時間:Sep 3, 2020
  * 
@@ -21,9 +22,7 @@ public class Trip_M implements Serializable {
 	private int pMax;
 	private int status;
 	private byte[] bPic;
-	
-	
-	
+
 	public Trip_M(String tripId, int memberId, String tripTitle, String startDate, String startTime, int dayCount,
 			int pMax, int status, byte[] bPic) {
 		super();
@@ -38,9 +37,8 @@ public class Trip_M implements Serializable {
 		this.bPic = bPic;
 	}
 
-	
-	public Trip_M(int memberId, String tripTitle, String startDate, String startTime, int dayCount,
-			  int pMax, int status) {
+	public Trip_M(int memberId, String tripTitle, String startDate, String startTime, int dayCount, int pMax,
+			int status) {
 		super();
 		this.memberId = memberId;
 		this.tripTitle = tripTitle;
@@ -51,8 +49,7 @@ public class Trip_M implements Serializable {
 		this.status = status;
 	}
 
-
-	public Trip_M(String tripId, int memberId, String tripTitle,String startDate, int pMax,int mCount) {
+	public Trip_M(String tripId, int memberId, String tripTitle, String startDate, int pMax, int mCount) {
 		super();
 		this.tripId = tripId;
 		this.memberId = memberId;
@@ -60,8 +57,6 @@ public class Trip_M implements Serializable {
 		this.tripTitle = tripTitle;
 		this.pMax = pMax;
 	}
-	
-	
 
 	public Trip_M(String tripId, int memberId, String tripTitle, int dayCount, int pMax, int status) {
 		super();
@@ -73,9 +68,6 @@ public class Trip_M implements Serializable {
 		this.status = status;
 	}
 
-
-
-
 	public Trip_M(int memberId, String tripTitle, String startDate, String startTime, int dayCount, int pMax) {
 		super();
 		this.memberId = memberId;
@@ -85,8 +77,6 @@ public class Trip_M implements Serializable {
 		this.dayCount = dayCount;
 		this.pMax = pMax;
 	}
-
-
 
 	public Trip_M(String tripId, int memberId, String tripTitle, String startDate, String startTime, int dayCount,
 			String createDateTime, int pMax, int status) {
@@ -101,15 +91,9 @@ public class Trip_M implements Serializable {
 		this.pMax = pMax;
 		this.status = status;
 	}
-	
-	
-	
-	
 
-	
-
-	public Trip_M(String tripId, String tripTitle, String startDate, String startTime, int dayCount,
-			 int pMax, int status) {
+	public Trip_M(String tripId, String tripTitle, String startDate, String startTime, int dayCount, int pMax,
+			int status) {
 		super();
 		this.tripId = tripId;
 		this.tripTitle = tripTitle;
@@ -120,7 +104,9 @@ public class Trip_M implements Serializable {
 		this.status = status;
 	}
 
-
+	public Trip_M(int status) {
+		this.status = status;
+	}
 
 	public String getTripId() {
 		return tripId;
@@ -198,11 +184,8 @@ public class Trip_M implements Serializable {
 		return bPic;
 	}
 
-
-
 	public void setbPic(byte[] bPic) {
 		this.bPic = bPic;
 	}
-
 
 }

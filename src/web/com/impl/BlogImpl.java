@@ -8,17 +8,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.sql.DataSource;
-<<<<<<< HEAD
-import web.com.bean.Blog;
 import web.com.bean.Blog_Note;
-=======
 
 import com.google.cloud.Date;
 
+import web.com.bean.Blog;
 import web.com.bean.BlogD;
 import web.com.bean.BlogM;
 import web.com.bean.Blog_Day;
->>>>>>> 5675a932d2115c492d2327e1342521fb6486b4ff
+
 import web.com.dao.BlogDao;
 import web.com.util.ServiceLocator;
 
@@ -163,7 +161,7 @@ public class BlogImpl implements BlogDao{
 		return bList;
 	}
 
-<<<<<<< HEAD
+
 	@Override
 	public int insertB_Note(Blog_Note blog_Note) {
 		int count = 0;
@@ -200,12 +198,17 @@ public class BlogImpl implements BlogDao{
 		}
 		return count;
 	}
-=======
+
+	@Override
+	public Blog findById1(int id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 //	@Override
 //	public BlogD findLocationById(int id) {
 //		
 //		return null;
 //	}
->>>>>>> 5675a932d2115c492d2327e1342521fb6486b4ff
 
 }
