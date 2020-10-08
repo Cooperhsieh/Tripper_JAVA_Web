@@ -10,13 +10,13 @@ import java.util.List;
 import javax.sql.DataSource;
 import web.com.bean.Blog_Note;
 
-<<<<<<< HEAD
+
 
 import com.fasterxml.jackson.core.TSFBuilder;
 
-=======
+
 import com.fasterxml.jackson.core.TSFBuilder;
->>>>>>> Member
+
 import com.google.cloud.Date;
 
 import web.com.bean.Blog;
@@ -266,9 +266,5 @@ public class BlogImpl implements BlogDao{
 //		
 //		return null;
 //	}
-<<<<<<< HEAD
-=======
 
-
->>>>>>> Member
 }

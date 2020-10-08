@@ -4,17 +4,17 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-<<<<<<< HEAD
+
 
 import java.util.ArrayList;
 
 import java.util.Base64;
-=======
+
 import java.util.ArrayList;
 
 import java.util.Base64;
 
->>>>>>> Member
+
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -144,12 +144,13 @@ public class BlogServlet extends HttpServlet {
 //			System.out.println("spotNames:" + spotNames);
 			writeText(response,gson.toJson(spotNames));
 				
-<<<<<<< HEAD
-		}else {
-=======
-		}
->>>>>>> Member
 
+		}
+		
+		
+		
+//		else {
+		
 //		}else if(action.equals("findById")) {
 //			int id = jsonObject.get("id").getAsInt();
 //			List<BlogD> blist = blogDao.findById(id);
@@ -158,21 +159,21 @@ public class BlogServlet extends HttpServlet {
 //			int id = jsonObject.get("id").getAsInt();
 ////			List<BlogD> blist = blogDao.findById(id);
 //			writeText(response, gson.toJson(blist));}
-<<<<<<< HEAD
-		
 
-				writeText(response, "");
-			}
-		}
-	
-=======
+//		
+//
+//				writeText(response, "");
+//			}
+//		}
+//	
+
 		else {
 
 				writeText(response, "");
 			}
 		
 	}
->>>>>>> Member
+
    
 		
 		
