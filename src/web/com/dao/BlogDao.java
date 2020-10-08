@@ -3,6 +3,10 @@ package web.com.dao;
 import java.util.List;
 
 
+import web.com.bean.Blog;
+import web.com.bean.Blog_Note;
+
+
 import web.com.bean.BlogD;
 import web.com.bean.BlogM;
 import web.com.bean.Blog_Day;
@@ -12,12 +16,20 @@ import web.com.bean.DateAndId;
 
 
 
+
 public interface BlogDao {
 	
 //	List <BlogD> getAll();
 
 	byte[] getImage(int id);
 	
+
+	Blog findById1(int id);
+	
+	int insertB_Note (Blog_Note blog_Note);
+	
+	int updateImage(byte[] image,String blogId,String tripId);
+
 	List <BlogD> findById(int id);
 	
 //	public BlogD findLocationById(int id);
@@ -25,5 +37,9 @@ public interface BlogDao {
 	
 	public List<Blog_Day> findDateById(int blodId);
 
+<<<<<<< HEAD
 	public List<Blog_SpotInformation> getSpotName(String s_Date, int blogId) ;
+=======
+
+>>>>>>> 55a727c47f9fb4ff30d086257a1e7a9fbd9642d0
 }

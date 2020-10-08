@@ -69,6 +69,13 @@ public class Trip_M_Servlet extends HttpServlet {
 
 			writeText(response, String.valueOf(tripM));
 
+//查找Status match 會員ID
+		} else if (action.equals("getStatus")) {
+			String memberId = jsonObject.get("memberId").getAsString();
+			System.out.println("getMemberId:: " + memberId);
+			Trip_M tripM = tripMDao.getStatusById(memberId);
+			writeText(response, gson.toJson(tripM));
+
 		} else if (action.equals("tripMDelete")) {
 			String tripId = jsonObject.get("tripId").getAsString();
 			int count = tripMDao.delete(tripId);
@@ -78,9 +85,7 @@ public class Trip_M_Servlet extends HttpServlet {
 			String tripId = jsonObject.get("tripId").getAsString();
 //			Trip_M tripM = tripMDao.getTripId(tripId);
 //			writeText(response, gson.toJson(tripM));
-		
-			
-				
+
 		} else if (action.equals("getImage")) {
 			OutputStream os = response.getOutputStream();
 			String id = jsonObject.get("id").getAsString();
@@ -88,12 +93,11 @@ public class Trip_M_Servlet extends HttpServlet {
 			byte[] image = tripMDao.getImage(id);
 			if (image != null) {
 				image = ImageUtil.shrink(image, imageSize);
-				response.setContentType("image/jpeg");    //傳送圖片格式
-				response.setContentLength(image.length);  //圖片佔的大小
+				response.setContentType("image/jpeg"); // 傳送圖片格式
+				response.setContentLength(image.length); // 圖片佔的大小
 				os.write(image);
 			}
-		}
-			else {
+		} else {
 			writeText(response, "fuck");
 		}
 	}

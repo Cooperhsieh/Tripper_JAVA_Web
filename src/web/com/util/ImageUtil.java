@@ -34,6 +34,7 @@ public class ImageUtil {
 			newSize = 50;
 		}
 		
+		
 		try {
 			BufferedImage bufferedImage = ImageIO.read(bais);
 			int type = bufferedImage.getType();

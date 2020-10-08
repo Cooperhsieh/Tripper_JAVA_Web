@@ -4,7 +4,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+<<<<<<< HEAD
 import java.util.ArrayList;
+=======
+import java.util.Base64;
+>>>>>>> 55a727c47f9fb4ff30d086257a1e7a9fbd9642d0
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -15,8 +19,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 55a727c47f9fb4ff30d086257a1e7a9fbd9642d0
 import io.grpc.netty.shaded.io.netty.channel.unix.Buffer;
+import web.com.bean.Blog_Note;
 import web.com.bean.BlogD;
 import web.com.bean.BlogM;
 import web.com.bean.Blog_Day;
@@ -24,7 +32,10 @@ import web.com.bean.Blog_SpotInfo;
 import web.com.bean.Blog_SpotInformation;
 import web.com.bean.DateAndId;
 import web.com.bean.Explore;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 55a727c47f9fb4ff30d086257a1e7a9fbd9642d0
 import web.com.dao.BlogDao;
 import web.com.impl.BlogImpl;
 import web.com.util.ImageUtil;
@@ -39,7 +50,7 @@ public class BlogServlet extends HttpServlet {
     
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	
+		request.setCharacterEncoding("UTF-8");
 		Gson gson = new Gson();
 		BufferedReader br = request.getReader();
 		StringBuilder jsonIn = new StringBuilder();
@@ -57,10 +68,42 @@ public class BlogServlet extends HttpServlet {
 		}
 		String action = jsonObject.get("action").getAsString();
 		
+		
 		if(action.equals("getAll")) {
+
+//			List<Blog> blogs = blogDao.getAll;
+//			writeText(response, gson.toJson(blogs));
+//網誌新增註解
+		}else if(action.equals("insertBlogNote")) {
+			String b_noteJson = jsonObject.get("blog_note").getAsString();
+			System.out.println("Blog_Note ::"+ b_noteJson);
+			Blog_Note blog_Note = gson.fromJson(b_noteJson, Blog_Note.class);
+			int count = 0 ;
+			count = blogDao.insertB_Note(blog_Note);
+			writeText(response, String.valueOf(count));
+		}	
+//檢查是否有上傳圖片
+		
+		else if (action.equals("imageUpdate")) {
+			if(jsonObject.get("imageBase64") != null) {
+			byte[] image = null;
+			String imageBase64 = jsonObject.get("imageBase64").getAsString();
+			if (imageBase64 != null && !imageBase64.isEmpty()) {
+				image = Base64.getMimeDecoder().decode(imageBase64);
+			}
+			int count = 0 ;
+			String blogId = jsonObject.get("blogId").getAsString();
+			String locId = jsonObject.get("locId").getAsString();
+			count = blogDao.updateImage(image,blogId,locId);
+			writeText(response, String.valueOf(count));
+			}
+		}
+		else if(action.equals("getImage")){
+
 //			List<BlogD> blogs = blogDao.findBlogById(id);
 //			writeText(response, gson.toJson(blogs));
 		}else if(action.equals("getImage")){
+
 			OutputStream os = response.getOutputStream();
 			int id = jsonObject.get("id").getAsInt();
 			int imageSize = jsonObject.get("imageSize").getAsInt();
@@ -71,6 +114,7 @@ public class BlogServlet extends HttpServlet {
 				response.setContentType("image/jpeg");
 				os.write(image);
 		}
+<<<<<<< HEAD
 		}else if(action.equals("findById")) {
 			int id = jsonObject.get("id").getAsInt();
 			List<BlogD> blist = blogDao.findById(id);
@@ -90,8 +134,20 @@ public class BlogServlet extends HttpServlet {
 			writeText(response,gson.toJson(spotNames));
 				
 		}else {
+=======
+//		}else if(action.equals("findById")) {
+//			int id = jsonObject.get("id").getAsInt();
+//			List<BlogD> blist = blogDao.findById(id);
+//			writeText(response, gson.toJson(blist));
+//		}else if(action.equals("findDateId")) {
+//			int id = jsonObject.get("id").getAsInt();
+////			List<BlogD> blist = blogDao.findById(id);
+//			writeText(response, gson.toJson(blist));}
+		else {
+>>>>>>> 55a727c47f9fb4ff30d086257a1e7a9fbd9642d0
 				writeText(response, "");
 			}
+		}
 	}
    
 		

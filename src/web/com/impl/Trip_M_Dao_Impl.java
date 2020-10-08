@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import web.com.bean.Member;
 import web.com.bean.Trip_M;
 import web.com.dao.Trip_M_Dao;
 import web.com.util.ServiceLocator;
@@ -157,8 +158,15 @@ public class Trip_M_Dao_Impl implements Trip_M_Dao {
 	@Override
 	public List<Trip_M> getAll() {
 		List<Trip_M> tripMs = new ArrayList<Trip_M>();
+<<<<<<< HEAD
 
 		String sql = "SELECT * FROM Trip_M left join Trip_Group on Trip_M.TRIP_ID = Trip_Group.TRIP_ID where STATUS = 1;";
+=======
+		String sql = "SELECT * FROM Tripper.Trip_M "
+				+ " left join Trip_Group on Trip_M.TRIP_ID = Trip_Group.TRIP_ID "
+				+ " where STATUS = 1 " +
+				" order by M_DATETIME desc" ;
+>>>>>>> 55a727c47f9fb4ff30d086257a1e7a9fbd9642d0
 
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql);) {
@@ -203,6 +211,26 @@ public class Trip_M_Dao_Impl implements Trip_M_Dao {
 			e.printStackTrace();
 		} 
 		return image;
+	}
+
+	// 實作查詢會員id 是否= 主揪人
+	@Override
+	public Trip_M getStatusById(String memberId) {
+		String sql = " SELECT MEMBER_ID, STATUS FROM Trip_M WHERE TRIP_ID = ?; ";
+		Trip_M tripM = null;
+		try (Connection connection = dataSource.getConnection();
+				PreparedStatement ps = connection.prepareStatement(sql);) {
+			ps.setInt(1, Integer.parseInt(memberId));
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				int status = rs.getInt(1);
+				tripM = new Trip_M(status);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return tripM;
 	}
 	
 	
