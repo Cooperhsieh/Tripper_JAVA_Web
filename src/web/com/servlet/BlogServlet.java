@@ -4,11 +4,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-<<<<<<< HEAD
 import java.util.ArrayList;
-=======
+
 import java.util.Base64;
->>>>>>> 55a727c47f9fb4ff30d086257a1e7a9fbd9642d0
+
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -19,16 +18,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-<<<<<<< HEAD
 
-=======
->>>>>>> 55a727c47f9fb4ff30d086257a1e7a9fbd9642d0
 import io.grpc.netty.shaded.io.netty.channel.unix.Buffer;
 import web.com.bean.Blog_Note;
-<<<<<<< HEAD
-=======
+
 import web.com.bean.Blog_Pic;
->>>>>>> Member
+
 import web.com.bean.BlogD;
 import web.com.bean.BlogM;
 import web.com.bean.Blog_Day;
@@ -36,10 +31,7 @@ import web.com.bean.Blog_SpotInfo;
 import web.com.bean.Blog_SpotInformation;
 import web.com.bean.DateAndId;
 import web.com.bean.Explore;
-<<<<<<< HEAD
 
-=======
->>>>>>> 55a727c47f9fb4ff30d086257a1e7a9fbd9642d0
 import web.com.dao.BlogDao;
 import web.com.impl.BlogImpl;
 import web.com.util.ImageUtil;
@@ -126,7 +118,7 @@ public class BlogServlet extends HttpServlet {
 				response.setContentType("image/jpeg");
 				os.write(image);
 		}
-<<<<<<< HEAD
+
 		}else if(action.equals("findById")) {
 			int id = jsonObject.get("id").getAsInt();
 			List<BlogD> blist = blogDao.findById(id);
@@ -145,8 +137,8 @@ public class BlogServlet extends HttpServlet {
 //			System.out.println("spotNames:" + spotNames);
 			writeText(response,gson.toJson(spotNames));
 				
-		}else {
-=======
+		}
+
 //		}else if(action.equals("findById")) {
 //			int id = jsonObject.get("id").getAsInt();
 //			List<BlogD> blist = blogDao.findById(id);
@@ -156,10 +148,10 @@ public class BlogServlet extends HttpServlet {
 ////			List<BlogD> blist = blogDao.findById(id);
 //			writeText(response, gson.toJson(blist));}
 		else {
->>>>>>> 55a727c47f9fb4ff30d086257a1e7a9fbd9642d0
+
 				writeText(response, "");
 			}
-		}
+		
 	}
    
 		
