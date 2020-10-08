@@ -12,14 +12,13 @@ public class DateAndId {
 		this.trip_Id = trip_Id;
 	}
 	
-<<<<<<< HEAD
-=======
+
 	public DateAndId(String tripId) {
 		super();
 		this.trip_Id = tripId;
 	}
 	
->>>>>>> 55a727c47f9fb4ff30d086257a1e7a9fbd9642d0
+
 
 	public String getS_Date() {
 		return s_Date;

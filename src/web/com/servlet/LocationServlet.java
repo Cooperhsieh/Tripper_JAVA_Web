@@ -54,6 +54,14 @@ public class LocationServlet extends HttpServlet {
 		
 		String action = jsonObject.get("action").getAsString();
 
+<<<<<<< HEAD
+=======
+
+		System.out.println("get action::" + action);
+
+
+
+>>>>>>> 349f136717c34025907e33fb1df5636b5831ef4a
 
 
 
@@ -77,10 +85,11 @@ public class LocationServlet extends HttpServlet {
 
 
 
+
+
+
 			System.out.println("image size ::" + image.length);
-
 			System.out.println("1111 locId::" + locId);
-
 
 
 			if(image != null) {
