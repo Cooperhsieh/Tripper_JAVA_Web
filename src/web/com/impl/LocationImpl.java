@@ -35,6 +35,7 @@ public class LocationImpl implements LocationDao{
 				+ "CITY, INFO, LONGITUDE, LATITUDE, CREATE_ID, " // 10
 				+ "M_USER_ID" + 
 				") values ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
+		
 		try(Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql);) {
 			ps.setString(1, loc.getLocId());

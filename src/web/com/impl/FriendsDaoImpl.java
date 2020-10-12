@@ -26,9 +26,9 @@ import web.com.util.ServiceLocator;
 */
 public class FriendsDaoImpl implements FriendsDao {
 	DataSource dataSource ;
-	private static final int NOT_FRIEND = 0;
-	private static final int CHECKING = 1;
-	private static final int FRIEND = 2;
+	private static final int NOT_FRIEND = 0; 
+	private static final int CHECKING = 1; // 邀請好友待確認
+	private static final int FRIEND = 2; // 已是好友
 	public FriendsDaoImpl() {
 		dataSource = ServiceLocator.getInstance().getDataSource();	
 	}
