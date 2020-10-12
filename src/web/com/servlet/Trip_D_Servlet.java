@@ -104,8 +104,8 @@ public class Trip_D_Servlet extends HttpServlet {
 			String tripId = jsonObject.get("tripId").getAsString();
 			System.out.println("編輯頁面秀行程ID: " + tripId);
 					
-			Map<String, List<Trip_LocInfo>> map = new TreeMap<String, List<Trip_LocInfo>>();
-			map = (Map<String, List<Trip_LocInfo>>) tripDDao.showLocName(tripId);	
+			Map<String, List<Location_D>> map = new TreeMap<String, List<Location_D>>();
+			map = (Map<String, List<Location_D>>) tripDDao.showLocName(tripId);	
 			writeText(response, gson.toJson(map));
 		}
 

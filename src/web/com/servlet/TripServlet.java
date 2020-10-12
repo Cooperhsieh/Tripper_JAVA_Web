@@ -8,6 +8,7 @@ import java.lang.reflect.Type;
 import java.util.Base64;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -83,6 +84,14 @@ public class TripServlet extends HttpServlet {
 				response.setContentLength(image.length);
 				os.write(image);
 			}
+		} else if (action.equals("showLocName")) {
+			String tripId = jsonObject.get("tripId").getAsString();
+			System.out.println("編輯頁面秀行程ID: " + tripId);
+			
+			tripDetailDao = new Trip_D_Dao_Impl();
+			Map<String, List<Location_D>> map = tripDetailDao.showLocName(tripId);	
+			writeText(response, gson.toJson(map));
+
 		} else if (action.equals("insert") || action.equals("update")) {
 
 			// 主檔
@@ -179,6 +188,8 @@ public class TripServlet extends HttpServlet {
 						count = tripDetailDao.update(tripD);
 						seq++;
 					}
+					
+					
 					// insert 失敗直接傳回null
 					if (count <= 0) {
 						writeText(response, String.valueOf(count));
