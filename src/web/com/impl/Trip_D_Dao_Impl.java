@@ -64,7 +64,8 @@ public class Trip_D_Dao_Impl implements Trip_D_Dao {
 	@Override
 	public int update(Trip_D tripD) {
 		int count = 0;
-		String sql = "update Trip_D set " + "TRANS_ID = ?, " + "TRIP_ID = ?, " + "SEQ_NO = ?, " + "LOC_ID = ? ,"
+		String sql = "update Trip_D set " 
+				+ "TRANS_ID = ?, " + "TRIP_ID = ?, " + "SEQ_NO = ?, " + "LOC_ID = ? ,"
 				+ "S_DATE = ? , " + // 5
 				"S_TIME = ? , " + "STAYTIME = ? ," + "MEMO = ? " + "where TRIP_ID = ?; ";
 
@@ -227,7 +228,7 @@ public class Trip_D_Dao_Impl implements Trip_D_Dao {
 	
 	//點擊編輯按鈕回到編輯行程，撈已存的景點資料
 	@Override
-	public Map<String, List<Trip_LocInfo>> showLocName(String tripId) {
+	public Map<String, List<Location_D>> showLocName(String tripId) {
 		
 		String sql = " SELECT * " 
 				+ " FROM Trip_D "
@@ -241,8 +242,8 @@ public class Trip_D_Dao_Impl implements Trip_D_Dao {
 			ps.setString(1, tripId);
 			System.out.println("ShowTripUpdate's ID :: " + ps.toString());
 			ResultSet rs = ps.executeQuery();
-			Map map = new TreeMap<String, List<Trip_LocInfo>>();
-			List<Trip_LocInfo> showLocNames = null;
+			Map map = new TreeMap<String, List<Location_D>>();
+			List<Location_D> showLocNames = null;
 			int count = 1;
 			while (rs.next()) {
 				if(rs.getInt("seq_No") == 1) {
@@ -251,16 +252,16 @@ public class Trip_D_Dao_Impl implements Trip_D_Dao {
 						map.put(count+"",showLocNames);
 						count++;
 					}
-					showLocNames = new ArrayList<Trip_LocInfo>();
+					showLocNames = new ArrayList<Location_D>();
 				}
-				String loc_Id = rs.getString("loc_Id");
-				String trip_Id = rs.getString("trip_Id");
-				String locName = rs.getString("name");
-				String address = rs.getString("address");
-				String staytime = rs.getString("staytime");
-				String memo = rs.getString("memo");
-				System.out.println(loc_Id + " " + trip_Id + " " + locName + " " + address + " " + staytime + " " + memo);
-				Trip_LocInfo trip_LocInfo = new Trip_LocInfo(loc_Id, trip_Id, locName, address, staytime, memo);
+				String locName = rs.getString("NAME");
+				String address = rs.getString("ADDRESS");
+				String locId = rs.getString("LOC_ID");
+				String memo = rs.getString("MEMO");
+				String staytime = rs.getString("STAYTIME");
+//				String trip_Id = rs.getString("trip_Id");
+				System.out.println(locName + " " + address + " " + locId + " " + memo + " " + staytime + " " + tripId);
+				Location_D trip_LocInfo = new Location_D(locName, address, locId, memo, staytime);
 				showLocNames.add(trip_LocInfo);
 			}
 			System.out.println("outside count:" + count );

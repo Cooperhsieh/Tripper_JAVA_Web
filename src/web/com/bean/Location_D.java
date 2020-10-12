@@ -19,7 +19,20 @@ public class Location_D extends Location implements Serializable {
         this.startDate = startDate;
     }
     
-    public String getTrip() {
+    
+    
+    
+    public Location_D(String name, String address, String locId, String memos, String stayTimes) {
+		super(name, address, locId);
+		this.memos = memos;
+		this.stayTimes = stayTimes;
+		
+	}
+
+
+
+
+	public String getTrip() {
         return tripId;
     }
 
