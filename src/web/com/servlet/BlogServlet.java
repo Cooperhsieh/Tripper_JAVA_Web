@@ -10,10 +10,6 @@ import java.util.ArrayList;
 
 import java.util.Base64;
 
-import java.util.ArrayList;
-
-import java.util.Base64;
-
 
 import java.util.List;
 
@@ -145,7 +141,15 @@ public class BlogServlet extends HttpServlet {
 			writeText(response,gson.toJson(spotNames));
 				
 
+		}else {
+
+				writeText(response, "");
+			}
 		}
+	
+
+
+		
 		
 		
 		
@@ -167,12 +171,9 @@ public class BlogServlet extends HttpServlet {
 //		}
 //	
 
-		else {
-
-				writeText(response, "");
-			}
+			
 		
-	}
+	
 
    
 		

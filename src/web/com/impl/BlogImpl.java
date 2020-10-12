@@ -10,11 +10,6 @@ import java.util.List;
 import javax.sql.DataSource;
 import web.com.bean.Blog_Note;
 
-
-
-import com.fasterxml.jackson.core.TSFBuilder;
-
-
 import com.fasterxml.jackson.core.TSFBuilder;
 
 import com.google.cloud.Date;
@@ -191,8 +186,7 @@ public class BlogImpl implements BlogDao{
 				"	LEFT JOIN Blog_M ON Blog_M.BLOG_ID = Blog_D.BLOG_ID \n" + 
 				"	LEFT JOIN Location ON Location.LOC_ID = Blog_D.LOC_ID  \n" + 
 				"	WHERE Blog_D.BLOG_ID = ?  and Blog_D.S_DATE = ?\n" + 
-				"	Order By \n" + 
-				"	 S_DATE asc ";
+				"ORDER BY SEQ_NO ASC";
 		try (Connection connection = dataSource.getConnection();
 			PreparedStatement ps = connection.prepareStatement(sql);) {
 			ps.setInt(1, blogId);
@@ -261,10 +255,5 @@ public class BlogImpl implements BlogDao{
 		return null;
 	}
 
-//	@Override
-//	public BlogD findLocationById(int id) {
-//		
-//		return null;
-//	}
 
 }

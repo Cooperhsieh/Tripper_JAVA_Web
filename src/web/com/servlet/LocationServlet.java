@@ -50,25 +50,8 @@ public class LocationServlet extends HttpServlet {
 		
 		if( locDao == null) {
 			locDao = new LocationImpl();
-		}
-		
+		}	
 		String action = jsonObject.get("action").getAsString();
-
-
-		System.out.println("get action::" + action);
-
-
-
-
-
-
-		System.out.println("get action::" + action);
-
-
-
-
-
-
 		if(action.equals("getAll")) {
 			List<Location> locations = locDao.getAll();
 			writeText(response, gson.toJson(locations));
