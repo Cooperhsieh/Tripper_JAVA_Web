@@ -24,7 +24,7 @@ public interface BlogDao {
 	
 //	List <BlogD> getAll();
 
-	byte[] getImage(int id);
+	byte[] getImage(String id);
 	
 	Blog findById1(int id);
 
