@@ -21,6 +21,7 @@ import web.com.bean.Trip_LocInfo;
 import web.com.bean.Trip_M;
 import web.com.dao.Trip_D_Dao;
 import web.com.util.ServiceLocator;
+import web.com.util.SettingUtil;
 
 /**
  * 類別說明：Trip_D_Impl檔
@@ -64,21 +65,28 @@ public class Trip_D_Dao_Impl implements Trip_D_Dao {
 	@Override
 	public int update(Trip_D tripD) {
 		int count = 0;
-		String sql = "update Trip_D set " 
-				+ "TRANS_ID = ?, " + "TRIP_ID = ?, " + "SEQ_NO = ?, " + "LOC_ID = ? ,"
-				+ "S_DATE = ? , " + // 5
-				"S_TIME = ? , " + "STAYTIME = ? ," + "MEMO = ? " + "where TRIP_ID = ?; ";
+		String sql = " update Trip_D set " 
+				+ " TRIP_ID = ?, " 
+				+ " SEQ_NO = ?, " 
+				+ " LOC_ID = ? ,"
+				+ " S_DATE = ? , " //5
+				+ " S_TIME = ? , " 
+				+ " STAYTIME = ? ," 
+				+ " MEMO = ? " 
+				+ " where TRIP_ID = ?; ";
 
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql);) {
-			ps.setString(1, tripD.getTransId());
-			ps.setString(2, tripD.getTripId());
-			ps.setInt(3, tripD.getSeqNo());
-			ps.setString(4, tripD.getLocId());
-			ps.setString(5, tripD.getStartDate());
-			ps.setString(6, tripD.getStartTime());
-			ps.setString(7, tripD.getStayTime());
-			ps.setString(8, tripD.getMemo());
+			ps.setString(1, tripD.getTripId());
+			ps.setInt(2, tripD.getSeqNo());
+			ps.setString(3, tripD.getLocId());
+			ps.setString(4, tripD.getStartDate());
+			ps.setString(5, tripD.getStartTime());
+			ps.setString(6, tripD.getStayTime());
+			ps.setString(7, tripD.getMemo());
+			ps.setString(8, tripD.getTripId());
+			System.out.println("update Trip_D sql :: " + ps.toString());
+			
 			count = ps.executeUpdate();
 
 		} catch (SQLException e) {
@@ -95,6 +103,7 @@ public class Trip_D_Dao_Impl implements Trip_D_Dao {
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql);) {
 			ps.setString(1, tripId);
+			System.out.println("Delete Trip_D sql :: " + ps.toString());
 			count = ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -242,7 +251,7 @@ public class Trip_D_Dao_Impl implements Trip_D_Dao {
 			ps.setString(1, tripId);
 			System.out.println("ShowTripUpdate's ID :: " + ps.toString());
 			ResultSet rs = ps.executeQuery();
-			Map map = new TreeMap<String, List<Location_D>>();
+			Map<String, List<Location_D>> map = new TreeMap<>();
 			List<Location_D> showLocNames = null;
 			int count = 1;
 			while (rs.next()) {
@@ -265,7 +274,7 @@ public class Trip_D_Dao_Impl implements Trip_D_Dao {
 				showLocNames.add(trip_LocInfo);
 			}
 			System.out.println("outside count:" + count );
-			map.put(count+" ",showLocNames);
+			map.put(count + "", showLocNames);
 			return map;
 
 		} catch (SQLException e) {
