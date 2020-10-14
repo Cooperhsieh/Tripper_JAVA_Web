@@ -8,11 +8,27 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.sql.DataSource;
 import web.com.bean.Blog_Note;
+<<<<<<< HEAD
 import web.com.bean.Blog;
 import web.com.bean.BlogD;
 import web.com.bean.Blog_Comment;
 import web.com.bean.Blog_Day;
 import web.com.bean.Blog_SpotInformation;
+=======
+import com.fasterxml.jackson.core.TSFBuilder;
+import com.fasterxml.jackson.core.TSFBuilder;
+import com.google.cloud.Date;
+import web.com.bean.Blog;
+import web.com.bean.BlogD;
+import web.com.bean.BlogFinish;
+import web.com.bean.BlogM;
+import web.com.bean.Blog_Comment;
+import web.com.bean.Blog_Day;
+import web.com.bean.Blog_SpotInfo;
+import web.com.bean.Blog_SpotInformation;
+import web.com.bean.DateAndId;
+import web.com.bean.Trip_M;
+>>>>>>> a7a359031362e995ba55a0f4b3131f674e78dc4b
 import web.com.dao.BlogDao;
 import web.com.util.ServiceLocator;
 
@@ -248,6 +264,93 @@ public class BlogImpl implements BlogDao{
 		// TODO Auto-generated method stub
 		return null;
 	}
+//發布網誌後將相關資料存進DB
+	@Override
+	public int insetBlog_M(BlogFinish blogFinish,byte[] b_Pic) {
+		int count = 0;
+		String sql = "";
+		if (b_Pic != null) {
+			sql = "insert into Blog_M " + "( BLOG_ID, BLOG_TITLE, BLOG_DESC, PIC, USER_ID) "
+					+ "values (? ,? ,? ,?, ? );";
+		}else {
+			sql = "insert into Blog_M " + "( BLOG_ID, BLOG_TITLE, BLOG_DESC, USER_ID) "
+					+ "values (? , ? , ? , ? );";
+		}
+		
+		try (Connection connection = dataSource.getConnection();
+				PreparedStatement ps = connection.prepareStatement(sql);) {
+			ps.setString(1, blogFinish.getTrip_Id());
+			ps.setString(2, blogFinish.getBlog_title());
+			ps.setString(3, blogFinish.getBlog_Info());
+			if (b_Pic != null) {
+				ps.setBytes(4, b_Pic);
+				ps.setString(5, blogFinish.getMemberId());
+			}
+			ps.setString(4, blogFinish.getMemberId());
+			
+			System.out.println("insert blog_M sql::" + ps.toString());
+			count = ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return count;
+	}
+
+	@Override
+	public List<byte[]> getSpotImages(String loc_Id, String blog_id) {
+		List<byte[]> spotImages = new ArrayList<byte[]>();
+		String sql = "SELECT * FROM Tripper.Blog_Spot_Pic where LOC_ID = ? and BLOG_ID = '?';";
+		try (Connection connection = dataSource.getConnection();
+				PreparedStatement ps = connection.prepareStatement(sql);) {
+			ps.setString(1, loc_Id);
+			ps.setString(2, blog_id);
+			System.out.println("getSpotImages :: " + ps.toString());
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				byte[] pic1 = rs.getBytes(5);
+				byte[] pic2 = rs.getBytes(6);
+				byte[] pic3 = rs.getBytes(7);
+				byte[] pic4 = rs.getBytes(8);
+				
+				spotImages.add(pic1);
+				spotImages.add(pic2);
+				spotImages.add(pic3);
+				spotImages.add(pic4);
+			}
+			return spotImages;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return spotImages;
+
+	}
+
+	@Override
+	public List<BlogFinish> getMyBlog(String memberId) {
+		List<BlogFinish> blogMList = new ArrayList<BlogFinish>();
+		String sql = "SELECT * FROM Blog_M where USER_ID = ? ;" ;
+
+		try (Connection connection = dataSource.getConnection();
+				PreparedStatement ps = connection.prepareStatement(sql);) {
+			ps.setString(1, memberId);
+			System.out.println("getMyBlog sql :" + ps.toString());
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				String blogTitle = rs.getString(3);
+				String blogInfo = rs.getString(4);
+				String blogId = rs.getString(2);
+				
+				BlogFinish blogFinish = new BlogFinish(blogId, blogTitle, blogInfo, memberId);
+				blogMList.add(blogFinish);
+			}
+			return blogMList;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return blogMList;
+	}
+
 
 	@Override
 	public List<Blog_Comment> findCommentById(String blogId) {
@@ -285,6 +388,8 @@ public class BlogImpl implements BlogDao{
 		
 		return blogComments;
 	}
+
+	
 
 
 }
