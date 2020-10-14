@@ -9,10 +9,10 @@ public class Blog implements Serializable {
     private String blogNote;
     private String LocName;
     private int dayCount;
-    private int locID;
-    private int blogID;
+    private String locID;
+    private String blogID;
 
-    public Blog(String blogTittle, String blogDesc, String blogNote, String locName, int dayCount,int locID, int blogID) {
+    public Blog(String blogTittle, String blogDesc, String blogNote, String locName, int dayCount,String locID, String blogID) {
         this.blogTittle = blogTittle;
         this.blogDesc = blogDesc;
         this.blogNote = blogNote;
@@ -21,19 +21,25 @@ public class Blog implements Serializable {
         this.locID = locID;
         this.blogID = blogID;
     }
-    public int getBlogID(){
+    public Blog(String blogTitle, String blogDesc2, String blogNote2) {
+        this.blogTittle = blogTitle;
+        this.blogDesc = blogDesc2;
+        this.blogNote = blogNote2;
+    }
+    public String getBlogID(){
         return blogID;
     }
 
-    public void setBlogID(int blogID) {
+    public void setBlogID(String blogID) {
         this.blogID = blogID;
     }
-    public int getLocId() {
-		return locID;
-	}
-    public int setLocId() {
-		return locID;
-	}
+
+    public String getLocId() {
+        return locID;
+    }
+    public void setLocId(String locID) {
+        this.locID = locID;
+    }
 
     public String getBlogTittle() {
         return blogTittle;
@@ -75,4 +81,3 @@ public class Blog implements Serializable {
         this.dayCount = dayCount;
     }
 }
-

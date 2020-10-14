@@ -6,23 +6,29 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.sql.DataSource;
 import web.com.bean.Blog_Note;
-
-import com.fasterxml.jackson.core.TSFBuilder;
-
-import com.google.cloud.Date;
-
+<<<<<<< HEAD
 import web.com.bean.Blog;
 import web.com.bean.BlogD;
-import web.com.bean.BlogM;
+import web.com.bean.Blog_Comment;
 import web.com.bean.Blog_Day;
-
+import web.com.bean.Blog_SpotInformation;
+=======
+import com.fasterxml.jackson.core.TSFBuilder;
+import com.fasterxml.jackson.core.TSFBuilder;
+import com.google.cloud.Date;
+import web.com.bean.Blog;
+import web.com.bean.BlogD;
+import web.com.bean.BlogFinish;
+import web.com.bean.BlogM;
+import web.com.bean.Blog_Comment;
+import web.com.bean.Blog_Day;
 import web.com.bean.Blog_SpotInfo;
 import web.com.bean.Blog_SpotInformation;
 import web.com.bean.DateAndId;
-
+import web.com.bean.Trip_M;
+>>>>>>> a7a359031362e995ba55a0f4b3131f674e78dc4b
 import web.com.dao.BlogDao;
 import web.com.util.ServiceLocator;
 
@@ -95,26 +101,11 @@ public class BlogImpl implements BlogDao{
 	}
 
 	@Override
-	public List<BlogD> findById(int id) {
-		String sql = "SELECT \n" + 
-				"    Blog_M.BLOG_ID,\n" + 
-				"    BLOG_TITLE,\n" + 
-				"    BLOG_DESC,\n" + 
-				"    Location.LOC_ID,\n" + 
-				"    BLOG_NOTE,\n" + 
-				"    NAME,\n" + 
-				"    SEQ_NO,\n" + 
-				"    S_DATE,\n" + 
-				"    Blog_M.TRIP_ID\n" + 
-				"FROM\n" + 
-				"    Blog_D\n" + 
-				"        LEFT JOIN\n" + 
-				"    Blog_M ON Blog_M.BLOG_ID = Blog_D.BLOG_ID\n" + 
-				"        LEFT JOIN\n" + 
-				"    Location ON Location.LOC_ID = Blog_D.LOC_ID\n" + 
-				"WHERE\n" + 
-				"    Blog_D.BLOG_ID = ?\n" + 
-				"ORDER BY SEQ_NO ASC";
+	public List<BlogD> findById(String id) {
+		String sql ="SELECT distinct Trip_ID,Trip_D.LOC_ID,LOC_NOTE,Trip_D.S_DATE,Trip_D.SEQ_NO,Location.NAME FROM Tripper.Trip_D\n" + 
+				"LEFT JOIN Blog_D on Trip_D.TRIP_ID = Blog_D.BLOG_ID\n" + 
+				"LEFT JOIN Location on Location.LOC_ID = Trip_D.LOC_ID\n" + 
+				"where Trip_D.TRIP_ID = ?";
 		
 		List<BlogD> bList = new ArrayList<>();
 		
@@ -123,15 +114,15 @@ public class BlogImpl implements BlogDao{
 				Connection connection  = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql);
 				) {
-			ps.setInt(1, id);
+			ps.setString(1, id);
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()) {
-				int blodId=  rs.getInt(1);
-				int locationId = rs.getInt(4);
+				String blodId=  rs.getString(1);
+				String locationId = rs.getString(2);
 				String locationName  =rs.getString(6);
-				String blogNote = rs.getString(5);
-				String s_Date = rs.getString(8);
-				int tripId= rs.getInt(9);
+				String blogNote = rs.getString(3);
+				String s_Date = rs.getString(4);
+				String tripId= rs.getString(1);
 				BlogD blogD = new BlogD(blodId,locationId, locationName, blogNote, s_Date,tripId);
 				bList.add(blogD);
 		}
@@ -146,12 +137,12 @@ public class BlogImpl implements BlogDao{
 	}
 	
 	@Override
-	public List<Blog_Day> findDateById(int blodId) {
-		String sql = " SELECT DISTINCT S_DATE FROM Blog_D  \n" + 
-				"												LEFT JOIN Blog_M ON Blog_M.BLOG_ID = Blog_D.BLOG_ID  \n" + 
-				"												LEFT JOIN Location ON Location.LOC_ID = Blog_D.LOC_ID \n" + 
+	public List<Blog_Day> findDateById(String blodId) {
+		String sql = " SELECT DISTINCT S_DATE FROM Trip_D  \n" + 
+				"												LEFT JOIN Blog_M ON Blog_M.BLOG_ID = Trip_D.TRIP_ID  \n" + 
+				"												LEFT JOIN Location ON Location.LOC_ID = Trip_D.LOC_ID \n" + 
 				"											\n" + 
-				"												WHERE Blog_D.BLOG_ID = ? \n" + 
+				"												WHERE Trip_D.TRIP_ID = ? \n" + 
 				"				                            \n" + 
 				"												Order By \n" + 
 				"										 S_DATE asc ;";
@@ -163,7 +154,7 @@ public class BlogImpl implements BlogDao{
 				Connection connection  = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql);
 				) {
-			ps.setInt(1,blodId);
+			ps.setString(1,blodId);
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()) {
 				
@@ -180,16 +171,17 @@ public class BlogImpl implements BlogDao{
 		
 		return blogDays;
 	}
-	public List<Blog_SpotInformation> getSpotName(String s_Date, int blogId) {
+	public List<Blog_SpotInformation> getSpotName(String s_Date, String blogId) {
 		List<Blog_SpotInformation> spotNames = new ArrayList<>();		
-		String sql = "SELECT NAME FROM Blog_D  \n" + 
-				"	LEFT JOIN Blog_M ON Blog_M.BLOG_ID = Blog_D.BLOG_ID \n" + 
-				"	LEFT JOIN Location ON Location.LOC_ID = Blog_D.LOC_ID  \n" + 
-				"	WHERE Blog_D.BLOG_ID = ?  and Blog_D.S_DATE = ?\n" + 
-				"ORDER BY SEQ_NO ASC";
+		String sql = "SELECT Location.NAME,Trip_D.S_DATE,SEQ_NO FROM Trip_D \n" + 
+				"		LEFT JOIN Location \n" + 
+				"        ON Location.LOC_ID = Trip_D.LOC_ID  \n" + 
+				"	    WHERE Trip_ID = ? and Trip_D.S_DATE = ?\n" + 
+				"        order by\n" + 
+				"        SEQ_NO ,S_DATE;";
 		try (Connection connection = dataSource.getConnection();
 			PreparedStatement ps = connection.prepareStatement(sql);) {
-			ps.setInt(1, blogId);
+			ps.setString(1, blogId);
 			ps.setString(2, s_Date);
 //			System.out.println("findspotNames :: " + ps.toString());
 			ResultSet rs = ps.executeQuery();
@@ -207,6 +199,24 @@ public class BlogImpl implements BlogDao{
 		
 	}
 
+//上傳留言內容
+	@Override
+	public int insertB_Comment(Blog_Comment blog_Comment) {
+		int count = 0;
+		String sql = "";
+		sql = "insert into Comment (Blog_ID, Member_ID,Com_Note) values (? , ? , ? ) ;"; 
+		try (Connection connection = dataSource.getConnection();
+				PreparedStatement ps = connection.prepareStatement(sql); ){
+			ps.setString(1, blog_Comment.getName());
+			ps.setString(2, blog_Comment.getMember_ID());
+			ps.setString(3, blog_Comment.getContent());
+
+			count = ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return count;
+	}
 
 //上傳心得
 	@Override
@@ -254,6 +264,132 @@ public class BlogImpl implements BlogDao{
 		// TODO Auto-generated method stub
 		return null;
 	}
+//發布網誌後將相關資料存進DB
+	@Override
+	public int insetBlog_M(BlogFinish blogFinish,byte[] b_Pic) {
+		int count = 0;
+		String sql = "";
+		if (b_Pic != null) {
+			sql = "insert into Blog_M " + "( BLOG_ID, BLOG_TITLE, BLOG_DESC, PIC, USER_ID) "
+					+ "values (? ,? ,? ,?, ? );";
+		}else {
+			sql = "insert into Blog_M " + "( BLOG_ID, BLOG_TITLE, BLOG_DESC, USER_ID) "
+					+ "values (? , ? , ? , ? );";
+		}
+		
+		try (Connection connection = dataSource.getConnection();
+				PreparedStatement ps = connection.prepareStatement(sql);) {
+			ps.setString(1, blogFinish.getTrip_Id());
+			ps.setString(2, blogFinish.getBlog_title());
+			ps.setString(3, blogFinish.getBlog_Info());
+			if (b_Pic != null) {
+				ps.setBytes(4, b_Pic);
+				ps.setString(5, blogFinish.getMemberId());
+			}
+			ps.setString(4, blogFinish.getMemberId());
+			
+			System.out.println("insert blog_M sql::" + ps.toString());
+			count = ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return count;
+	}
+
+	@Override
+	public List<byte[]> getSpotImages(String loc_Id, String blog_id) {
+		List<byte[]> spotImages = new ArrayList<byte[]>();
+		String sql = "SELECT * FROM Tripper.Blog_Spot_Pic where LOC_ID = ? and BLOG_ID = '?';";
+		try (Connection connection = dataSource.getConnection();
+				PreparedStatement ps = connection.prepareStatement(sql);) {
+			ps.setString(1, loc_Id);
+			ps.setString(2, blog_id);
+			System.out.println("getSpotImages :: " + ps.toString());
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				byte[] pic1 = rs.getBytes(5);
+				byte[] pic2 = rs.getBytes(6);
+				byte[] pic3 = rs.getBytes(7);
+				byte[] pic4 = rs.getBytes(8);
+				
+				spotImages.add(pic1);
+				spotImages.add(pic2);
+				spotImages.add(pic3);
+				spotImages.add(pic4);
+			}
+			return spotImages;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return spotImages;
+
+	}
+
+	@Override
+	public List<BlogFinish> getMyBlog(String memberId) {
+		List<BlogFinish> blogMList = new ArrayList<BlogFinish>();
+		String sql = "SELECT * FROM Blog_M where USER_ID = ? ;" ;
+
+		try (Connection connection = dataSource.getConnection();
+				PreparedStatement ps = connection.prepareStatement(sql);) {
+			ps.setString(1, memberId);
+			System.out.println("getMyBlog sql :" + ps.toString());
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				String blogTitle = rs.getString(3);
+				String blogInfo = rs.getString(4);
+				String blogId = rs.getString(2);
+				
+				BlogFinish blogFinish = new BlogFinish(blogId, blogTitle, blogInfo, memberId);
+				blogMList.add(blogFinish);
+			}
+			return blogMList;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return blogMList;
+	}
+
+
+	@Override
+	public List<Blog_Comment> findCommentById(String blogId) {
+		
+		String sql = "select BLOG_ID,Member.NICKNAME,Com_Note,Comment.Member_ID, SEQ from Comment\n" + 
+				"left join Member on Member.Member_ID = Comment.Member_ID\n" + 
+				"where Comment.BLOG_ID = ?\n" + 
+				"order by \n" + 
+				"SEQ";
+		
+		List<Blog_Comment> blogComments = new ArrayList<>();
+		
+		
+		try(
+				Connection connection  = dataSource.getConnection();
+				PreparedStatement ps = connection.prepareStatement(sql);
+				) {
+			ps.setString(1,blogId);
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+				
+				String name = rs.getString(2);
+				String comment = rs.getString(3);
+				String memberID = rs.getString(4);
+				
+				Blog_Comment blog_Comment = new Blog_Comment(name,comment,memberID);
+				blogComments.add(blog_Comment);
+		}
+			return blogComments;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		
+		
+		return blogComments;
+	}
+
+	
 
 
 }
