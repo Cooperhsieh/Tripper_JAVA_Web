@@ -6,30 +6,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.sql.DataSource;
 import web.com.bean.Blog_Note;
-
-<<<<<<< HEAD
-
-
-
 import com.fasterxml.jackson.core.TSFBuilder;
-
-
-=======
 import com.fasterxml.jackson.core.TSFBuilder;
->>>>>>> 63d20286b6ebcc9701368d1aa2677a80483c5d84
-
 import com.google.cloud.Date;
-
 import web.com.bean.Blog;
 import web.com.bean.BlogD;
 import web.com.bean.BlogFinish;
 import web.com.bean.BlogM;
 import web.com.bean.Blog_Comment;
 import web.com.bean.Blog_Day;
-
 import web.com.bean.Blog_SpotInfo;
 import web.com.bean.Blog_SpotInformation;
 import web.com.bean.DateAndId;
@@ -176,7 +163,7 @@ public class BlogImpl implements BlogDao{
 		
 		return blogDays;
 	}
-	public List<Blog_SpotInformation> getSpotName(String s_Date, int blogId) {
+	public List<Blog_SpotInformation> getSpotName(String s_Date, String blogId) {
 		List<Blog_SpotInformation> spotNames = new ArrayList<>();		
 		String sql = "SELECT Location.NAME,Trip_D.S_DATE,SEQ_NO FROM Trip_D \n" + 
 				"		LEFT JOIN Location \n" + 
@@ -186,7 +173,7 @@ public class BlogImpl implements BlogDao{
 				"        SEQ_NO ,S_DATE;";
 		try (Connection connection = dataSource.getConnection();
 			PreparedStatement ps = connection.prepareStatement(sql);) {
-			ps.setInt(1, blogId);
+			ps.setString(1, blogId);
 			ps.setString(2, s_Date);
 //			System.out.println("findspotNames :: " + ps.toString());
 			ResultSet rs = ps.executeQuery();
@@ -358,7 +345,6 @@ public class BlogImpl implements BlogDao{
 	}
 
 
-<<<<<<< HEAD
 	@Override
 	public List<Blog_Comment> findCommentById(String blogId) {
 		
@@ -396,7 +382,7 @@ public class BlogImpl implements BlogDao{
 		return blogComments;
 	}
 
-=======
->>>>>>> dfb9f9cd750918df6c9ec48809bba15112800a9c
+	
+
 
 }

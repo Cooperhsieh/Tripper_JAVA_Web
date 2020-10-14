@@ -4,21 +4,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-
 import java.util.ArrayList;
-
 import java.util.Base64;
-<<<<<<< HEAD
-
-=======
 import java.util.Base64.Encoder;
 import java.util.ArrayList;
-
 import java.util.Base64;
->>>>>>> dfb9f9cd750918df6c9ec48809bba15112800a9c
-
 import java.util.List;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -85,7 +76,7 @@ public class BlogServlet extends HttpServlet {
 			int count = 0;
 			count = blogDao.insertB_Note(blog_Note);
 			writeText(response, String.valueOf(count));
-<<<<<<< HEAD
+
 		}
 //網誌新增留言
 	       else if(action.equals("insertBlogComment")) {
@@ -96,8 +87,8 @@ public class BlogServlet extends HttpServlet {
 		     count = blogDao.insertB_Comment(blog_Comment);
 		     writeText(response, String.valueOf(count));
 	       }
-=======
-		} else if (action.equals("getSpotImage")) {
+
+		 else if (action.equals("getSpotImage")) {
 			String blog_Id = jsonObject.get("blog_Id").getAsString();
 			String loc_Id = jsonObject.get("loc_Id").getAsString();
 			List<byte[]> spotImages = new ArrayList<byte[]>();
@@ -126,7 +117,6 @@ public class BlogServlet extends HttpServlet {
 			writeText(response, gson.toJson(spotImages));
 		}
 
->>>>>>> dfb9f9cd750918df6c9ec48809bba15112800a9c
 //檢查是否有上傳圖片
 
 		else if (action.equals("imageUpdate")) {
@@ -176,8 +166,7 @@ public class BlogServlet extends HttpServlet {
 				response.setContentLength(image.length);
 				response.setContentType("image/jpeg");
 				os.write(image);
-
-<<<<<<< HEAD
+			}
 		}else if(action.equals("findById")) {
 			String id = jsonObject.get("id").getAsString();
 			List<BlogD> blist = blogDao.findById(id);
@@ -185,27 +174,27 @@ public class BlogServlet extends HttpServlet {
 		}else if(action.equals("findDateById")) {
 			String id = jsonObject.get("id").getAsString();
 			List<Blog_Day> blogDays= blogDao.findDateById(id);
-=======
+
 			}
 
-		} 
+		
 //抓取個人的Blog		
 		else if (action.equals("getMyBlog")) {
 			String memberId = jsonObject.get("memberId").getAsString();
 			List<BlogFinish> blogMs = blogDao.getMyBlog(memberId);
 			writeText(response, gson.toJson(blogMs));
 		} else if (action.equals("findById")) {
-			int id = jsonObject.get("id").getAsInt();
+			String id = jsonObject.get("id").getAsString();
 			List<BlogD> blist = blogDao.findById(id);
 			writeText(response, gson.toJson(blist));
 		} else if (action.equals("findDateById")) {
-			int id = jsonObject.get("id").getAsInt();
+			String id = jsonObject.get("id").getAsString();
 			List<Blog_Day> blogDays = blogDao.findDateById(id);
->>>>>>> dfb9f9cd750918df6c9ec48809bba15112800a9c
+
 			writeText(response, gson.toJson(blogDays));
 		} else if (action.equals("getSpotName")) {
-			int id = jsonObject.get("id").getAsInt();
-<<<<<<< HEAD
+			String id = jsonObject.get("id").getAsString();
+
 			String date = jsonObject.get("dateD").getAsString();		
 			List<Blog_SpotInformation> spotNames = blogDao.getSpotName(date,id);
 //			System.out.println("spotNames:" + spotNames);
@@ -215,32 +204,24 @@ public class BlogServlet extends HttpServlet {
 			List<Blog_Comment> comments = blogDao.findCommentById(id);
 			writeText(response, gson.toJson(comments));
 				
-=======
-			String date = jsonObject.get("dateD").getAsString();
+			
 
 //			System.out.println("dateAndId" + dateId);
 
-			List<Blog_SpotInformation> spotNames = blogDao.getSpotName(date, id);
 //			System.out.println("spotNames:" + spotNames);
-			writeText(response, gson.toJson(spotNames));
->>>>>>> dfb9f9cd750918df6c9ec48809bba15112800a9c
+		
+
 
 		}else {
 
 				writeText(response, "");
 			}
-		}
-<<<<<<< HEAD
-	
+		
 
 
 		
 		
-		
-		
-=======
 
->>>>>>> dfb9f9cd750918df6c9ec48809bba15112800a9c
 //		else {
 
 //		}else if(action.equals("findById")) {
@@ -259,18 +240,9 @@ public class BlogServlet extends HttpServlet {
 //		}
 //	
 
-<<<<<<< HEAD
-			
-		
+
+}
 	
-=======
-		else {
-
-			writeText(response, "");
-		}
->>>>>>> dfb9f9cd750918df6c9ec48809bba15112800a9c
-
-	}
 
 	private void writeText(HttpServletResponse response, String outText) throws IOException {
 		response.setContentType(CONTENT_TYPE);
