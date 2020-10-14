@@ -5,6 +5,7 @@ import java.util.Map;
 
 import web.com.bean.Blog_SpotInfo;
 import web.com.bean.DateAndId;
+import web.com.bean.Location_D;
 import web.com.bean.Trip_D;
 import web.com.bean.Trip_LocInfo;
 
@@ -32,7 +33,7 @@ public interface Trip_D_Dao {
 	
 	List<Trip_LocInfo> getLocName(DateAndId dateAndId);
 	
-	Map<String, List<Trip_LocInfo>> showLocName(String tripId);
+	Map<String, List<Location_D>> showLocName(String tripId);
 	
 
 }
