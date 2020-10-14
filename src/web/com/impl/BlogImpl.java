@@ -299,7 +299,7 @@ public class BlogImpl implements BlogDao{
 	@Override
 	public List<byte[]> getSpotImages(String loc_Id, String blog_id) {
 		List<byte[]> spotImages = new ArrayList<byte[]>();
-		String sql = "SELECT * FROM Tripper.Blog_Spot_Pic where LOC_ID = ? and BLOG_ID = ;";
+		String sql = "SELECT * FROM Tripper.Blog_Spot_Pic where LOC_ID = ? and BLOG_ID = ?;";
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql);) {
 			ps.setString(1, loc_Id);
