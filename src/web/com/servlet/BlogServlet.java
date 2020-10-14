@@ -5,22 +5,12 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 
-<<<<<<< HEAD
-=======
 
 import java.util.ArrayList;
 
 import java.util.Base64;
 
->>>>>>> 349f136717c34025907e33fb1df5636b5831ef4a
-import java.util.ArrayList;
 
-import java.util.Base64;
-
-<<<<<<< HEAD
-=======
-
->>>>>>> 349f136717c34025907e33fb1df5636b5831ef4a
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -32,13 +22,13 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
-import io.grpc.netty.shaded.io.netty.channel.unix.Buffer;
 import web.com.bean.Blog_Note;
 
 import web.com.bean.Blog_Pic;
 
 import web.com.bean.BlogD;
 import web.com.bean.BlogM;
+import web.com.bean.Blog_Comment;
 import web.com.bean.Blog_Day;
 import web.com.bean.Blog_SpotInfo;
 import web.com.bean.Blog_SpotInformation;
@@ -90,7 +80,16 @@ public class BlogServlet extends HttpServlet {
 			int count = 0 ;
 			count = blogDao.insertB_Note(blog_Note);
 			writeText(response, String.valueOf(count));
-		}	
+		}
+//網誌新增留言
+	       else if(action.equals("insertBlogComment")) {
+		     String b_commentJson= jsonObject.get("blog_comment").getAsString();
+		     System.out.println("Blog_Comment ::"+ b_commentJson);
+		     Blog_Comment blog_Comment = gson.fromJson(b_commentJson, Blog_Comment.class);
+		     int count = 0 ;
+		     count = blogDao.insertB_Comment(blog_Comment);
+		     writeText(response, String.valueOf(count));
+	       }
 //檢查是否有上傳圖片
 		
 		else if (action.equals("imageUpdate")) {
@@ -133,33 +132,34 @@ public class BlogServlet extends HttpServlet {
 		}
 
 		}else if(action.equals("findById")) {
-			int id = jsonObject.get("id").getAsInt();
+			String id = jsonObject.get("id").getAsString();
 			List<BlogD> blist = blogDao.findById(id);
 			writeText(response, gson.toJson(blist));
 		}else if(action.equals("findDateById")) {
-			int id = jsonObject.get("id").getAsInt();
+			String id = jsonObject.get("id").getAsString();
 			List<Blog_Day> blogDays= blogDao.findDateById(id);
 			writeText(response, gson.toJson(blogDays));
 		}else if (action.equals("getSpotName")) {
 			int id = jsonObject.get("id").getAsInt();
-			String date = jsonObject.get("dateD").getAsString();
-	
-//			System.out.println("dateAndId" + dateId);
-			
+			String date = jsonObject.get("dateD").getAsString();		
 			List<Blog_SpotInformation> spotNames = blogDao.getSpotName(date,id);
 //			System.out.println("spotNames:" + spotNames);
 			writeText(response,gson.toJson(spotNames));
+		}else if(action.equals("getCommentNote")) {
+			String id = jsonObject.get("id").getAsString();
+			List<Blog_Comment> comments = blogDao.findCommentById(id);
+			writeText(response, gson.toJson(comments));
 				
-<<<<<<< HEAD
+
 		}else {
 
 				writeText(response, "");
 			}
 		}
 	
-=======
 
-		}
+
+		
 		
 		
 		
@@ -181,14 +181,10 @@ public class BlogServlet extends HttpServlet {
 //		}
 //	
 
-		else {
-
-				writeText(response, "");
-			}
+			
 		
-	}
+	
 
->>>>>>> 349f136717c34025907e33fb1df5636b5831ef4a
    
 		
 		

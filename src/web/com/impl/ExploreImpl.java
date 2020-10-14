@@ -62,8 +62,8 @@ public class ExploreImpl implements ExploreDao{
 			while (rs.next()) {
 				
 				String titleName = rs.getString(1);
-				int userID = rs.getInt(2);
-				int blogID = rs.getInt(3);
+				String userID = rs.getString(2);
+				String blogID = rs.getString(3);
 			    String blogDesc = rs.getString(5);
 				String nickName = rs.getString(4);
 				

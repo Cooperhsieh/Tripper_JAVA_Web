@@ -54,14 +54,13 @@ public class LocationServlet extends HttpServlet {
 		
 		String action = jsonObject.get("action").getAsString();
 
-<<<<<<< HEAD
-=======
+
 
 		System.out.println("get action::" + action);
 
 
 
->>>>>>> 349f136717c34025907e33fb1df5636b5831ef4a
+
 
 
 
