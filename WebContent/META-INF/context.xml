@@ -7,14 +7,7 @@
 		driverClassName="com.mysql.cj.jdbc.Driver"
 		url="jdbc:mysql://localhost:3306/TRIPPER?allowPublicKeyRetrieval=true" 
 		username="root"
-<<<<<<< HEAD
 		password="00000000" 
 />
 
-
-
-
-=======
-		password="password"/>
->>>>>>> 63d20286b6ebcc9701368d1aa2677a80483c5d84
 </Context>

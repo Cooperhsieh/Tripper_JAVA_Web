@@ -6,33 +6,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.sql.DataSource;
 import web.com.bean.Blog_Note;
-
-<<<<<<< HEAD
-
-
-
-import com.fasterxml.jackson.core.TSFBuilder;
-
-
-=======
-import com.fasterxml.jackson.core.TSFBuilder;
->>>>>>> 63d20286b6ebcc9701368d1aa2677a80483c5d84
-
-import com.google.cloud.Date;
-
 import web.com.bean.Blog;
 import web.com.bean.BlogD;
-import web.com.bean.BlogM;
 import web.com.bean.Blog_Comment;
 import web.com.bean.Blog_Day;
-
-import web.com.bean.Blog_SpotInfo;
 import web.com.bean.Blog_SpotInformation;
-import web.com.bean.DateAndId;
-
 import web.com.dao.BlogDao;
 import web.com.util.ServiceLocator;
 
@@ -175,7 +155,7 @@ public class BlogImpl implements BlogDao{
 		
 		return blogDays;
 	}
-	public List<Blog_SpotInformation> getSpotName(String s_Date, int blogId) {
+	public List<Blog_SpotInformation> getSpotName(String s_Date, String blogId) {
 		List<Blog_SpotInformation> spotNames = new ArrayList<>();		
 		String sql = "SELECT Location.NAME,Trip_D.S_DATE,SEQ_NO FROM Trip_D \n" + 
 				"		LEFT JOIN Location \n" + 
@@ -185,7 +165,7 @@ public class BlogImpl implements BlogDao{
 				"        SEQ_NO ,S_DATE;";
 		try (Connection connection = dataSource.getConnection();
 			PreparedStatement ps = connection.prepareStatement(sql);) {
-			ps.setInt(1, blogId);
+			ps.setString(1, blogId);
 			ps.setString(2, s_Date);
 //			System.out.println("findspotNames :: " + ps.toString());
 			ResultSet rs = ps.executeQuery();
@@ -211,11 +191,10 @@ public class BlogImpl implements BlogDao{
 		sql = "insert into Comment (Blog_ID, Member_ID,Com_Note) values (? , ? , ? ) ;"; 
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql); ){
-			ps.setString(1, blog_Comment.getBlogId());
+			ps.setString(1, blog_Comment.getName());
 			ps.setString(2, blog_Comment.getMember_ID());
 			ps.setString(3, blog_Comment.getContent());
-			
-			System.out.println("insert Blog_Comment sql::" + ps.toString());
+
 			count = ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();

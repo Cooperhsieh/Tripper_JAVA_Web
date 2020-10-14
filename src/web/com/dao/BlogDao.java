@@ -40,7 +40,7 @@ public interface BlogDao {
 	public List<Blog_Day> findDateById(String blodId);
 
 
-	public List<Blog_SpotInformation> getSpotName(String s_Date, int blogId) ;
+	public List<Blog_SpotInformation> getSpotName(String s_Date, String blogId) ;
 	
 	public List<Blog_Comment> findCommentById(String blogId);
 

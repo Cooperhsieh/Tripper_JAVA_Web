@@ -140,7 +140,7 @@ public class BlogServlet extends HttpServlet {
 			List<Blog_Day> blogDays= blogDao.findDateById(id);
 			writeText(response, gson.toJson(blogDays));
 		}else if (action.equals("getSpotName")) {
-			int id = jsonObject.get("id").getAsInt();
+			String id = jsonObject.get("id").getAsString();
 			String date = jsonObject.get("dateD").getAsString();		
 			List<Blog_SpotInformation> spotNames = blogDao.getSpotName(date,id);
 //			System.out.println("spotNames:" + spotNames);
