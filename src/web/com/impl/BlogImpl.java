@@ -8,13 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.sql.DataSource;
 import web.com.bean.Blog_Note;
-<<<<<<< HEAD
+
 import web.com.bean.Blog;
 import web.com.bean.BlogD;
 import web.com.bean.Blog_Comment;
 import web.com.bean.Blog_Day;
 import web.com.bean.Blog_SpotInformation;
-=======
+
 import com.fasterxml.jackson.core.TSFBuilder;
 import com.fasterxml.jackson.core.TSFBuilder;
 import com.google.cloud.Date;
@@ -28,7 +28,7 @@ import web.com.bean.Blog_SpotInfo;
 import web.com.bean.Blog_SpotInformation;
 import web.com.bean.DateAndId;
 import web.com.bean.Trip_M;
->>>>>>> a7a359031362e995ba55a0f4b3131f674e78dc4b
+
 import web.com.dao.BlogDao;
 import web.com.util.ServiceLocator;
 
