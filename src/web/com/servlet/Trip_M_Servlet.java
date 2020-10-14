@@ -59,14 +59,16 @@ public class Trip_M_Servlet extends HttpServlet {
 		if (action.equals("getAll")) {
 			List<Trip_M> tripMs = tripMDao.getAll();
 			writeText(response, gson.toJson(tripMs));
-
+//抓取個人的行程資訊
+		} else if (action.equals("getMyTrip")) {
+			String memberId = jsonObject.get("memberId").getAsString();
+			List<Trip_M> tripMs_mime = tripMDao.getMyTrip(memberId);
+			writeText(response, gson.toJson(tripMs_mime));
+			
 		} else if (action.equals("tripMInsert") || action.equals("tripMUpdate")) {
 			String tripMJson = jsonObject.get("tripM").getAsString();
-
 			System.out.println("tripMJson " + tripMJson);
-
 			Trip_M tripM = gson.fromJson(tripMJson, Trip_M.class);
-
 			writeText(response, String.valueOf(tripM));
 
 //查找Status match 會員ID

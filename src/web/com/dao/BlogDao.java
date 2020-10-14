@@ -24,7 +24,7 @@ public interface BlogDao {
 	
 //	List <BlogD> getAll();
 
-	byte[] getImage(int id);
+	byte[] getImage(String id);
 	
 	Blog findById1(int id);
 
@@ -46,10 +46,7 @@ public interface BlogDao {
 	
 	public List<Blog_Day> findDateById(String blodId);
 
-<<<<<<< HEAD
 
-=======
->>>>>>> a7a359031362e995ba55a0f4b3131f674e78dc4b
 	public List<Blog_SpotInformation> getSpotName(String s_Date, String blogId) ;
 	
 	public List<Blog_Comment> findCommentById(String blogId);
