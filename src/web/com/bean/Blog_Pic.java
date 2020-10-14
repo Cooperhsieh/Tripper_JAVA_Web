@@ -13,6 +13,14 @@ public class Blog_Pic  {
     public Blog_Pic() {
         super();
     }
+    
+    public Blog_Pic(String pic1, String pic2, String pic3, String pic4) {
+    
+        this.pic1 = pic1;
+        this.pic2 = pic2;
+        this.pic3 = pic3;
+        this.pic4 = pic4;
+    }
 
     public Blog_Pic(String blogId, String locId, String pic1, String pic2, String pic3, String pic4) {
         this.blogId = blogId;

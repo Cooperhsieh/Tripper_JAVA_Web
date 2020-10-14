@@ -7,8 +7,9 @@ public class BlogM implements Serializable {
 
     private String blogTittle;
     private String blogDesc;
-    private int BlogId;
-    public BlogM(String blogTittle, String blogDesc, int blogId, List<BlogD> blogDs) {
+    private String BlogId;
+    
+    public BlogM(String blogTittle, String blogDesc, String blogId, List<BlogD> blogDs) {
 		super();
 		this.blogTittle = blogTittle;
 		this.blogDesc = blogDesc;
@@ -16,12 +17,23 @@ public class BlogM implements Serializable {
 		this.blogDs = blogDs;
 	}
     
+    
     public BlogM(String blogTittle, String blogDesc) {
 		super();
 		this.blogTittle = blogTittle;
 		this.blogDesc = blogDesc;
 		;
 	}
+    
+    
+	public BlogM(String blogTittle, String blogDesc, String blogId) {
+		super();
+		this.blogTittle = blogTittle;
+		this.blogDesc = blogDesc;
+		BlogId = blogId;
+	}
+
+
 	private List<BlogD> blogDs;
 	public String getBlogTittle() {
 		return blogTittle;
@@ -35,10 +47,10 @@ public class BlogM implements Serializable {
 	public void setBlogDesc(String blogDesc) {
 		this.blogDesc = blogDesc;
 	}
-	public int getBlogId() {
+	public String getBlogId() {
 		return BlogId;
 	}
-	public void setBlogId(int blogId) {
+	public void setBlogId(String blogId) {
 		BlogId = blogId;
 	}
 	public List<BlogD> getBlogDs() {
