@@ -79,15 +79,14 @@ public class BlogImpl implements BlogDao{
 //	}
 
 	@Override
-	public byte[] getImage(int id) {
-	    String sql = ";";
+	public byte[] getImage(String id) {
+	    String sql = "SELECT PIC FROM Tripper.Blog_M where BLOG_ID = ?;";
 	    byte [] pic = null;
 	    try (
 	    	Connection connection = dataSource.getConnection();
-	    	PreparedStatement ps = connection.prepareStatement(sql);
-	    		
+	    	PreparedStatement ps = connection.prepareStatement(sql);    		
 	    		){
-	    	ps.setInt(1, id);
+	    	ps.setString(1, id);
 			ResultSet rs = ps.executeQuery();
 			if(rs.next()) {
 				pic = rs.getBytes(1);
@@ -293,9 +292,10 @@ public class BlogImpl implements BlogDao{
 			if (b_Pic != null) {
 				ps.setBytes(4, b_Pic);
 				ps.setString(5, blogFinish.getMemberId());
+			}else {
+				ps.setString(4, blogFinish.getMemberId());
 			}
-			ps.setString(4, blogFinish.getMemberId());
-			
+				
 			System.out.println("insert blog_M sql::" + ps.toString());
 			count = ps.executeUpdate();
 		} catch (SQLException e) {
@@ -307,7 +307,7 @@ public class BlogImpl implements BlogDao{
 	@Override
 	public List<byte[]> getSpotImages(String loc_Id, String blog_id) {
 		List<byte[]> spotImages = new ArrayList<byte[]>();
-		String sql = "SELECT * FROM Tripper.Blog_Spot_Pic where LOC_ID = ? and BLOG_ID = '?';";
+		String sql = "SELECT * FROM Tripper.Blog_Spot_Pic where LOC_ID = ? and BLOG_ID = ?;";
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql);) {
 			ps.setString(1, loc_Id);
