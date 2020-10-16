@@ -242,14 +242,14 @@ public class Trip_D_Dao_Impl implements Trip_D_Dao {
 			ps.setString(1, tripId);
 			System.out.println("ShowTripUpdate's ID :: " + ps.toString());
 			ResultSet rs = ps.executeQuery();
-			Map map = new TreeMap<String, List<Location_D>>();
+			Map<String, List<Location_D>> map = new TreeMap<>();
 			List<Location_D> showLocNames = null;
 			int count = 1;
 			while (rs.next()) {
 				if(rs.getInt("seq_No") == 1) {
 					if (showLocNames != null) {
 						System.out.println("rs next inside count: " + count);
-						map.put(count+"",showLocNames);
+						map.put(count + "", showLocNames);
 						count++;
 					}
 					showLocNames = new ArrayList<Location_D>();
@@ -265,7 +265,7 @@ public class Trip_D_Dao_Impl implements Trip_D_Dao {
 				showLocNames.add(trip_LocInfo);
 			}
 			System.out.println("outside count:" + count );
-			map.put(count+" ",showLocNames);
+			map.put(count + " ", showLocNames);
 			return map;
 
 		} catch (SQLException e) {

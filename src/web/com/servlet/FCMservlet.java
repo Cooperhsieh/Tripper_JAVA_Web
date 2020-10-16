@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,6 +24,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
 import web.com.bean.AppMessage;
+import web.com.bean.Notify;
 import web.com.dao.FCMDao;
 import web.com.impl.FCMDaolmpl;
 import web.com.util.SettingUtil;
@@ -80,6 +82,10 @@ public class FCMservlet extends HttpServlet {
 			int count = fcmDao.insertMsg(message);
 			sendSingleFcm(message, token);
 			writeText(response, count + "");
+		}else if(action.equals("getNotify")) {
+			int memberId = jsonObject.get("memberId").getAsInt();
+			List<Notify> notifies = fcmDao.getAllMsg(memberId);
+			writeText(response, gson.toJson(notifies));
 		}
 	}
 

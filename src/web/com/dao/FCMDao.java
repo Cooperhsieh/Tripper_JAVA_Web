@@ -1,6 +1,9 @@
 package web.com.dao;
 
+import java.util.List;
+
 import web.com.bean.AppMessage;
+import web.com.bean.Notify;
 
 /**
 * 類別說明：
@@ -16,4 +19,6 @@ public interface FCMDao {
 	String getToken(int memberId);
 	// 寫入傳送的訊息
 	int insertMsg(AppMessage msg);
+	// 取得該會員的通知訊息
+	List<Notify> getAllMsg(int memberId);
 }
