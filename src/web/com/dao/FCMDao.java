@@ -20,5 +20,5 @@ public interface FCMDao {
 	// 寫入傳送的訊息
 	int insertMsg(AppMessage msg);
 	// 取得該會員的通知訊息
-	List<Notify> getAllMsg(int memberId);
+	//List<Notify> getAllMsg(int memberId);
 }
