@@ -142,10 +142,7 @@ public class Trip_M_Dao_Impl implements Trip_M_Dao {
 	@Override
 	public List<Trip_M> getAll() {
 		List<Trip_M> tripMs = new ArrayList<Trip_M>();
-<<<<<<< HEAD
-=======
 
->>>>>>> 5e2f51476cf0cddf820bd522a33ed07e77fd22ec
 		String sql = "SELECT * FROM Tripper.Trip_M "
 				+ " left join Trip_Group on Trip_M.TRIP_ID = Trip_Group.TRIP_ID "
 				+ " where STATUS = 1 " 
