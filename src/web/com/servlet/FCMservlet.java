@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,6 +24,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
 import web.com.bean.AppMessage;
+import web.com.bean.Notify;
 import web.com.dao.FCMDao;
 import web.com.impl.FCMDaolmpl;
 import web.com.util.SettingUtil;
@@ -32,28 +34,10 @@ public class FCMservlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private String userToken = "";
 	private FCMDao fcmDao = null;
-//	@Override
-//	public void init() throws ServletException {		
-//		FileInputStream serviceAccount = null;
-//		try {
-//			serviceAccount = new FileInputStream("/google-services-2.json");
-//			FirebaseOptions options = new FirebaseOptions.Builder()
-//					  .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-//					  .setDatabaseUrl("https://myfirebasemessage-ba28b.firebaseio.com")
-//					  .build();
-//			FirebaseApp.initializeApp(options);
-//		} catch (FileNotFoundException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}			
-//	}
-	
 	
 	@Override
 	public void init() throws ServletException {		
+		// json存在專案內的用法
 		try (InputStream in = getServletContext().getResourceAsStream("/firebaseServlet.json")) {
 				FirebaseOptions options = new FirebaseOptions.Builder().setCredentials(GoogleCredentials.fromStream(in))
 					.build();
@@ -80,6 +64,7 @@ public class FCMservlet extends HttpServlet {
 		
 		JsonObject jsonObject = gson.fromJson(jsonIn.toString(), JsonObject.class);
 		String action = jsonObject.get("action").getAsString();
+		// 註冊會員Token
 		if(action.equals("register")) {
 			userToken = jsonObject.get("userToken").getAsString();
 			int memberId = jsonObject.get("memberId").getAsInt();
@@ -97,9 +82,11 @@ public class FCMservlet extends HttpServlet {
 			int count = fcmDao.insertMsg(message);
 			sendSingleFcm(message, token);
 			writeText(response, count + "");
+		}else if(action.equals("getNotify")) {
+			int memberId = jsonObject.get("memberId").getAsInt();
+			List<Notify> notifies = fcmDao.getAllMsg(memberId);
+			writeText(response, gson.toJson(notifies));
 		}
-		
-
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -123,9 +110,9 @@ public class FCMservlet extends HttpServlet {
 		
 		// 主要設定訊息標題跟內容，client app一定要在背景時才會自動顯示
 		Notification notification = Notification.builder()
-									.setTitle(title)
-									.setBody(body)
-									.build();
+							.setTitle(title)
+							.setBody(body)
+							.build();
 		// 發送notification message
 		Message message = Message.builder()
 				.setNotification(notification)

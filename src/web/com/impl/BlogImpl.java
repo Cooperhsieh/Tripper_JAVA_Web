@@ -8,13 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.sql.DataSource;
 import web.com.bean.Blog_Note;
-<<<<<<< HEAD
+
 import web.com.bean.Blog;
 import web.com.bean.BlogD;
 import web.com.bean.Blog_Comment;
 import web.com.bean.Blog_Day;
 import web.com.bean.Blog_SpotInformation;
-=======
+
 import com.fasterxml.jackson.core.TSFBuilder;
 import com.fasterxml.jackson.core.TSFBuilder;
 import com.google.cloud.Date;
@@ -28,7 +28,7 @@ import web.com.bean.Blog_SpotInfo;
 import web.com.bean.Blog_SpotInformation;
 import web.com.bean.DateAndId;
 import web.com.bean.Trip_M;
->>>>>>> a7a359031362e995ba55a0f4b3131f674e78dc4b
+
 import web.com.dao.BlogDao;
 import web.com.util.ServiceLocator;
 
@@ -79,15 +79,14 @@ public class BlogImpl implements BlogDao{
 //	}
 
 	@Override
-	public byte[] getImage(int id) {
-	    String sql = ";";
+	public byte[] getImage(String id) {
+	    String sql = "SELECT PIC FROM Tripper.Blog_M where BLOG_ID = ?;";
 	    byte [] pic = null;
 	    try (
 	    	Connection connection = dataSource.getConnection();
-	    	PreparedStatement ps = connection.prepareStatement(sql);
-	    		
+	    	PreparedStatement ps = connection.prepareStatement(sql);    		
 	    		){
-	    	ps.setInt(1, id);
+	    	ps.setString(1, id);
 			ResultSet rs = ps.executeQuery();
 			if(rs.next()) {
 				pic = rs.getBytes(1);
@@ -102,10 +101,18 @@ public class BlogImpl implements BlogDao{
 
 	@Override
 	public List<BlogD> findById(String id) {
-		String sql ="SELECT distinct Trip_ID,Trip_D.LOC_ID,LOC_NOTE,Trip_D.S_DATE,Trip_D.SEQ_NO,Location.NAME FROM Tripper.Trip_D\n" + 
-				"LEFT JOIN Blog_D on Trip_D.TRIP_ID = Blog_D.BLOG_ID\n" + 
-				"LEFT JOIN Location on Location.LOC_ID = Trip_D.LOC_ID\n" + 
-				"where Trip_D.TRIP_ID = ?";
+		String sql = "SELECT \n" + 
+				"    a.Trip_ID,\n" + 
+				"    a.LOC_ID,\n" + 
+				"    (select b.loc_note from blog_d b where Blog_iD = trip_id and b.loc_id = a.loc_id ) loc_note,\n" + 
+				"   a.S_DATE,\n" + 
+				"    a.SEQ_NO,\n" + 
+				"    c.name\n" + 
+				"FROM\n" + 
+				"    Tripper.Trip_D a\n" + 
+				"        inner JOIN\n" + 
+				"   Location c ON a.LOC_ID = c.LOC_ID\n" + 
+				" where a.TRIP_ID = ? ;";
 		
 		List<BlogD> bList = new ArrayList<>();
 		
@@ -285,9 +292,10 @@ public class BlogImpl implements BlogDao{
 			if (b_Pic != null) {
 				ps.setBytes(4, b_Pic);
 				ps.setString(5, blogFinish.getMemberId());
+			}else {
+				ps.setString(4, blogFinish.getMemberId());
 			}
-			ps.setString(4, blogFinish.getMemberId());
-			
+				
 			System.out.println("insert blog_M sql::" + ps.toString());
 			count = ps.executeUpdate();
 		} catch (SQLException e) {
@@ -299,7 +307,7 @@ public class BlogImpl implements BlogDao{
 	@Override
 	public List<byte[]> getSpotImages(String loc_Id, String blog_id) {
 		List<byte[]> spotImages = new ArrayList<byte[]>();
-		String sql = "SELECT * FROM Tripper.Blog_Spot_Pic where LOC_ID = ? and BLOG_ID = '?';";
+		String sql = "SELECT * FROM Tripper.Blog_Spot_Pic where LOC_ID = ? and BLOG_ID = ?;";
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql);) {
 			ps.setString(1, loc_Id);
@@ -355,11 +363,11 @@ public class BlogImpl implements BlogDao{
 	@Override
 	public List<Blog_Comment> findCommentById(String blogId) {
 		
-		String sql = "select BLOG_ID,Member.NICKNAME,Com_Note,Comment.Member_ID, SEQ from Comment\n" + 
-				"left join Member on Member.Member_ID = Comment.Member_ID\n" + 
-				"where Comment.BLOG_ID = ?\n" + 
-				"order by \n" + 
-				"SEQ";
+		String sql ="select BLOG_ID,Member.NICKNAME,Com_Note,Comment.Member_ID, SEQ,Com_Date from Comment\n" + 
+				"				left join Member on Member.Member_ID = Comment.Member_ID\n" + 
+				"				where Comment.BLOG_ID = ? \n" + 
+				"				order by \n" + 
+				"				SEQ";
 		
 		List<Blog_Comment> blogComments = new ArrayList<>();
 		
@@ -375,8 +383,9 @@ public class BlogImpl implements BlogDao{
 				String name = rs.getString(2);
 				String comment = rs.getString(3);
 				String memberID = rs.getString(4);
+				String date = rs.getString(6);
 				
-				Blog_Comment blog_Comment = new Blog_Comment(name,comment,memberID);
+				Blog_Comment blog_Comment = new Blog_Comment(name,comment,memberID,date);
 				blogComments.add(blog_Comment);
 		}
 			return blogComments;
