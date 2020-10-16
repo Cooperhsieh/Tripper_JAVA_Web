@@ -171,11 +171,7 @@ public class BlogServlet extends HttpServlet {
 			String id = jsonObject.get("id").getAsString();
 			List<BlogD> blist = blogDao.findById(id);
 			writeText(response, gson.toJson(blist));
-		}else if(action.equals("findDateById")) {
-			String id = jsonObject.get("id").getAsString();
-			List<Blog_Day> blogDays= blogDao.findDateById(id);
-
-			}
+		}
 
 		
 //抓取個人的Blog		
@@ -192,14 +188,9 @@ public class BlogServlet extends HttpServlet {
 			List<Blog_Day> blogDays = blogDao.findDateById(id);
 
 			writeText(response, gson.toJson(blogDays));
-<<<<<<< HEAD
-		}else if (action.equals("getSpotName")) {
-			String id = jsonObject.get("id").getAsString();
-=======
+
 		} else if (action.equals("getSpotName")) {
 			String id = jsonObject.get("id").getAsString();
-
->>>>>>> a7a359031362e995ba55a0f4b3131f674e78dc4b
 			String date = jsonObject.get("dateD").getAsString();		
 			List<Blog_SpotInformation> spotNames = blogDao.getSpotName(date,id);
 //			System.out.println("spotNames:" + spotNames);
