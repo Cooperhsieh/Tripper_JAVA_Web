@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.lang.reflect.Type;
+import java.sql.Connection;
+import java.text.ParseException;
 import java.util.Base64;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +17,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.http.cookie.CommonCookieAttributeHandler;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -30,6 +34,7 @@ import web.com.dao.Trip_M_Dao;
 import web.com.impl.Trip_D_Dao_Impl;
 import web.com.impl.Trip_Group_Dao_Impl;
 import web.com.impl.Trip_M_Dao_Impl;
+import web.com.util.DateUtil;
 import web.com.util.ImageUtil;
 import web.com.util.SettingUtil;
 
@@ -178,21 +183,25 @@ public class TripServlet extends HttpServlet {
 				}
 
 				// 副檔修改
+				count = tripDetailDao.delete(tripMaster.getTripId());
 				List<Location_D> locationDs = null;
+				int timeAdd = 1;
 				for (int i = 1; i <= maps.size(); i++) {
 					int seq = 1;
 					locationDs = maps.get(i + "");
 					for (Location_D locD : locationDs) {
-						Trip_D tripD = new Trip_D(locD.getTransId(), tripMaster.getTripId(), seq, locD.getLocId(),
-								locD.getStartDate(), locD.getStartTime(), locD.getStayTimes(), locD.getMemos());
-						count = tripDetailDao.update(tripD);
-						seq++;
-					}
-					
-					
-					// insert 失敗直接傳回null
-					if (count <= 0) {
-						writeText(response, String.valueOf(count));
+						try {
+							String dayForDetail = DateUtil.date4day(tripMaster.getStartDate(), i - 1);
+							Trip_D tripD = new Trip_D(Long.parseLong(SettingUtil.getTransId()) + timeAdd + "", tripMaster.getTripId(), seq, locD.getLocId(),
+									dayForDetail, locD.getStartTime(), locD.getStayTimes(), locD.getMemos());
+							count = tripDetailDao.insert(tripD);
+							seq++;
+							timeAdd++;
+						} catch (ParseException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
 					}
 				}
 

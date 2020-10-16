@@ -23,6 +23,8 @@ public interface Trip_M_Dao {
 	List<Trip_M> getTripId(String memberId);
 
 	List<Trip_M> getAll();
+	
+	List<Trip_M> getMyTrip(String memberId);
 
 	byte[] getImage(String id);
 	
