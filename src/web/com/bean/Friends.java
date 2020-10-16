@@ -8,9 +8,7 @@ package web.com.bean;
 import java.io.Serializable;
 
 public class Friends extends Member implements Serializable {
-    /**
-	 * 
-	 */
+    
 	private static final long serialVersionUID = 1L;
 	private int status;
 
