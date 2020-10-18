@@ -31,5 +31,6 @@ public interface Trip_M_Dao {
 	//透過會員ID 抓取是否為主揪人
 	Trip_M getStatusById (String memberId);
 	
+	int changeBlogStatus (String tripId);
 
 }

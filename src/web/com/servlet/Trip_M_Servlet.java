@@ -78,7 +78,13 @@ public class Trip_M_Servlet extends HttpServlet {
 			Trip_M tripM = tripMDao.getStatusById(memberId);
 			writeText(response, gson.toJson(tripM));
 
-		} else if (action.equals("tripMDelete")) {
+		} else if (action.equals("updateTrip")) {
+			String tripId1 = jsonObject.get("tripId").getAsString();
+			System.out.println("tripID"+tripId1);
+			int count = tripMDao.changeBlogStatus(tripId1);
+			writeText(response, String.valueOf(count));
+		}	
+			else if (action.equals("tripMDelete")) {
 			String tripId = jsonObject.get("tripId").getAsString();
 			int count = tripMDao.delete(tripId);
 			writeText(response, String.valueOf(count));
