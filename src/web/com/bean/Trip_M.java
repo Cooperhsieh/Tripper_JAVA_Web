@@ -22,6 +22,8 @@ public class Trip_M implements Serializable {
 	private int pMax;
 	private int status;
 	private byte[] bPic;
+	private int mcount ;
+	
 
 	public Trip_M(String tripId, int memberId, String tripTitle, String startDate, String startTime, int dayCount,
 			int pMax, int status, byte[] bPic) {
@@ -76,6 +78,21 @@ public class Trip_M implements Serializable {
 		this.startTime = startTime;
 		this.dayCount = dayCount;
 		this.pMax = pMax;
+	}
+	
+	
+
+	public Trip_M(String tripId, int memberId, String tripTitle, String startDate, String startTime, int pMax,
+			int status, int mcount) {
+		super();
+		this.tripId = tripId;
+		this.memberId = memberId;
+		this.tripTitle = tripTitle;
+		this.startDate = startDate;
+		this.startTime = startTime;
+		this.pMax = pMax;
+		this.status = status;
+		this.mcount = mcount;
 	}
 
 	public Trip_M(String tripId, int memberId, String tripTitle, String startDate, String startTime, int dayCount,
@@ -186,6 +203,13 @@ public class Trip_M implements Serializable {
 
 	public void setbPic(byte[] bPic) {
 		this.bPic = bPic;
+	}
+	public int getMcount() {
+		return mcount;
+	}
+
+	public void setMcount(int mcount) {
+		this.mcount = mcount;
 	}
 
 }

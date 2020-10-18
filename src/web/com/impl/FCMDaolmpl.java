@@ -123,5 +123,35 @@ public class FCMDaolmpl implements FCMDao{
 		}
 		return notifies;
 	}
+	
+	
+	
+	@Override
+	public int insertChatMsg(AppMessage msg) {
+		int count = 0;
+		String sql = " insert into CHAT ( " 
+				   + " msg_type, member_id, msg_title, msg_body, msg_stat, send_id, reciver_id ,uptime " // 7
+				   + " ) values ( "
+				   + " ?, ?, ?, ?, ?, ?, ? ,?"
+				   + " ); ";
+		try(Connection connection = dataSource.getConnection();
+				PreparedStatement ps = connection.prepareStatement(sql)) {
+			ps.setString(1, msg.getMsgType());
+			ps.setInt(2, msg.getMemberId());
+			ps.setString(3, msg.getMsgTitle());
+			ps.setString(4, msg.getMsgBody());
+			ps.setInt(5, msg.getMsgStat());
+			ps.setInt(6, msg.getSendId());
+			ps.setInt(7, msg.getReciverId());
+			ps.setString(8,msg.getUpTime());
+			System.out.println("insertChatMsg sql :: " + ps.toString());
+			count = ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return count;
+	}
+	
+	
 
 }
