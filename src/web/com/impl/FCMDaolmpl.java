@@ -152,6 +152,49 @@ public class FCMDaolmpl implements FCMDao{
 		return count;
 	}
 	
+	@Override
+	public List<Notify> getChat(int memberId, int recierverId) {
+		List<Notify> notifies = new ArrayList<Notify>();
+		String sql = "select \n" + 
+				"				    MSG_TYPE, MSG_TITLE, MSG_BODY, MSG_STAT, SEND_ID, RECIVER_ID, " + 
+				"				    ( select NICKNAME from MEMBER a where a.MEMBER_ID = b.MEMBER_ID ) NICKNAME, " + 
+				"				    DATE_TIME " + 
+				"				    from Chat b " + 
+				"				    where (SEND_ID = ? and RECIVER_ID = ?) or " + 
+				"                    (SEND_ID = ? and RECIVER_ID = ?) " + 
+				"				    and MSG_STAT = ?" + 
+				"				    order by DATE_TIME asc ; ";
+		try(Connection connection = dataSource.getConnection();
+				PreparedStatement ps = connection.prepareStatement(sql)){
+			ps.setInt(1, memberId);
+			ps.setInt(2, recierverId);
+			ps.setInt(3, recierverId);
+			ps.setInt(4, memberId);
+			ps.setInt(5, NOT_READ);
+			System.out.println("## get Message sql:: " + ps.toString());
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+				// String msgType, int memberId, String msgTitle, String msgBody, int msgStat,
+				// int sendId, int reciverId, String nickname, String notifyDateTime
+				String msgType = rs.getString("MSG_TYPE");
+				String msgTitle = rs.getString("MSG_TITLE");
+				String msgBody = rs.getString("MSG_BODY");
+				int msgStat = rs.getInt("MSG_STAT");
+				int sendId = rs.getInt("SEND_ID");
+				int reciverId = rs.getInt("RECIVER_ID");
+				String nickname = rs.getString("NICKNAME");
+				String notifyDateTime = rs.getString("DATE_TIME");
+				Notify notify = new Notify(msgType, memberId, msgTitle, msgBody, msgStat, 
+											sendId, reciverId, nickname, notifyDateTime);
+				
+				notifies.add(notify);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return notifies;
+	}
+	
 	
 
 }
