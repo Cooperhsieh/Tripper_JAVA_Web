@@ -29,18 +29,15 @@ public class MemberDaoImpl implements MemberDao {
 	public int insert(Member member) {
 		int confirm = selectAccount(member) ;
 		int count = 0;
-		String sql = "INSERT INTO Member" + "(ACCOUNT_ID,PASSWORD,NICKNAME)" + "VALUES(?,?,?);";
+		String sql = "INSERT INTO Member" + "(ACCOUNT_ID,PASSWORD,EMAIL,NICKNAME)" + "VALUES(?,?,?,?);";
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql)) {
 			if(confirm ==0) {
 			
 			ps.setString(1, member.getAccount());
 			ps.setString(2, member.getPassword());
-			ps.setString(3, member.getNickName());
-//			ps.setInt(6,member.getLoginType());
-//			ps.setBytes(7, photo);
-//			ps.setBytes(8, backgroundImage);
-//			ps.setString(9, member.getToken());
+			ps.setString(3, member.getMail());
+			ps.setString(4, member.getNickName());
 
 			count = ps.executeUpdate();
 			}

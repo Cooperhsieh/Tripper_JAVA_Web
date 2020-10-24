@@ -9,6 +9,8 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import com.google.api.Usage;
+
 import web.com.bean.AppMessage;
 import web.com.bean.Notify;
 import web.com.dao.FCMDao;
@@ -158,7 +160,7 @@ public class FCMDaolmpl implements FCMDao{
 		String sql = "select \n" + 
 				"				    MSG_TYPE, MSG_TITLE, MSG_BODY, MSG_STAT, SEND_ID, RECIVER_ID, " + 
 				"				    ( select NICKNAME from MEMBER a where a.MEMBER_ID = b.MEMBER_ID ) NICKNAME, " + 
-				"				    DATE_TIME " + 
+				"				    UPTIME " + 
 				"				    from Chat b " + 
 				"				    where (SEND_ID = ? and RECIVER_ID = ?) or " + 
 				"                    (SEND_ID = ? and RECIVER_ID = ?) " + 
@@ -183,7 +185,7 @@ public class FCMDaolmpl implements FCMDao{
 				int sendId = rs.getInt("SEND_ID");
 				int reciverId = rs.getInt("RECIVER_ID");
 				String nickname = rs.getString("NICKNAME");
-				String notifyDateTime = rs.getString("DATE_TIME");
+				String notifyDateTime = rs.getString("UPTIME");
 				Notify notify = new Notify(msgType, memberId, msgTitle, msgBody, msgStat, 
 											sendId, reciverId, nickname, notifyDateTime);
 				
@@ -193,6 +195,23 @@ public class FCMDaolmpl implements FCMDao{
 			e.printStackTrace();
 		}
 		return notifies;
+	}
+	@Override
+	public String getSenderName(AppMessage msg) {
+		String senderNameString = "" ;
+		String sql = "SELECT NICKNAME FROM Tripper.Member where MEMBER_ID = ?;";
+		try(Connection connection = dataSource.getConnection();
+				PreparedStatement ps = connection.prepareStatement(sql)) {
+			ps.setInt(1, msg.getMemberId());			
+			System.out.println("getSenderName sql :: " + ps.toString());
+			ResultSet rs = ps.executeQuery();
+		while(rs.next()) {
+			senderNameString = rs.getString("NICKNAME");
+		}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return senderNameString;
 	}
 	
 	
