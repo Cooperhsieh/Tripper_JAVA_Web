@@ -222,9 +222,12 @@ public class BlogServlet extends HttpServlet {
 
 		} else if (action.equals("getSpotName")) {
 			String id = jsonObject.get("id").getAsString();
+<<<<<<< HEAD
 
 
 
+=======
+>>>>>>> 0db230fc3faa002e11c6b4987109f3328ae16b77
 			String date = jsonObject.get("dateD").getAsString();		
 			List<Blog_SpotInformation> spotNames = blogDao.getSpotName(date,id);
 //			System.out.println("spotNames:" + spotNames);

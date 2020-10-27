@@ -4,10 +4,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.sql.DataSource;
 
 import web.com.bean.AppMessage;
+import web.com.bean.Notify;
 import web.com.dao.FCMDao;
 import web.com.util.ServiceLocator;
 
@@ -19,7 +22,8 @@ import web.com.util.ServiceLocator;
 */
 public class FCMDaolmpl implements FCMDao{
 	DataSource dataSource;
-
+	private static final int NOT_READ = 0;
+	private static final int READ = 1;
 	public FCMDaolmpl() {
 		dataSource = ServiceLocator.getInstance().getDataSource();
 	}
@@ -81,5 +85,73 @@ public class FCMDaolmpl implements FCMDao{
 		}
 		return count;
 	}
+	@Override
+	public List<Notify> getAllMsg(int memberId) {
+		List<Notify> notifies = new ArrayList<Notify>();
+		String sql = " select "
+				   + " MSG_TYPE, MSG_TITLE, MSG_BODY, MSG_STAT, SEND_ID, RECIVER_ID, "
+				   + " ( select NICKNAME from MEMBER a where a.MEMBER_ID = b.MEMBER_ID ) NICKNAME, "
+				   + " DATE_TIME "
+				   + " from MESSAGE b " 
+				   + " where RECIVER_ID = ? "
+				   + " and MSG_STAT = ? "
+				   + " order by DATE_TIME desc ; ";
+		try(Connection connection = dataSource.getConnection();
+				PreparedStatement ps = connection.prepareStatement(sql)){
+			ps.setInt(1, memberId);
+			ps.setInt(2, NOT_READ);
+			System.out.println("## get Message sql:: " + ps.toString());
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+				// String msgType, int memberId, String msgTitle, String msgBody, int msgStat,
+				// int sendId, int reciverId, String nickname, String notifyDateTime
+				String msgType = rs.getString("MSG_TYPE");
+				String msgTitle = rs.getString("MSG_TITLE");
+				String msgBody = rs.getString("MSG_BODY");
+				int msgStat = rs.getInt("MSG_STAT");
+				int sendId = rs.getInt("SEND_ID");
+				int reciverId = rs.getInt("RECIVER_ID");
+				String nickname = rs.getString("NICKNAME");
+				String notifyDateTime = rs.getString("DATE_TIME");
+				Notify notify = new Notify(msgType, memberId, msgTitle, msgBody, msgStat, 
+											sendId, reciverId, nickname, notifyDateTime);
+				
+				notifies.add(notify);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return notifies;
+	}
+	
+	
+	
+	@Override
+	public int insertChatMsg(AppMessage msg) {
+		int count = 0;
+		String sql = " insert into CHAT ( " 
+				   + " msg_type, member_id, msg_title, msg_body, msg_stat, send_id, reciver_id ,uptime " // 7
+				   + " ) values ( "
+				   + " ?, ?, ?, ?, ?, ?, ? ,?"
+				   + " ); ";
+		try(Connection connection = dataSource.getConnection();
+				PreparedStatement ps = connection.prepareStatement(sql)) {
+			ps.setString(1, msg.getMsgType());
+			ps.setInt(2, msg.getMemberId());
+			ps.setString(3, msg.getMsgTitle());
+			ps.setString(4, msg.getMsgBody());
+			ps.setInt(5, msg.getMsgStat());
+			ps.setInt(6, msg.getSendId());
+			ps.setInt(7, msg.getReciverId());
+			ps.setString(8,msg.getUpTime());
+			System.out.println("insertChatMsg sql :: " + ps.toString());
+			count = ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return count;
+	}
+	
+	
 
 }

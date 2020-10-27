@@ -262,7 +262,7 @@ public class Trip_D_Dao_Impl implements Trip_D_Dao {
 				if(rs.getInt("seq_No") == 1) {
 					if (showLocNames != null) {
 						System.out.println("rs next inside count: " + count);
-						map.put(count+"",showLocNames);
+						map.put(count + "", showLocNames);
 						count++;
 					}
 					showLocNames = new ArrayList<Location_D>();

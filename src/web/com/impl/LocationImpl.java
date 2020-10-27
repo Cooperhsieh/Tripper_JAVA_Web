@@ -35,6 +35,7 @@ public class LocationImpl implements LocationDao{
 				+ "CITY, INFO, LONGITUDE, LATITUDE, CREATE_ID, " // 10
 				+ "M_USER_ID" + 
 				") values ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
+		
 		try(Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql);) {
 			ps.setString(1, loc.getLocId());
@@ -75,14 +76,14 @@ public class LocationImpl implements LocationDao{
 		}else {
 			// 不更新image
 			sql = " update LOCATION set " +
-					"NAME       = ?, " +
-					"ADDRESS    = ?, " +
-					"LOC_TYPE   = ?, " +
-					"CITY       = ?, " +
-					"INFO       = ?, " + // 5
-					"LONGITUDE  = ?, " +
-					"LATITUDE   = ?, " +
-					"M_USER_ID  = ?" + 
+					" NAME       = ?, " +
+					" ADDRESS    = ?, " +
+					" LOC_TYPE   = ?, " +
+					" CITY       = ?, " +
+					" INFO       = ?, " + // 5
+					" LONGITUDE  = ?, " +
+					" LATITUDE   = ?, " +
+					" M_USER_ID  = ?" + 
 			   " where LOC_ID = ? ;" ; // 9
 		}
 		try(Connection connection = dataSource.getConnection();
