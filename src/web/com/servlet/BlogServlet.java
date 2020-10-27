@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import io.opencensus.common.ServerStatsFieldEnums.Id;
 import web.com.bean.Blog_Note;
 
 import web.com.bean.Blog_Pic;
@@ -137,14 +138,33 @@ public class BlogServlet extends HttpServlet {
 			if (blog_Pic.getPic4() != null && !blog_Pic.getPic4().isEmpty()) {
 				image4 = Base64.getMimeDecoder().decode(blog_Pic.getPic4());
 			}
-			count = blogDao.updateImage(image1, image2, image3, image4, blog_Pic.getBlogId(), blog_Pic.getLocId());
+			count = blogDao.insertImage(image1, image2, image3, image4, blog_Pic.getBlogId(), blog_Pic.getLocId());
 			writeText(response, String.valueOf(count));
-
-		} else if (action.equals("updateBlog")) {
+		}else if (action.equals("UpdateImage")) {
+			String blogPic_json = jsonObject.get("blogPic").getAsString();
+			System.out.println("BlogPic ::" + blogPic_json);
+			Blog_Pic blog_Pic = gson.fromJson(blogPic_json, Blog_Pic.class);
+			int count = 0;
+			byte[] image1 = null, image2 = null, image3 = null, image4 = null;
+			if (blog_Pic.getPic1() != null && !blog_Pic.getPic1().isEmpty()) {
+				image1 = Base64.getMimeDecoder().decode(blog_Pic.getPic1());
+			}
+			if (blog_Pic.getPic2() != null && !blog_Pic.getPic2().isEmpty()) {
+				image2 = Base64.getMimeDecoder().decode(blog_Pic.getPic2());
+			}
+			if (blog_Pic.getPic3() != null && !blog_Pic.getPic3().isEmpty()) {
+				image3 = Base64.getMimeDecoder().decode(blog_Pic.getPic3());
+			}
+			if (blog_Pic.getPic4() != null && !blog_Pic.getPic4().isEmpty()) {
+				image4 = Base64.getMimeDecoder().decode(blog_Pic.getPic4());
+			}
+			count = blogDao.updateImage(blog_Pic,image1,image2,image3,image4);
+			writeText(response, String.valueOf(count));
+		} else if (action.equals("updateBlog")|| action.equals("blogUpdate")) {
 			String blogFinish = jsonObject.get("blogFinish").getAsString();
 			System.out.println("BlogFinish ::" + blogFinish);
 			BlogFinish blogFinsh = gson.fromJson(blogFinish, BlogFinish.class);
-			int count = 0 ;
+			
 			byte[] image = null;
 			// 檢查是否有上傳圖片
 			if (jsonObject.get("imageBase64") != null) {
@@ -153,7 +173,13 @@ public class BlogServlet extends HttpServlet {
 					image = Base64.getMimeDecoder().decode(imageBase64);
 				}
 			}
-			count = blogDao.insetBlog_M(blogFinsh, image);
+			int count = 0;
+			if(action.equals("updateBlog")) {
+				count = blogDao.insetBlog_M(blogFinsh, image);
+			}else if (action.equals("blogUpdate")) {
+				count = blogDao.update(blogFinsh, image);
+			}
+			
 			writeText(response, String.valueOf(count));
 
 		} else if (action.equals("getImage")) {
@@ -172,9 +198,16 @@ public class BlogServlet extends HttpServlet {
 			String id = jsonObject.get("id").getAsString();
 			List<BlogD> blist = blogDao.findById(id);
 			writeText(response, gson.toJson(blist));
+			//編輯網誌抓BlogM 資料
+		}else if(action.equals("findBlogById")) {
+			String id = jsonObject.get("id").getAsString();
+			BlogFinish blogFinish = blogDao.findBlogById(id);
+			writeText(response, gson.toJson(blogFinish));
+		}else if(action.equals("blogDelete")) {
+			 String blogId= jsonObject.get("blogId").getAsString();
+			 int count = blogDao.delete(blogId);
+			 writeText(response, String.valueOf(count));
 		}
-
-	
 //抓取個人的Blog		
 		else if (action.equals("getMyBlog")) {
 			String memberId = jsonObject.get("memberId").getAsString();
@@ -189,6 +222,12 @@ public class BlogServlet extends HttpServlet {
 
 		} else if (action.equals("getSpotName")) {
 			String id = jsonObject.get("id").getAsString();
+<<<<<<< HEAD
+
+
+
+=======
+>>>>>>> 0db230fc3faa002e11c6b4987109f3328ae16b77
 			String date = jsonObject.get("dateD").getAsString();		
 			List<Blog_SpotInformation> spotNames = blogDao.getSpotName(date,id);
 //			System.out.println("spotNames:" + spotNames);
@@ -197,15 +236,13 @@ public class BlogServlet extends HttpServlet {
 			String id = jsonObject.get("id").getAsString();
 			List<Blog_Comment> comments = blogDao.findCommentById(id);
 			writeText(response, gson.toJson(comments));
-				
-			
-
-//			System.out.println("dateAndId" + dateId);
-
-//			System.out.println("spotNames:" + spotNames);
-		
-
-
+		}else if(action.equals("getUpdateNote")){
+			String spotNote = jsonObject.get("spotNoteUpadte").getAsString();
+			System.out.println("blogNote"+spotNote);
+			Blog_Note blog_Note  = gson.fromJson(spotNote, Blog_Note.class);
+			int count = 0;
+			count=blogDao.updateB_Note(blog_Note);
+			writeText(response, String.valueOf(count));
 		}else {
 
 				writeText(response, "");
