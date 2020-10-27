@@ -207,6 +207,9 @@ public class TripServlet extends HttpServlet {
 
 				writeText(response, String.valueOf(count));
 			}
+				
+			 
+			
 		} else if (action.equals("delete")) {
 
 			int count = 0;
@@ -219,7 +222,19 @@ public class TripServlet extends HttpServlet {
 			if (count <= 0) {
 				writeText(response, String.valueOf(count));
 			}
+		} else if (action.equals("updateGroup")) {
+			int count = 0;
+			String tripGroupJson = jsonObject.get("tripGroup").getAsString();
+			System.out.println("tripGroupJson:: " + tripGroupJson);
+			Trip_Group tripGroup_1 = gson.fromJson(tripGroupJson, Trip_Group.class);
+			Trip_Group tripGroup_2 = new Trip_Group(SettingUtil.getTransId(), tripGroup_1.getTripId(),
+					tripGroup_1.getMemberId());
+			count = tripGroupDao.insert(tripGroup_2);
+		 if (count <= 0) {
+			writeText(response, String.valueOf(count));
+			}
 		}
+
 	}
 
 	@Override
