@@ -177,7 +177,10 @@ public class Trip_D_Dao_Impl implements Trip_D_Dao {
 	@Override
 	public List<Blog_SpotInfo> getSpotName(DateAndId dateAndId) {
 		List<Blog_SpotInfo> spotNames = new ArrayList<Blog_SpotInfo>();
-		String sql = "SELECT Location.LOC_ID,Trip_D.TRIP_ID,NAME FROM Location left join Trip_D on Location.LOC_ID = Trip_D.LOC_ID where S_DATE = ? and TRIP_ID = ?;";
+		String sql = "SELECT   Location.LOC_ID,Trip_D.TRIP_ID,NAME ,Blog_D.LOC_NOTE FROM Location \n" + 
+				"left join Trip_D on Location.LOC_ID = Trip_D.LOC_ID \n" + 
+				"left join Blog_D on Location.LOC_ID = Blog_D.LOC_ID and Blog_D.BLOG_ID = Trip_D.TRIP_ID\n" + 
+				"where Trip_D.S_DATE = ? and Trip_D.TRIP_ID = ?;";
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql);) {
 			ps.setString(1, dateAndId.getS_Date());
@@ -188,8 +191,9 @@ public class Trip_D_Dao_Impl implements Trip_D_Dao {
 				String loc_Id = rs.getString(1);
 				String trip_Id = rs.getString(2);
 				String spotName = rs.getString(3);
+				String loc_Note= rs.getString(4);
 
-				Blog_SpotInfo blog_SpotInfo = new Blog_SpotInfo(loc_Id, trip_Id, spotName);
+				Blog_SpotInfo blog_SpotInfo = new Blog_SpotInfo(loc_Id, trip_Id, spotName,loc_Note);
 				spotNames.add(blog_SpotInfo);
 			}
 			return spotNames;

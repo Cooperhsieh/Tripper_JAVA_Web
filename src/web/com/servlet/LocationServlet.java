@@ -58,10 +58,7 @@ public class LocationServlet extends HttpServlet {
 
 		System.out.println("get action::" + action);
 
-<<<<<<< HEAD
-		System.out.println("get action::" + action);
-=======
->>>>>>> e6a4b07919b6fb696a322fc3baa7efa3fefe513e
+
 
 		if(action.equals("getAll")) {
 			List<Location> locations = locDao.getAll();
