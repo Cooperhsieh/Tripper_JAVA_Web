@@ -277,11 +277,11 @@ public class BlogImpl implements BlogDao{
 		int count = 0;
 		String sql = "";
 		if (b_Pic != null) {
-			sql = "insert into Blog_M " + "( BLOG_ID, BLOG_TITLE, BLOG_DESC, PIC, USER_ID) "
-					+ "values (? ,? ,? ,?, ? );";
+			sql = "insert into Blog_M " + "( BLOG_ID, BLOG_TITLE, BLOG_DESC, PIC, USER_ID , STATUS) "
+					+ "values (? ,? ,? ,?, ?, ? );";
 		}else {
-			sql = "insert into Blog_M " + "( BLOG_ID, BLOG_TITLE, BLOG_DESC, USER_ID) "
-					+ "values (? , ? , ? , ? );";
+			sql = "insert into Blog_M " + "( BLOG_ID, BLOG_TITLE, BLOG_DESC, USER_ID , STATUS) "
+					+ "values (? , ? , ? , ? , ?);";
 		}
 		
 		try (Connection connection = dataSource.getConnection();
@@ -292,8 +292,10 @@ public class BlogImpl implements BlogDao{
 			if (b_Pic != null) {
 				ps.setBytes(4, b_Pic);
 				ps.setString(5, blogFinish.getMemberId());
+				ps.setInt(6, blogFinish.getStatus());
 			}else {
 				ps.setString(4, blogFinish.getMemberId());
+				ps.setInt(5, blogFinish.getStatus());
 			}
 				
 			System.out.println("insert blog_M sql::" + ps.toString());

@@ -225,5 +225,24 @@ public class MemberDaoImpl implements MemberDao {
 		}
 		return count;  //帳號密碼正確回傳1
 	}
+	@Override
+	public int updatePassword(String account, String newPassword) {
+		int count = 0;
+		String sql = "";
+		
+		sql = "UPDATE Member SET PASSWORD = ?" + "WHERE ACCOUNT_ID = ?;"; // 
+		
+		try (Connection connection = dataSource.getConnection();
+				PreparedStatement ps = connection.prepareStatement(sql);) {
+			ps.setString(1, newPassword);
+			ps.setString(2, account);
+			
+			System.out.println("updatePassword sql :: " + ps.toString());
+			count = ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return count;
+	}
 	
 }
