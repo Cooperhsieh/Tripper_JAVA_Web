@@ -7,12 +7,10 @@ public class BlogFinish implements Serializable {
     private String blog_title ;
     private String blog_Info ;
     private String memberId ;
-<<<<<<< HEAD
     private int status ;
-=======
     private String startDate;
     private String startTime;
->>>>>>> master
+
 
     public BlogFinish(String trip_Id, String blog_title, String blog_Info, String memberId) {
         this.trip_Id = trip_Id;
