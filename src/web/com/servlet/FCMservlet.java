@@ -95,8 +95,17 @@ public class FCMservlet extends HttpServlet {
 			String token = fcmDao.getToken(message.getReciverId());
 			// 將message寫入DB
 			int count = fcmDao.insertChatMsg(message);
+			String senderName = fcmDao.getSenderName(message);
+			message.setMsgTitle(senderName);
 			sendSingleFcm(message, token);
 			writeText(response, count + "");
+		}
+	//取得聊天訊息		
+			else if(action.equals("getChatMsg")) {
+			int memberId = jsonObject.get("memberId").getAsInt();
+			int recieverId = jsonObject.get("recirverId").getAsInt();
+			List<Notify> chats = fcmDao.getChat(memberId, recieverId);
+			writeText(response, gson.toJson(chats));
 		}
 	}
 

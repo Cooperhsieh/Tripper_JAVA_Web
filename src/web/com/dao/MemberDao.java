@@ -28,4 +28,6 @@ public interface MemberDao {
 		byte[] getB_picById(int id);
 	//檢查密碼
 		int selectAandP(Member member);
+	//更改密碼
+		int updatePassword(String account,String newPassword);
 }

@@ -5,8 +5,7 @@ import java.util.List;
 
 import web.com.bean.Blog;
 import web.com.bean.Blog_Note;
-
-
+import web.com.bean.Blog_Pic;
 import web.com.bean.BlogD;
 import web.com.bean.BlogFinish;
 import web.com.bean.BlogM;
@@ -37,12 +36,18 @@ public interface BlogDao {
 
 	int insertB_Note (Blog_Note blog_Note);
 //將網誌景點的照片存進DB	
-	int updateImage(byte[] image1,byte[] image2,byte[] image3,byte[] image4,String blogId,String tripId);
-
-	List <BlogD> findById(String id);
+	int insertImage(byte[] image1,byte[] image2,byte[] image3,byte[] image4,String blogId,String locId);
+//將網誌景點的照片從DB更改
+	int updateImage(Blog_Pic blog_Pic , byte[] image1,byte[] image2,byte[] image3,byte[] image4);
 	
+	List <BlogD> findById(String id);
+	int updateB_Note(Blog_Note blog_Note);
 //	public BlogD findLocationById(int id);
-
+//編輯網誌的資料存進DB
+	int update(BlogFinish blog_id,byte[] b_Pic);
+//刪除存在DB的網誌資料	
+	int delete(String blog_id);
+    public BlogFinish findBlogById(String blogId);
 	
 	public List<Blog_Day> findDateById(String blodId);
 

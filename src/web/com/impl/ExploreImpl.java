@@ -81,13 +81,13 @@ public class ExploreImpl implements ExploreDao{
 
 	@Override
 	public byte[] getImage(int id) {
-		String sql = "SELECT PIC  FROM Blog_M WHERE USER_ID = ?;";
+		String sql = "SELECT PIC  FROM Blog_M WHERE BLOG_ID = ?;";
 		byte [] pic = null;
 		try (
 				Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql);
 			){
-			ps.setInt(1, id);
+			ps.setInt(1, id);		
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
 			pic = rs.getBytes(1);	

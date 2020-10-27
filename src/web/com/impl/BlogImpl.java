@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.sql.DataSource;
 import web.com.bean.Blog_Note;
-
+import web.com.bean.Blog_Pic;
 import web.com.bean.Blog;
 import web.com.bean.BlogD;
 import web.com.bean.Blog_Comment;
@@ -30,6 +30,7 @@ import web.com.bean.DateAndId;
 import web.com.bean.Trip_M;
 
 import web.com.dao.BlogDao;
+import web.com.util.ImageUtil;
 import web.com.util.ServiceLocator;
 
 public class BlogImpl implements BlogDao{
@@ -246,7 +247,7 @@ public class BlogImpl implements BlogDao{
 	}
 //上傳景點照片
 	@Override
-	public int updateImage(byte[] image1,byte[] image2,byte[] image3,byte[] image4,String blogId,String locId) {
+	public int insertImage(byte[] image1,byte[] image2,byte[] image3,byte[] image4,String blogId,String locId) {
 		int count = 0;
 		String sql = "insert into Blog_Spot_Pic (LOC_ID,BLOG_ID,PIC1,PIC2,PIC3,PIC4) values (?,?,?,?,?,?);";
 		try (Connection connection = dataSource.getConnection();
@@ -265,6 +266,31 @@ public class BlogImpl implements BlogDao{
 		}
 		return count;
 	}
+//update 網誌 image
+	@Override
+	public int updateImage(Blog_Pic blog_Pic , byte[] image1,byte[] image2,byte[] image3,byte[] image4) {
+		int count = 0;
+		String sql = "update  Blog_Spot_Pic Set LOC_ID= ?,BLOG_ID=?,PIC1= ?,PIC2=? ,PIC3 =? ,PIC4 = ? where Blog_Spot_Pic.LOC_ID=? and BLOG_ID =? ;";
+		try(
+				Connection connection = dataSource.getConnection();
+				PreparedStatement ps = connection.prepareStatement(sql);
+				){
+			ps.setString(1, blog_Pic.getLocId());
+			ps.setString(2,blog_Pic.getBlogId());
+			ps.setBytes(3, image1);
+			ps.setBytes(4, image2);
+			ps.setBytes(5, image3);
+			ps.setBytes(6, image4);
+			ps.setString(7, blog_Pic.getLocId());
+			ps.setString(8,blog_Pic.getBlogId());
+		
+			count = ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return count;
+	}
+
 
 	@Override
 	public Blog findById1(int id) {
@@ -277,11 +303,11 @@ public class BlogImpl implements BlogDao{
 		int count = 0;
 		String sql = "";
 		if (b_Pic != null) {
-			sql = "insert into Blog_M " + "( BLOG_ID, BLOG_TITLE, BLOG_DESC, PIC, USER_ID) "
-					+ "values (? ,? ,? ,?, ? );";
+			sql = "insert into Blog_M " + "( BLOG_ID, BLOG_TITLE, BLOG_DESC, PIC, USER_ID , STATUS) "
+					+ "values (? ,? ,? ,?, ?, ? );";
 		}else {
-			sql = "insert into Blog_M " + "( BLOG_ID, BLOG_TITLE, BLOG_DESC, USER_ID) "
-					+ "values (? , ? , ? , ? );";
+			sql = "insert into Blog_M " + "( BLOG_ID, BLOG_TITLE, BLOG_DESC, USER_ID , STATUS) "
+					+ "values (? , ? , ? , ? , ?);";
 		}
 		
 		try (Connection connection = dataSource.getConnection();
@@ -292,8 +318,10 @@ public class BlogImpl implements BlogDao{
 			if (b_Pic != null) {
 				ps.setBytes(4, b_Pic);
 				ps.setString(5, blogFinish.getMemberId());
+				ps.setInt(6, blogFinish.getStatus());
 			}else {
 				ps.setString(4, blogFinish.getMemberId());
+				ps.setInt(5, blogFinish.getStatus());
 			}
 				
 			System.out.println("insert blog_M sql::" + ps.toString());
@@ -337,7 +365,9 @@ public class BlogImpl implements BlogDao{
 	@Override
 	public List<BlogFinish> getMyBlog(String memberId) {
 		List<BlogFinish> blogMList = new ArrayList<BlogFinish>();
-		String sql = "SELECT * FROM Blog_M where USER_ID = ? ;" ;
+		String sql = "SELECT BLOG_ID,BLOG_TITLE,BLOG_DESC,Trip_M.S_DATE,Trip_M.S_TIME FROM TRIPPER.Blog_M\n" + 
+				"Left join Trip_M on Trip_M.TRIP_ID = Blog_M.BLOG_ID\n" + 
+				"Where Blog_M.USER_ID = ?" ;
 
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql);) {
@@ -348,8 +378,10 @@ public class BlogImpl implements BlogDao{
 				String blogTitle = rs.getString(3);
 				String blogInfo = rs.getString(4);
 				String blogId = rs.getString(2);
+				String sDate = rs.getString(1);
+				String sTime = rs.getString(5);
 				
-				BlogFinish blogFinish = new BlogFinish(blogId, blogTitle, blogInfo, memberId);
+				BlogFinish blogFinish = new BlogFinish(sDate, blogId,blogTitle , memberId,blogInfo,sTime);
 				blogMList.add(blogFinish);
 			}
 			return blogMList;
@@ -367,7 +399,7 @@ public class BlogImpl implements BlogDao{
 				"				left join Member on Member.Member_ID = Comment.Member_ID\n" + 
 				"				where Comment.BLOG_ID = ? \n" + 
 				"				order by \n" + 
-				"				SEQ";
+				"				Com_Date Desc ";
 		
 		List<Blog_Comment> blogComments = new ArrayList<>();
 		
@@ -397,7 +429,100 @@ public class BlogImpl implements BlogDao{
 		
 		return blogComments;
 	}
+//更新網誌標題 描述 照片
+	@Override
+	public int update(BlogFinish blog_id, byte[] b_Pic) {
+	  int count = 0 ;
+	  String sql = "";
+	  if (b_Pic != null) {
+			sql = "UPDATE Blog_M SET  BLOG_TITLE = ?, BLOG_DESC= ?, PIC= ? WHERE BLOG_ID = ?  ";
 
+		}else {
+			sql = "UPDATE Blog_M SET  BLOG_TITLE=?, BLOG_DESC=? WHERE BLOG_ID = ?  ";
+		}
+	  try(
+			  Connection connection = dataSource.getConnection();
+			  PreparedStatement ps = connection.prepareStatement(sql);
+			  ) {
+		  ps.setString(1, blog_id.getBlog_title());
+		  ps.setString(2, blog_id.getBlog_Info());
+		
+		  if(b_Pic != null) {
+			  ps.setBytes(3, b_Pic);
+			  ps.setString(4, blog_id.getTrip_Id());  
+		  }else {
+			ps.setString(3, blog_id.getTrip_Id());
+		}
+		count = ps.executeUpdate();
+	} catch (SQLException e) {
+		e.printStackTrace();
+	}
+	  return count;
+		
+	}
+//刪除網誌
+	@Override
+	public int delete(String blog_id) {
+		int count = 0;
+		String sql = "DELETE FROM Blog_M WHERE BLOG_ID = ?";
+		try(
+				Connection connection = dataSource.getConnection();
+				PreparedStatement ps = connection.prepareStatement(sql);
+				
+				){
+			ps.setString(1, blog_id);
+			count= ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return count;
+	}
+
+	@Override
+	public BlogFinish findBlogById(String blogId) {
+		String sql = "select BLOG_TITLE,BLOG_DESC  from Blog_M where Blog_ID = ? ;";
+	    BlogFinish blogFinish = null;
+	    try (
+	    		Connection connection = dataSource.getConnection();
+	    		PreparedStatement ps = connection.prepareStatement(sql);
+	    	
+	    		){
+	    	ps.setString(1,blogId);
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()) {
+				String title = rs.getString(1);
+				String desc = rs. getString(2);
+				 blogFinish  = new BlogFinish(title, desc);
+				
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	    return blogFinish;
+	}
+
+	@Override
+	public int updateB_Note(Blog_Note blog_Note) {
+		int count = 0 ;
+		String sql = "Update Blog_D Set LOC_ID= ? ,LOC_NOTE= ?,BLOG_ID= ? where Blog_D.LOC_ID = ? and Blog_D.BLOG_ID = ?;";
+		try(
+				Connection connection = dataSource.getConnection();
+				PreparedStatement ps = connection.prepareStatement(sql);
+				
+				){
+			ps.setString(1,blog_Note.getLoc_Id());
+			ps.setString(2, blog_Note.getLoc_Note());
+			ps.setString(3, blog_Note.getBlog_Id());
+			ps.setString(4, blog_Note.getLoc_Id());
+			ps.setString(5, blog_Note.getBlog_Id());
+			count = ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	 return count;
+	}
+
+	
 	
 
 
