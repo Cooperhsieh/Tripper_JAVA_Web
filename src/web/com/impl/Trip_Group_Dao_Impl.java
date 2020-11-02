@@ -140,6 +140,23 @@ public class Trip_Group_Dao_Impl implements Trip_Group_Dao {
 		return tripGroups;
 	}
 
+	@Override
+	public int selectMCountByTripID(String trip_ID) {
+		int count = 0 ;
+		String sql = "SELECT count(*) FROM Tripper.Trip_Group where TRIP_ID = ?;";
+		try (Connection connection = datasource.getConnection();
+				PreparedStatement ps = connection.prepareStatement(sql); ){
+			ps.setString(1,trip_ID);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				count = rs.getInt(1);					
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return count;
+	}
+
 
 
 }
