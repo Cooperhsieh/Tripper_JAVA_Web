@@ -142,16 +142,9 @@ public class Trip_M_Dao_Impl implements Trip_M_Dao {
 	@Override
 	public List<Trip_M> getAll() {
 		List<Trip_M> tripMs = new ArrayList<Trip_M>();
-<<<<<<< HEAD
-		String sql = "SELECT * FROM Tripper.Trip_M "
-				+ " left join Trip_Group on Trip_M.TRIP_ID = Trip_Group.TRIP_ID "
-				+ " where STATUS = 1 " 
-				+ " order by M_DATETIME desc" ;
-=======
 
 		String sql = "SELECT DISTINCT t1.TRIP_ID ,t2.* FROM Trip_GROUP t1\n" + 
 				" left join Trip_M t2 on t1.TRIP_ID = t2.TRIP_ID where t2.STATUS = 1 order by t2.M_DATETIME desc;" ;
->>>>>>> 12baebf90856bc4c41905190c21de731a5396abd
 
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql);) {
