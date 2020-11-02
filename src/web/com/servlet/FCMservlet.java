@@ -86,6 +86,12 @@ public class FCMservlet extends HttpServlet {
 			int memberId = jsonObject.get("memberId").getAsInt();
 			List<Notify> notifies = fcmDao.getAllMsg(memberId);
 			writeText(response, gson.toJson(notifies));
+		}else if(action.equals("add")) {
+			// 新增已成好友的通知及原申請加好友訊息改為已讀
+			String appMessageJson = jsonObject.get("appMessage").getAsString();
+			AppMessage appMessage = gson.fromJson(appMessageJson, AppMessage.class);
+			int count = fcmDao.insertMsg(appMessage);
+			count = fcmDao.updateMsg(appMessage);
 		}
 	}
 
@@ -98,8 +104,7 @@ public class FCMservlet extends HttpServlet {
         response.setContentType(SettingUtil.CONTENT_TYPE);
         PrintWriter out = response.getWriter();
         out.print(json);
-        // TODO for debug 
-        System.out.println("response json: " +  json);
+      
         out.close();
     }
 	

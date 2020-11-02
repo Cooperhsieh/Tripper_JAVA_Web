@@ -85,6 +85,8 @@ public class FCMDaolmpl implements FCMDao{
 		}
 		return count;
 	}
+	
+	
 	@Override
 	public List<Notify> getAllMsg(int memberId) {
 		List<Notify> notifies = new ArrayList<Notify>();
@@ -122,6 +124,25 @@ public class FCMDaolmpl implements FCMDao{
 			e.printStackTrace();
 		}
 		return notifies;
+	}
+	@Override
+	public int updateMsg(AppMessage msg) {
+		String sql = " update MESSAGE "
+				   + " set MSG_STAT = 1 "
+				   + " where RECIVER_ID = ? "
+				   + " and SEND_ID = ? "
+				   + " and MSG_STAT = 0 "
+				   ;
+		try (Connection connection = dataSource.getConnection();
+				PreparedStatement ps = connection.prepareStatement(sql)){
+			ps.setInt(1, msg.getReciverId());
+			ps.setInt(2, msg.getSendId());
+			System.out.println("updateMsg sql :" + ps.toString());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return 0;
 	}
 
 }

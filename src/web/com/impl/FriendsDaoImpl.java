@@ -29,6 +29,7 @@ public class FriendsDaoImpl implements FriendsDao {
 	private static final int NOT_FRIEND = 0; 
 	private static final int CHECKING = 1; // 邀請好友待確認
 	private static final int FRIEND = 2; // 已是好友
+	
 	public FriendsDaoImpl() {
 		dataSource = ServiceLocator.getInstance().getDataSource();	
 	}
@@ -114,7 +115,7 @@ public class FriendsDaoImpl implements FriendsDao {
 	}
 
 	@Override
-	public int insert(int memberId, int friendId) {
+	public int insert(int memberId, int friendId, int status) {
 		int count = 0;
 		String sql = " insert into FRIENDS "
 				   + " ( "
@@ -126,12 +127,56 @@ public class FriendsDaoImpl implements FriendsDao {
 				PreparedStatement ps = connection.prepareStatement(sql)) {
 			ps.setInt(1, memberId);
 			ps.setInt(2, friendId);
-			ps.setInt(3, CHECKING);
+			ps.setInt(3, status);
 			count = ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
+		return count;
+	}
+
+	@Override
+	public int update(int friendId, int memberId, int status) {
+		int count = 0;
+		String sql = " update FRIENDS "
+				   + " set F_STATUS = ? "
+				   + " where ( "
+				   + " MEMBER_ID = ? "
+				   + " and "
+				   + " FRIEND_ID = ?"
+				   + " ) ; ";
+		try(Connection connection = dataSource.getConnection();
+				PreparedStatement ps = connection.prepareStatement(sql)) {
+			ps.setInt(1, status);
+			ps.setInt(2, friendId);
+			ps.setInt(3, memberId);
+			System.out.println("friend update sql::" + ps.toString());
+			count = ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return count;
+	}
+
+	@Override
+	public int delete(int friendId, int memberId) {
+		int count = 0;
+		String sql = " delete from FRIENDS "
+				   + " where ( "
+				   + " MEMBER_ID = ? "
+				   + " and "
+				   + " FRIEND_ID = ? "
+				   + " ); ";
+		try(Connection connection = dataSource.getConnection();
+				PreparedStatement ps = connection.prepareStatement(sql)) {
+			ps.setInt(1, friendId);
+			ps.setInt(2, memberId);
+			System.out.println("friend delete sql::" + sql);
+			count = ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return count;
 	}
 

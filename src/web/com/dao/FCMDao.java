@@ -15,10 +15,13 @@ public interface FCMDao {
 	
 	// 更新token
 	int update(String token, int memberId);
+	// 更改訊息狀態
+	int updateMsg(AppMessage msg);
 	// 取得user token
 	String getToken(int memberId);
 	// 寫入傳送的訊息
 	int insertMsg(AppMessage msg);
 	// 取得該會員的通知訊息
-	//List<Notify> getAllMsg(int memberId);
+	List<Notify> getAllMsg(int memberId);
+
 }
