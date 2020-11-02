@@ -70,7 +70,8 @@ public class FriendsServlet extends HttpServlet {
 			// 加入好友
 			int memberId = jsonObject.get("memberId").getAsInt();
 			int friendId = jsonObject.get("friendId").getAsInt();
-			int count = friendsDao.insert(memberId, friendId, CHECKING);
+			int count = friendsDao.insert(memberId, friendId, FRIEND);
+			count = friendsDao.insert(friendId, memberId, FRIEND);
 			writeText(response, gson.toJson(count));
 		}else if(action.equals("apply")) {
 			// 按下同意
