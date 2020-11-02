@@ -94,6 +94,7 @@ public class MemberServlet extends HttpServlet {
 			Member member = memberDao.findById(Integer.parseInt(memberId));
 			writeText(response, gson.toJson(member));
 		}
+		
 //新增帳號or修改帳號
 		else if (action.equals("memberInsert") || action.equals("memberUpdate")||action.equals("memberGBInsert")) {
 			String memberJson = jsonObject.get("member").getAsString();
@@ -121,6 +122,14 @@ public class MemberServlet extends HttpServlet {
 			}
 			writeText(response, String.valueOf(count));
 			
+		}
+//更改密碼		
+		else if(action.equals("UpdatePassword")){
+			String account = jsonObject.get("account").getAsString();
+			String newPassword = jsonObject.get("newPassword").getAsString();
+			int count = 0 ;
+			count = memberDao.updatePassword(account, newPassword);
+			writeText(response, String.valueOf(count));
 		}
 			
 //		} else if (action.equals("findById")) {

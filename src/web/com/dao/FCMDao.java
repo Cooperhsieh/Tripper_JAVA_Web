@@ -24,4 +24,11 @@ public interface FCMDao {
 	// 取得該會員的通知訊息
 	List<Notify> getAllMsg(int memberId);
 
+	//寫入聊天發送的訊息
+	int insertChatMsg(AppMessage msg);
+	//取得聊天訊息
+	List<Notify> getChat(int memberId,int recierverId);
+	//透過ID得到自己的名字，設為Title用
+	String getSenderName(AppMessage msg);
+
 }

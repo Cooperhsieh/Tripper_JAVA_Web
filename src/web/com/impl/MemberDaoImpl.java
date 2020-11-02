@@ -29,18 +29,15 @@ public class MemberDaoImpl implements MemberDao {
 	public int insert(Member member) {
 		int confirm = selectAccount(member) ;
 		int count = 0;
-		String sql = "INSERT INTO Member" + "(ACCOUNT_ID,PASSWORD,NICKNAME)" + "VALUES(?,?,?);";
+		String sql = "INSERT INTO Member" + "(ACCOUNT_ID,PASSWORD,EMAIL,NICKNAME)" + "VALUES(?,?,?,?);";
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql)) {
 			if(confirm ==0) {
 			
 			ps.setString(1, member.getAccount());
 			ps.setString(2, member.getPassword());
-			ps.setString(3, member.getNickName());
-//			ps.setInt(6,member.getLoginType());
-//			ps.setBytes(7, photo);
-//			ps.setBytes(8, backgroundImage);
-//			ps.setString(9, member.getToken());
+			ps.setString(3, member.getMail());
+			ps.setString(4, member.getNickName());
 
 			count = ps.executeUpdate();
 			}
@@ -227,6 +224,25 @@ public class MemberDaoImpl implements MemberDao {
 			e.printStackTrace();
 		}
 		return count;  //帳號密碼正確回傳1
+	}
+	@Override
+	public int updatePassword(String account, String newPassword) {
+		int count = 0;
+		String sql = "";
+		
+		sql = "UPDATE Member SET PASSWORD = ?" + "WHERE ACCOUNT_ID = ?;"; // 
+		
+		try (Connection connection = dataSource.getConnection();
+				PreparedStatement ps = connection.prepareStatement(sql);) {
+			ps.setString(1, newPassword);
+			ps.setString(2, account);
+			
+			System.out.println("updatePassword sql :: " + ps.toString());
+			count = ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return count;
 	}
 	
 }

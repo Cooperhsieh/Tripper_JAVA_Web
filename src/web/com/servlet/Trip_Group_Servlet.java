@@ -31,7 +31,7 @@ import web.com.util.SettingUtil;
 @WebServlet("/Trip_Group_Servlet")
 public class Trip_Group_Servlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	Trip_Group_Dao tripGroupDao = null;
+	private Trip_Group_Dao tripGroupDao = null;
 	
 
 	@Override
@@ -46,37 +46,24 @@ public class Trip_Group_Servlet extends HttpServlet {
 			jsonIn.append(line);
 		}
 
-		System.out.println("input: " + jsonIn);
+		System.out.println("jsonIn input: " + jsonIn);
 
 		JsonObject jsonObject = gson.fromJson(jsonIn.toString(), JsonObject.class);
+		String action = jsonObject.get("action").getAsString();
 		if (tripGroupDao == null) {
 			tripGroupDao = new Trip_Group_Dao_Impl();
 		}
 
-		String action = jsonObject.get("action").getAsString();
-
-		if (action.equals("getAll")) {
+		int count = 0;
+		if (action.equals("update")) {
 			List<Trip_Group> tripGroups = tripGroupDao.getAll();
 			writeText(response, gson.toJson(tripGroups));
 
-		} else if (action.equals("tripGroupInsert") || action.equals("tripGroupUpdate")) {
-			String tripGroupJson = jsonObject.get("tripGroup").getAsString();
+		
 
-			System.out.println("tripGroup" + tripGroupJson);
+		
 
-			Trip_Group tripGroup = gson.fromJson(tripGroupJson, Trip_Group.class);
-			writeText(response, String.valueOf(tripGroup));
-
-		} else if (action.equals("tripGroupDelete")) {
-			String tripId = jsonObject.get("tripId").getAsString();
-			int memberId = jsonObject.get("memberId").getAsInt();
-			int count = tripGroupDao.delete(tripId);
-			writeText(response, String.valueOf(count));
-
-		} else if (action.equals("findGroupTripId")) {
-			String tripId = jsonObject.get("tripId").getAsString();
-			List<TripGroupMember> tripGroups = tripGroupDao.findGroupTripId(tripId);
-			writeText(response, gson.toJson(tripGroups));
+		
 
 		} else {
 			writeText(response, "");

@@ -53,6 +53,7 @@ public class ExploreServlet extends HttpServlet {
 			}else if(action.equals("getImage")) {
 				OutputStream os = response.getOutputStream();
 				int id = jsonObject.get("id").getAsInt();
+//				String blogId = jsonObject.get("blogId").getAsString();
 				int imageSize = jsonObject.get("imageSize").getAsInt();
 				byte[] image = exploreDao.getImage(id);
 				if(image != null) {

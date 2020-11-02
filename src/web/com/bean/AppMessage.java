@@ -18,6 +18,7 @@ public class AppMessage implements Serializable{
 	private int msgStat;
 	private int sendId;
 	private int reciverId;
+	private String upTime ;
 	
 	public AppMessage(String msgType, int memberId, String msgTitle, String msgBody,int msgStat, int sendId, int reciverId) {
 		super();
@@ -28,6 +29,16 @@ public class AppMessage implements Serializable{
 		this.msgStat = msgStat;
 		this.sendId = sendId;
 		this.reciverId = reciverId;
+	}
+	public AppMessage(String msgType, int memberId, String msgTitle, String msgBody, int msgStat, int sendId, int reciverId, String upTime) {
+		this.msgType = msgType;
+		this.memberId = memberId;
+		this.msgTitle = msgTitle;
+		this.msgBody = msgBody;
+		this.msgStat = msgStat;
+		this.sendId = sendId;
+		this.reciverId = reciverId;
+		this.upTime = upTime;
 	}
 	public String getMsgType() {
 		return msgType;
@@ -71,6 +82,11 @@ public class AppMessage implements Serializable{
 	public void setMsgStat(int msgStat) {
 		this.msgStat = msgStat;
 	}
-	
+	public String getUpTime() {
+		return upTime;
+	}
+	public void setUpTime(String upTime) {
+		this.upTime = upTime;
+	}
 	
 }
