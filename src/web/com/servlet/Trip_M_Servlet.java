@@ -80,8 +80,9 @@ public class Trip_M_Servlet extends HttpServlet {
 
 		} else if (action.equals("updateTrip")) {
 			String tripId1 = jsonObject.get("tripId").getAsString();
+			int blogStatus = jsonObject.get("blogStatus").getAsInt();
 			System.out.println("tripID"+tripId1);
-			int count = tripMDao.changeBlogStatus(tripId1);
+			int count = tripMDao.changeBlogStatus(blogStatus,tripId1);
 			writeText(response, String.valueOf(count));
 		}	
 			else if (action.equals("tripMDelete")) {

@@ -138,32 +138,30 @@ public class Trip_M_Dao_Impl implements Trip_M_Dao {
 		}
 		return tripMasters;
 	}
-
+//揪團頁面，尋找揪團
 	@Override
 	public List<Trip_M> getAll() {
 		List<Trip_M> tripMs = new ArrayList<Trip_M>();
 
-		String sql = "SELECT * FROM Tripper.Trip_M "
-				+ " left join Trip_Group on Trip_M.TRIP_ID = Trip_Group.TRIP_ID "
-				+ " where STATUS = 1 " 
-				+ " order by M_DATETIME desc" ;
+		String sql = "SELECT DISTINCT t1.TRIP_ID ,t2.* FROM Trip_GROUP t1\n" + 
+				" left join Trip_M t2 on t1.TRIP_ID = t2.TRIP_ID where t2.STATUS = 1 order by t2.M_DATETIME desc;" ;
 
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql);) {
 
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
-				String tripId = rs.getString(1);
-				int memberId = rs.getInt(2);
-				String tripTitle = rs.getString(3);
-				String startDate = rs.getString(4);
-				String startTime = rs.getString(5);
-				int pMax = rs.getInt(9);
-				int status = rs.getInt(10);
-				int mCount = rs.getInt(16);
+				String tripId = rs.getString(2);
+				int memberId = rs.getInt(3);
+				String tripTitle = rs.getString(4);
+				String startDate = rs.getString(5);
+				String startTime = rs.getString(6);
+				int pMax = rs.getInt(10);
+				int status = rs.getInt(11);
+				
 				
 
-				Trip_M tripM = new Trip_M(tripId, memberId, tripTitle, startDate,startTime, pMax, status, mCount);
+				Trip_M tripM = new Trip_M(tripId, memberId, tripTitle, startDate,startTime, pMax, status, 1);
 				tripMs.add(tripM);
 			}
 			return tripMs;
@@ -214,12 +212,13 @@ public class Trip_M_Dao_Impl implements Trip_M_Dao {
 	public List<Trip_M> getMyTrip(String memberIdStr) {
 		List<Trip_M> tripMs = new ArrayList<Trip_M>();
 
-		String sql = "SELECT * FROM Tripper.Trip_M left join Trip_Group on Trip_M.TRIP_ID = Trip_Group.TRIP_ID "
-				+ " where Trip_M.MEMBER_ID = ? and Trip_M.BLOGSTATUS = 0 " + "order by M_DATETIME desc";
+		String sql = "SELECT * FROM Tripper.Trip_M left join Trip_Group on Trip_M.TRIP_ID = Trip_Group.TRIP_ID \n" + 
+				"				 where Trip_M.MEMBER_ID = ? and Trip_Group.MEMBER_ID = ? and  Trip_M.BLOGSTATUS = 0 order by M_DATETIME desc";
 
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql);) {
 			ps.setString(1, memberIdStr);
+			ps.setString(2, memberIdStr);
 			ResultSet rs = ps.executeQuery();
 			
 			while (rs.next()) {
@@ -233,6 +232,7 @@ public class Trip_M_Dao_Impl implements Trip_M_Dao {
 				Trip_M tripM = new Trip_M(tripId, memberId, tripTitle, startDate, pMax, mCount);
 				tripMs.add(tripM);
 			}
+			System.out.println(tripMs);
 			return tripMs;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -242,15 +242,16 @@ public class Trip_M_Dao_Impl implements Trip_M_Dao {
 	}
 
 	@Override
-	public int changeBlogStatus(String tripId) {
+	public int changeBlogStatus(int blogStatus , String tripId) {
 		int count = 0;
 		String sql = "";
 		
-			sql = "update TRIP_M set BLOGSTATUS = 1 where TRIP_ID = ?;";
+			sql = "update TRIP_M set BLOGSTATUS = ? where TRIP_ID = ?;";
 		
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql);) {
-			ps.setString(1, tripId);		
+			ps.setInt(1, blogStatus);
+			ps.setString(2, tripId);
 			System.out.println("update changeBlogStatus sql :: " + ps.toString());
 			count = ps.executeUpdate();
 		} catch (SQLException e) {

@@ -59,13 +59,14 @@ public class Trip_Group_Servlet extends HttpServlet {
 			List<Trip_Group> tripGroups = tripGroupDao.getAll();
 			writeText(response, gson.toJson(tripGroups));
 
+		} else if(action.equals("getGroupCount")) {
+			String trip_Id = jsonObject.get("trip_Id").getAsString();
+			System.out.println("trip_Id ::" + trip_Id);
+			int mcount = tripGroupDao.selectMCountByTripID(trip_Id);
+			writeText(response, String.valueOf(mcount));
+		}
 		
-
-		
-
-		
-
-		} else {
+		else {
 			writeText(response, "");
 		}
 
