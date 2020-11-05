@@ -2,6 +2,7 @@ package web.com.dao;
 
 import java.util.List;
 
+import web.com.bean.Member;
 import web.com.bean.TripGroupMember;
 import web.com.bean.Trip_Group;
 
@@ -26,5 +27,10 @@ public interface Trip_Group_Dao {
 	List<Trip_Group> getAll();
 //透過Trip_ID取得該揪團人數	
 	int selectMCountByTripID(String Trip_ID);
-
+//查找該行程是否有該會員已參加
+	int selectMyGroup(String trip_Id,String memberId);
+//退出揪團
+	int deleteGroup(Trip_Group tripGroup);
+//取得揪團成員列表
+	List<Member> getMbrList(String tripId);
 }

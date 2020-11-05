@@ -233,6 +233,15 @@ public class TripServlet extends HttpServlet {
 		 if (count <= 0) {
 			writeText(response, String.valueOf(count));
 			}
+		}else if (action.equals("deleteGroup")) {
+			int count = 0;
+			String tripGroupJson = jsonObject.get("tripGroup").getAsString();
+			System.out.println("tripGroupJson:: " + tripGroupJson);
+			Trip_Group tripGroup = gson.fromJson(tripGroupJson, Trip_Group.class);
+		
+			count = tripGroupDao.deleteGroup(tripGroup);	 
+			writeText(response, String.valueOf(count));
+			
 		}
 
 	}

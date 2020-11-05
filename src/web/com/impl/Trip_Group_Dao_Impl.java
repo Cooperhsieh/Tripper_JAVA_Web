@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import web.com.bean.Member;
 import web.com.bean.TripGroupMember;
 import web.com.bean.Trip_Group;
 import web.com.dao.Trip_Group_Dao;
@@ -157,6 +158,70 @@ public class Trip_Group_Dao_Impl implements Trip_Group_Dao {
 		return count;
 	}
 
+	@Override
+	public int selectMyGroup(String trip_Id, String memberId) {
+		int count = 0 ;
+		String sql = "SELECT MEMBER_ID FROM Tripper.Trip_Group where Trip_ID = ? and MEMBER_ID = ?;" ;
+		try (Connection connection = datasource.getConnection();
+				PreparedStatement ps = connection.prepareStatement(sql); ){
+			ps.setString(1,trip_Id);
+			ps.setString(2, memberId);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				if(rs.getString("MEMBER_ID").equals(memberId)) {
+					count = 1 ;
+				}					
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return count;
+	}
 
+	@Override
+	public int deleteGroup(Trip_Group tripGroup) {
+		int count = 0 ;
+		String sql = "delete from Trip_Group where TRIP_ID = ? and MEMBER_ID = ? ;" ;
+		
+		try (Connection connection = datasource.getConnection();
+				PreparedStatement ps = connection.prepareStatement(sql);) {
+			
+			ps.setString(1, tripGroup.getTripId());
+			ps.setInt(2, tripGroup.getMemberId());
+			
+			count = ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return count;
+	}
+
+	@Override
+	public List<Member> getMbrList(String tripId) {
+		String sql = "select b.* " + 
+					"from Trip_Group a inner join MEMBER b " + 	
+					"where ( a.MEMBER_ID = b.MEMBER_ID ) " + 
+					"and a.Trip_ID = ? ;";
+		List<Member> friends = new ArrayList<Member>();
+		Member member = null;
+		try (Connection connection = datasource.getConnection();
+				PreparedStatement ps = connection.prepareStatement(sql);) {
+			ps.setString(1, tripId);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				int memberId = rs.getInt("member_id");
+				String accountId = rs.getString("account_id");
+				String email = rs.getString("email");
+				String nickname = rs.getString("nickname");
+				int loginType = rs.getInt("login_type");
+				String tokenId = rs.getString("token_id");
+				member = new Member(memberId, accountId, email, nickname, loginType, tokenId);
+				friends.add(member);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return friends;
+	}
 
 }

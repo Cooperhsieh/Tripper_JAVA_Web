@@ -32,5 +32,6 @@ public interface Trip_M_Dao {
 	Trip_M getStatusById (String memberId);
 	
 	int changeBlogStatus (int blogStatus , String tripId);
-
+	//顯示已參加的揪團
+	List<Trip_M> getMyGroup(String memberID);
 }

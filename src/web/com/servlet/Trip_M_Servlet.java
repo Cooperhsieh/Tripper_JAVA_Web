@@ -59,8 +59,15 @@ public class Trip_M_Servlet extends HttpServlet {
 		if (action.equals("getAll")) {
 			List<Trip_M> tripMs = tripMDao.getAll();
 			writeText(response, gson.toJson(tripMs));
+		}
+// 顯示已參加的揪團		
+		else if(action.equals("getMyGroup")) {
+			String memberId = jsonObject.get("memberId").getAsString();
+			List<Trip_M> trip_Ms = tripMDao.getMyGroup(memberId);
+			writeText(response, gson.toJson(trip_Ms));
+		}
 //抓取個人的行程資訊
-		} else if (action.equals("getMyTrip")) {
+		 else if (action.equals("getMyTrip")) {
 			String memberId = jsonObject.get("memberId").getAsString();
 			List<Trip_M> tripMs_mime = tripMDao.getMyTrip(memberId);
 			writeText(response, gson.toJson(tripMs_mime));
