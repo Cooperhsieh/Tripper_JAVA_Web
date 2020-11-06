@@ -86,6 +86,16 @@ public class FCMservlet extends HttpServlet {
 			int memberId = jsonObject.get("memberId").getAsInt();
 			List<Notify> notifies = fcmDao.getAllMsg(memberId);
 			writeText(response, gson.toJson(notifies));
+		}else if(action.equals("add")) {
+			String messageStr = jsonObject.get("appMessage").getAsString();
+			AppMessage message = gson.fromJson(messageStr, AppMessage.class);
+			int count = fcmDao.insertMsg(message);
+			writeText(response, count + "");
+			// 新增已成好友的通知及原申請加好友訊息改為已讀
+//			String appMessageJson = jsonObject.get("appMessage").getAsString();
+//			AppMessage appMessage = gson.fromJson(appMessageJson, AppMessage.class);
+//			int count = fcmDao.insertMsg(appMessage);
+//			count = fcmDao.updateMsg(appMessage);
 		}
 	//發送聊天訊息	
 			else if(action.equals("sendChatMsg")) {
@@ -118,15 +128,14 @@ public class FCMservlet extends HttpServlet {
         response.setContentType(SettingUtil.CONTENT_TYPE);
         PrintWriter out = response.getWriter();
         out.print(json);
-        // TODO for debug 
-        System.out.println("response json: " +  json);
+      
         out.close();
     }
 	
 	private void sendSingleFcm(AppMessage msg, String token) {
 		String title = msg.getMsgTitle();
 		String body = msg.getMsgBody();
-		String data = "Notify";
+		String data = msg.getMsgType();
 		
 		// 主要設定訊息標題跟內容，client app一定要在背景時才會自動顯示
 		Notification notification = Notification.builder()

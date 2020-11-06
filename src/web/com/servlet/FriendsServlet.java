@@ -34,6 +34,9 @@ public class FriendsServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     FriendsDao friendsDao = null;
     MemberDao memberDao = null;
+    private static final int NOT_FRIEND = 0; 
+	private static final int CHECKING = 1; // 邀請好友待確認
+	private static final int FRIEND = 2; // 已是好友
 
     @Override
 		protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -64,10 +67,27 @@ public class FriendsServlet extends HttpServlet {
 			Friends friend = friendsDao.findSearchFriend(memberId, account);
 			writeText(response, gson.toJson(friend));
 		} else if(action.equals("insert")) {
+			// 加入好友
 			int memberId = jsonObject.get("memberId").getAsInt();
 			int friendId = jsonObject.get("friendId").getAsInt();
-			int count = friendsDao.insert(memberId, friendId);
+			int count = friendsDao.insert(memberId, friendId, FRIEND);
+			count = friendsDao.insert(friendId, memberId, FRIEND);
 			writeText(response, gson.toJson(count));
+		}else if(action.equals("apply")) {
+			// 按下同意
+			int memberId = jsonObject.get("memberId").getAsInt();
+			int friendId = jsonObject.get("friendId").getAsInt();
+			int count = friendsDao.insert(memberId, friendId, FRIEND);
+				count = friendsDao.update(friendId, memberId, FRIEND);
+			writeText(response, gson.toJson(count));
+		}else if(action.equals("delete")) {
+			
+			// 按拒絕的人
+			int memberId = jsonObject.get("memberId").getAsInt();
+			// 原申請的人
+			int friendId = jsonObject.get("friendId").getAsInt();
+			// 刪除原申請好友的資料，由於是被加好友的人按拒絕，所以刪除的時候須相反過來
+			int count = friendsDao.delete(friendId, memberId);
 		}
 	}
     

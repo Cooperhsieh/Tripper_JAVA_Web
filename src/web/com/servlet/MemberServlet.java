@@ -53,7 +53,7 @@ public class MemberServlet extends HttpServlet {
 		}
 //----------------------------------------------------------------------------------
 		String action = jsonObject.get("action").getAsString();
-
+		System.out.println("action::" + action);
 //取得大頭貼
 		 if (action.equals("getImage")) {
 			OutputStream os = response.getOutputStream();

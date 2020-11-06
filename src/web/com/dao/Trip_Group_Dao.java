@@ -24,5 +24,7 @@ public interface Trip_Group_Dao {
 	List<TripGroupMember> findGroupTripId(String groupTripId);
 
 	List<Trip_Group> getAll();
+//透過Trip_ID取得該揪團人數	
+	int selectMCountByTripID(String Trip_ID);
 
 }
