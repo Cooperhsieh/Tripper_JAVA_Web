@@ -9,6 +9,8 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import com.fasterxml.jackson.core.TSFBuilder;
+
 import web.com.bean.Explore;
 import web.com.bean.Member;
 import web.com.dao.ExploreDao;
@@ -51,7 +53,8 @@ public class ExploreImpl implements ExploreDao{
 
 	@Override
 	public List<Explore> getAll() {
-		String sql = "SELECT Blog_M.BLOG_TITLE, Blog_M.USER_ID,Blog_M.BLOG_ID, Member.NICKNAME,Blog_M.BLOG_DESC FROM  Blog_M	INNER JOIN Member ON  Blog_M.USER_ID = Member.MEMBER_ID;";
+		String sql = "SELECT distinct Blog_M.BLOG_TITLE, Blog_M.USER_ID,Blog_M.BLOG_ID, Member.NICKNAME,Blog_M.BLOG_DESC,Blog_M.C_DATETIME FROM  Blog_M\n" + 
+				"LEFT JOIN Member ON  Blog_M.USER_ID = Member.MEMBER_ID";
 		List<Explore> exploreslList = new ArrayList<>();
 		try(    
 				Connection connection = dataSource.getConnection();
@@ -66,10 +69,11 @@ public class ExploreImpl implements ExploreDao{
 				String blogID = rs.getString(3);
 			    String blogDesc = rs.getString(5);
 				String nickName = rs.getString(4);
+				String date = rs.getString(6);
 				
 				
 	
-				Explore explore = new Explore(blogID, userID, nickName, titleName,blogDesc);
+				Explore explore = new Explore(blogID, userID, nickName, titleName,blogDesc,date);
 				exploreslList.add(explore);
 			}
 			return exploreslList;

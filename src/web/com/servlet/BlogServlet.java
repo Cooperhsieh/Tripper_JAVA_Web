@@ -237,6 +237,17 @@ public class BlogServlet extends HttpServlet {
 			int count = 0;
 			count=blogDao.updateB_Note(blog_Note);
 			writeText(response, String.valueOf(count));
+		}else if(action.equals("deleteComment")) {
+			int comId  = jsonObject.get("comId").getAsInt();
+			int count = blogDao.deleteComment(comId);
+			writeText(response, String.valueOf(count));
+		}else if(action.equals("updateComment")) {
+				String commentJson = jsonObject.get("comment").getAsString();
+				System.out.println("commentJson" + commentJson);
+				Blog_Comment blog_Comment = gson.fromJson(commentJson, Blog_Comment.class);
+				int count = blogDao.updateComment(blog_Comment);
+				writeText(response, String.valueOf(count));
+		
 		}else {
 
 				writeText(response, "");
