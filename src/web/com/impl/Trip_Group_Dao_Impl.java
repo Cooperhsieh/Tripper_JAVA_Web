@@ -35,8 +35,8 @@ public class Trip_Group_Dao_Impl implements Trip_Group_Dao {
 	public int insert(Trip_Group tripGroup) {
 		int count = 0 ;
 		String sql = " insert into Trip_Group " +
-		"( GROUP_TRANS_ID, TRIP_ID, MEMBER_ID )" +
-		"values (? , ?, ?)" ;
+		"( GROUP_TRANS_ID, TRIP_ID, MEMBER_ID ,STATUS )" +
+		"values (? , ?, ? , ?)" ;
 		
 		try (Connection connection = datasource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql);) {
@@ -44,6 +44,7 @@ public class Trip_Group_Dao_Impl implements Trip_Group_Dao {
 			ps.setString(1, tripGroup.getGroupTransId());
 			ps.setString(2, tripGroup.getTripId());
 			ps.setInt(3, tripGroup.getMemberId());
+			ps.setInt(4, 1);
 			
 			count = ps.executeUpdate();
 		} catch (SQLException e) {
@@ -54,9 +55,8 @@ public class Trip_Group_Dao_Impl implements Trip_Group_Dao {
 
 	@Override
 	public int update(Trip_Group tripGroup) {
-		return 0;
-//		int count = 0 ;
-//		String sql = "update Trip_Group set MEMBER_ID = ? " +
+		int count = 0 ;
+//		String sql = "update Trip_Group STATUS  = 2 " +
 //		"where GROUP_TRANS_ID = ? ; " ;
 //		
 //		try (Connection connection = datasource.getConnection();
@@ -69,7 +69,7 @@ public class Trip_Group_Dao_Impl implements Trip_Group_Dao {
 //		} catch (SQLException e) {
 //			e.printStackTrace();
 //		}
-//		return count;
+		return count;
 	}
 
 	@Override
@@ -144,7 +144,7 @@ public class Trip_Group_Dao_Impl implements Trip_Group_Dao {
 	@Override
 	public int selectMCountByTripID(String trip_ID) {
 		int count = 0 ;
-		String sql = "SELECT count(*) FROM Tripper.Trip_Group where TRIP_ID = ?;";
+		String sql = "SELECT count(*) FROM Tripper.Trip_Group where TRIP_ID = ? and STATUS = 2 ;";
 		try (Connection connection = datasource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql); ){
 			ps.setString(1,trip_ID);
@@ -161,17 +161,15 @@ public class Trip_Group_Dao_Impl implements Trip_Group_Dao {
 	@Override
 	public int selectMyGroup(String trip_Id, String memberId) {
 		int count = 0 ;
-		String sql = "SELECT MEMBER_ID FROM Tripper.Trip_Group where Trip_ID = ? and MEMBER_ID = ?;" ;
+		String sql = "SELECT STATUS FROM Tripper.Trip_Group where Trip_ID = ? and MEMBER_ID = ?;" ;
 		try (Connection connection = datasource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql); ){
 			ps.setString(1,trip_Id);
 			ps.setString(2, memberId);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
-				if(rs.getString("MEMBER_ID").equals(memberId)) {
-					count = 1 ;
+				count = rs.getInt(1);
 				}					
-			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -201,7 +199,7 @@ public class Trip_Group_Dao_Impl implements Trip_Group_Dao {
 		String sql = "select b.* " + 
 					"from Trip_Group a inner join MEMBER b " + 	
 					"where ( a.MEMBER_ID = b.MEMBER_ID ) " + 
-					"and a.Trip_ID = ? ;";
+					"and a.Trip_ID = ? and a.STATUS = 2;";
 		List<Member> friends = new ArrayList<Member>();
 		Member member = null;
 		try (Connection connection = datasource.getConnection();
@@ -222,6 +220,52 @@ public class Trip_Group_Dao_Impl implements Trip_Group_Dao {
 			e.printStackTrace();
 		}
 		return friends;
+	}
+
+	@Override
+	public List<Member> getApplicationList(String tripId) {
+		String sql = "select b.* " + 
+				"from Trip_Group a inner join MEMBER b " + 	
+				"where ( a.MEMBER_ID = b.MEMBER_ID ) " + 
+				"and a.Trip_ID = ? and a.STATUS = 1;";
+	List<Member> friends = new ArrayList<Member>();
+	Member member = null;
+	try (Connection connection = datasource.getConnection();
+			PreparedStatement ps = connection.prepareStatement(sql);) {
+		ps.setString(1, tripId);
+		ResultSet rs = ps.executeQuery();
+		while (rs.next()) {
+			int memberId = rs.getInt("member_id");
+			String accountId = rs.getString("account_id");
+			String email = rs.getString("email");
+			String nickname = rs.getString("nickname");
+			int loginType = rs.getInt("login_type");
+			String tokenId = rs.getString("token_id");
+			member = new Member(memberId, accountId, email, nickname, loginType, tokenId);
+			friends.add(member);
+		}
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
+	return friends;
+	}
+
+	@Override
+	public int agreeJoinGroup(Trip_Group tripGroup) {
+		int count = 0 ;
+		String sql = "update Trip_Group set STATUS = 2 where TRIP_ID = ? and MEMBER_ID = ? ;" ;
+		
+		try (Connection connection = datasource.getConnection();
+				PreparedStatement ps = connection.prepareStatement(sql);) {
+			
+			ps.setString(1, tripGroup.getTripId());
+			ps.setInt(2, tripGroup.getMemberId());
+			
+			count = ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return count;
 	}
 
 }

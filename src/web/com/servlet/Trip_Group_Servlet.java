@@ -64,8 +64,7 @@ public class Trip_Group_Servlet extends HttpServlet {
 			String tripId = jsonObject.get("trip_Id").getAsString();
 			String memberId = jsonObject.get("memberId").getAsString();
 			int checkCount = tripGroupDao.selectMyGroup(tripId, memberId);
-			writeText(response, String.valueOf(checkCount));
-			
+			writeText(response, String.valueOf(checkCount));		
 		}else if(action.equals("getGroupCount")) {
 			String trip_Id = jsonObject.get("trip_Id").getAsString();
 			System.out.println("trip_Id ::" + trip_Id);
@@ -74,6 +73,10 @@ public class Trip_Group_Servlet extends HttpServlet {
 		}else if(action.equals("getGroupMbrList")) {
 			String tripId = jsonObject.get("tripId").getAsString();
 			List<Member> mbrList = tripGroupDao.getMbrList(tripId);
+			writeText(response, gson.toJson(mbrList));
+		}else if(action.equals("getApplicationList")) {
+			String tripId = jsonObject.get("tripId").getAsString();
+			List<Member> mbrList = tripGroupDao.getApplicationList(tripId);
 			writeText(response, gson.toJson(mbrList));
 		}		
 		else {

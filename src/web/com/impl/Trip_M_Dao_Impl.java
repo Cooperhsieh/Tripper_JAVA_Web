@@ -262,7 +262,7 @@ public class Trip_M_Dao_Impl implements Trip_M_Dao {
 		List<Trip_M> tripMs = new ArrayList<Trip_M>();
 
 		String sql = "SELECT DISTINCT t1.TRIP_ID ,t2.* FROM Trip_GROUP t1\n" + 
-				" left join Trip_M t2 on t1.TRIP_ID = t2.TRIP_ID where t2.STATUS = 1 and t1.MEMBER_ID = ? order by t2.M_DATETIME desc;" ;
+				" left join Trip_M t2 on t1.TRIP_ID = t2.TRIP_ID where t2.STATUS = 1 and t1.MEMBER_ID = ? and t1.STATUS = 2 order by t2.M_DATETIME desc;" ;
 
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql);) {

@@ -123,6 +123,45 @@ public class MemberServlet extends HttpServlet {
 			writeText(response, String.valueOf(count));
 			
 		}
+//管理者新增帳號or修改帳號
+		else if (action.equals("managerInsert") || action.equals("managerUpdate")) {
+			String memberJson = jsonObject.get("member").getAsString();
+			System.out.println("memberJson = " + memberJson); // 先get外部的json，再get內部的json取得spot物件
+			Member member = gson.fromJson(memberJson, Member.class);
+			byte[] image = null;
+			
+			// 檢查是否有上傳圖片
+			if (jsonObject.get("imageBase64") != null) {
+				String imageBase64 = jsonObject.get("imageBase64").getAsString();
+				if (imageBase64 != null && !imageBase64.isEmpty()) {
+					image = Base64.getMimeDecoder().decode(imageBase64);
+				}
+			}
+			int count = 0;
+
+			if (action.equals("managerInsert")) {
+				count = memberDao.insertManager(member);
+
+			} else if (action.equals("managerUpdate")) {
+				count = memberDao.update(member, image);
+			}
+			writeText(response, String.valueOf(count));
+		}
+//管理者登入		 
+		else if(action.equals("managerlogIn")) {
+			String memberJson = jsonObject.get("member").getAsString();
+			System.out.println("memberJson = " + memberJson);
+			Member member = gson.fromJson(memberJson, Member.class);
+			int count = 0 ;
+			if(action.equals("managerlogIn")) {
+				count = memberDao.selectManagerAandP(member);
+				System.out.println(count);
+				writeText(response, String.valueOf(count));
+			}
+			else {
+				writeText(response, "");
+			}
+		}
 //更改密碼		
 		else if(action.equals("UpdatePassword")){
 			String account = jsonObject.get("account").getAsString();
