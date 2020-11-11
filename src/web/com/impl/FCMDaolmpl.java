@@ -236,6 +236,25 @@ public class FCMDaolmpl implements FCMDao{
 		}
 		return senderNameString;
 	}
+	@Override
+	public byte[] getSpotImage(String locId) {
+		String sql = "SELECT LOC_PIC FROM TRIPPER.Location where LOC_ID = ?;";
+		byte [] image = null;
+		try (
+				Connection connection = dataSource.getConnection();
+				PreparedStatement ps = connection.prepareStatement(sql);
+			){
+			ps.setString(1, locId);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+			image = rs.getBytes(1);	
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();		
+			}
+		return image;
+	}
+
 	
 	
 

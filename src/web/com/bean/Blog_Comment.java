@@ -1,5 +1,7 @@
 package web.com.bean;
 
+import io.grpc.netty.shaded.io.netty.handler.codec.string.StringDecoder;
+
 public class Blog_Comment {
     String blogId;
     String name;
@@ -7,6 +9,16 @@ public class Blog_Comment {
     String member_ID;
     int ivImage;
     String date;
+   int comId;
+
+    
+    public int getComId() {
+        return comId;
+    }
+
+    public void setComId(int comId) {
+        this.comId = comId;
+    }
 
     public String getDate() {
 		return date;
@@ -22,7 +34,27 @@ public class Blog_Comment {
         this.name = name;
         this.content = content;
         this.member_ID = member_ID;
+        
     }
+  public Blog_Comment(String name, String content,String member_ID,String date,int comID){
+          
+      this.name = name;
+      this.content = content;
+      this.member_ID = member_ID;
+      this.date = date;
+      this.comId = comID;
+      
+  }
+  public Blog_Comment(String blogId,String name, String content,String member_ID,String date , int comID){
+      this.blogId= blogId;        
+      this.name = name;
+      this.content = content;
+      this.member_ID = member_ID;
+      this.comId = comID;
+      this.date  = date;
+      
+  }
+  
     public Blog_Comment(String name, String content,String member_ID){
         
         this.name = name;

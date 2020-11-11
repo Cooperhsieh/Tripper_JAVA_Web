@@ -27,7 +27,7 @@ public interface BlogDao {
 	
 	Blog findById1(int id);
 
-	
+	byte[] getSpotImage(String locId);
 	int insertB_Comment(Blog_Comment blog_Comment);
 
 //將發布網誌的資料存進DB
@@ -40,6 +40,7 @@ public interface BlogDao {
 //將網誌景點的照片從DB更改
 	int updateImage(Blog_Pic blog_Pic , byte[] image1,byte[] image2,byte[] image3,byte[] image4);
 	
+	int deleteComment(int comID);
 	List <BlogD> findById(String id);
 	int updateB_Note(Blog_Note blog_Note);
 //	public BlogD findLocationById(int id);
@@ -47,6 +48,8 @@ public interface BlogDao {
 	int update(BlogFinish blog_id,byte[] b_Pic);
 //刪除存在DB的網誌資料	
 	int delete(String blog_id);
+//更新留言內容
+	int updateComment(Blog_Comment blog_Comment);
     public BlogFinish findBlogById(String blogId);
 	
 	public List<Blog_Day> findDateById(String blodId);
