@@ -30,5 +30,6 @@ public interface FCMDao {
 	List<Notify> getChat(int memberId,int recierverId);
 	//透過ID得到自己的名字，設為Title用
 	String getSenderName(AppMessage msg);
+	byte[] getSpotImage(String locId);
 
 }

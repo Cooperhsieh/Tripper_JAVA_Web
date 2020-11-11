@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.List;
 
@@ -27,6 +28,7 @@ import web.com.bean.AppMessage;
 import web.com.bean.Notify;
 import web.com.dao.FCMDao;
 import web.com.impl.FCMDaolmpl;
+import web.com.util.ImageUtil;
 import web.com.util.SettingUtil;
 
 @WebServlet("/FCMServlet")
@@ -116,6 +118,18 @@ public class FCMservlet extends HttpServlet {
 			int recieverId = jsonObject.get("recirverId").getAsInt();
 			List<Notify> chats = fcmDao.getChat(memberId, recieverId);
 			writeText(response, gson.toJson(chats));
+			}else if(action.equals("getImage")) {
+				OutputStream os = response.getOutputStream();
+				String locID = jsonObject.get("id").getAsString();
+				int imageSize = jsonObject.get("imageSize").getAsInt();
+				byte[] image = fcmDao.getSpotImage(locID);
+				if(image != null) {
+					image = ImageUtil.shrink(image, imageSize);
+					response.setContentLength(image.length);
+					response.setContentType("image/jpeg");
+					os.write(image);
+					
+				}
 		}
 	}
 

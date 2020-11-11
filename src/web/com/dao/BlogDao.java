@@ -27,7 +27,7 @@ public interface BlogDao {
 	
 	Blog findById1(int id);
 
-	
+	byte[] getSpotImage(String locId);
 	int insertB_Comment(Blog_Comment blog_Comment);
 
 //將發布網誌的資料存進DB

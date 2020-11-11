@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +13,7 @@ import javax.sql.DataSource;
 import com.fasterxml.jackson.core.TSFBuilder;
 
 import web.com.bean.Explore;
+import web.com.bean.Location;
 import web.com.bean.Member;
 import web.com.dao.ExploreDao;
 import web.com.util.ServiceLocator;
@@ -124,6 +126,44 @@ public class ExploreImpl implements ExploreDao{
 		}
 		return memberList;
 		
+	}
+
+
+	@Override
+	public List<Location> getHotLocationAll() {
+		
+		List<Location> locations = new ArrayList<Location>();
+		Location loc = null;
+		String sql = " select \n" + 
+				"				 LOC_ID, NAME, ADDRESS, LOC_TYPE, CITY,\n" + 
+				"				 INFO, LONGITUDE, LATITUDE, CREATE_ID, M_USER_ID,  \n" + 
+				"				 C_DATETIME from LOCATION \n" + 
+				"                 where LOC_TYPE = 1 ;";
+				               
+		try (Connection connection = dataSource.getConnection();
+				PreparedStatement ps = connection.prepareStatement(sql);) {
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+				String locId = rs.getString(1);
+				String name = rs.getString(2);
+				String address = rs.getString(3);
+				String locType = rs.getString(4);
+				String city = rs.getString(5);
+				String info = rs.getString(6);
+				double longitude = rs.getDouble(7);
+				double latitude = rs.getDouble(8);
+				int createId = rs.getInt(9);
+				int useId = rs.getInt(10);
+				Timestamp createDateTime = rs.getTimestamp(11);
+				loc = new Location(locId, name, address, locType, city, info, longitude, latitude, createId, useId, createDateTime);
+				locations.add(loc);
+			}
+			return locations;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return locations;
 	}
 	
 }

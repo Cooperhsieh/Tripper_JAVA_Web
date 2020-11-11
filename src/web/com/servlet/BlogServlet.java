@@ -164,7 +164,6 @@ public class BlogServlet extends HttpServlet {
 			String blogFinish = jsonObject.get("blogFinish").getAsString();
 			System.out.println("BlogFinish ::" + blogFinish);
 			BlogFinish blogFinsh = gson.fromJson(blogFinish, BlogFinish.class);
-			
 			byte[] image = null;
 			// 檢查是否有上傳圖片
 			if (jsonObject.get("imageBase64") != null) {
@@ -179,7 +178,6 @@ public class BlogServlet extends HttpServlet {
 			}else if (action.equals("blogUpdate")) {
 				count = blogDao.update(blogFinsh, image);
 			}
-			
 			writeText(response, String.valueOf(count));
 
 		} else if (action.equals("getImage")) {
@@ -247,6 +245,18 @@ public class BlogServlet extends HttpServlet {
 				Blog_Comment blog_Comment = gson.fromJson(commentJson, Blog_Comment.class);
 				int count = blogDao.updateComment(blog_Comment);
 				writeText(response, String.valueOf(count));
+		}else if(action.equals("getImage1")) {
+			OutputStream os = response.getOutputStream();
+			String locID = jsonObject.get("id").getAsString();
+			int imageSize = jsonObject.get("imageSize").getAsInt();
+			byte[] image = blogDao.getSpotImage(locID);
+			if(image != null) {
+				image = ImageUtil.shrink(image, imageSize);
+				response.setContentLength(image.length);
+				response.setContentType("image/jpeg");
+				os.write(image);
+				
+			}
 		
 		}else {
 
