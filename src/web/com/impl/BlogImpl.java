@@ -270,20 +270,37 @@ public class BlogImpl implements BlogDao{
 	@Override
 	public int updateImage(Blog_Pic blog_Pic , byte[] image1,byte[] image2,byte[] image3,byte[] image4) {
 		int count = 0;
-		String sql = "update Blog_Spot_Pic Set LOC_ID= ?,BLOG_ID=?,PIC1= ?,PIC2=? ,PIC3 =? ,PIC4 = ? where Blog_Spot_Pic.LOC_ID=? and BLOG_ID =? ;";
+		String sql = "update Blog_Spot_Pic Set PIC1= ?,PIC2= ? ,PIC3 = ? ,PIC4 = ? where Blog_Spot_Pic.LOC_ID = ? and BLOG_ID = ? ;";
 		try(
 				Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql);
 				){
-			ps.setString(1, blog_Pic.getLocId());
-			ps.setString(2,blog_Pic.getBlogId());
-			ps.setBytes(3, image1);
-			ps.setBytes(4, image2);
-			ps.setBytes(5, image3);
-			ps.setBytes(6, image4);
-			ps.setString(7, blog_Pic.getLocId());
-			ps.setString(8,blog_Pic.getBlogId());
-		
+			
+			if(image1 == null || image1.length == 0) {
+				ps.setString(1, null);
+			}else {
+				ps.setBytes(1, image1);
+			}
+			if(image2 == null || image2.length == 0) {
+				ps.setString(2, null);
+			}else {
+				ps.setBytes(2, image2);
+			}
+			if(image3 == null || image3.length == 0) {
+				ps.setString(3, null);
+			}else {
+				ps.setBytes(3, image3);
+			}
+			if(image4 == null || image4.length == 0) {
+				ps.setString(4, null);
+			}else {
+				ps.setBytes(4, image4);
+			}
+	
+			ps.setString(5, blog_Pic.getLocId());
+			ps.setString(6,blog_Pic.getBlogId());
+			
+			
 			count = ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
