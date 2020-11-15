@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import web.com.bean.Blog_Comment;
 import web.com.bean.Member;
 import web.com.bean.TripGroupMember;
 import web.com.bean.Trip_Group;
@@ -266,6 +267,102 @@ public class Trip_Group_Dao_Impl implements Trip_Group_Dao {
 			e.printStackTrace();
 		}
 		return count;
+	}
+
+	@Override
+	public int insertB_Comment(Blog_Comment blog_Comment) {
+		int count = 0;
+		String sql = "";
+		sql = "insert into GroupComment (Group_ID, Member_ID,Com_Info) values (? , ? , ? ) ;"; 
+		try (Connection connection = datasource.getConnection();
+				PreparedStatement ps = connection.prepareStatement(sql); ){
+			ps.setString(1, blog_Comment.getName());
+			ps.setString(2, blog_Comment.getMember_ID());
+			ps.setString(3, blog_Comment.getContent());
+
+			count = ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return count;
+	}
+
+	@Override
+	public int deleteComment(int comID) {
+		int count = 0 ;
+		String sql = "DELETE FROM GroupComment WHERE Com_ID = ?";
+		try (
+				Connection connection = datasource.getConnection();
+				PreparedStatement ps = connection.prepareStatement(sql);){
+			ps.setInt(1, comID);
+			count = ps.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return count;
+	}
+
+	@Override
+	public int updateComment(Blog_Comment blog_Comment) {
+		int count = 0 ;
+		String sql = "UPDATE GroupComment set Com_ID = ?, Group_ID = ?,Member_ID = ?,Com_Info = ? ,Com_Date = ?" + 
+				"where Com_ID = ?;";
+		try(
+				Connection connection = datasource.getConnection();
+				PreparedStatement ps = connection.prepareStatement(sql);
+				
+				){
+			ps.setInt(1, blog_Comment.getComId());
+			ps.setString(2, blog_Comment.getBlogId());
+			ps.setString(3, blog_Comment.getMember_ID());
+			ps.setString(4,blog_Comment.getContent());
+			ps.setString(5, blog_Comment.getDate());
+			ps.setInt(6, blog_Comment.getComId());
+		
+			count = ps.executeUpdate();			
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return count;
+	}
+
+	@Override
+	public List<Blog_Comment> findCommentById(String blogId) {
+		String sql ="select GroupComment.Group_ID,Member.NICKNAME,GroupComment.Com_Info,GroupComment.Member_ID, GroupComment.SEQ,Com_Date,Com_ID from GroupComment\n" + 
+				"								left join Member on Member.Member_ID = GroupComment.Member_ID \n" + 
+				"								where GroupComment.Group_ID = ? \n" + 
+				"								order by   \n" + 
+				"								Com_Date Desc ";
+		
+		List<Blog_Comment> blogComments = new ArrayList<>();
+		
+		
+		try(
+				Connection connection  = datasource.getConnection();
+				PreparedStatement ps = connection.prepareStatement(sql);
+				) {
+			ps.setString(1,blogId);
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+				String blogID = rs.getString(1);
+				String name = rs.getString(2);
+				String comment = rs.getString(3);
+				String memberID = rs.getString(4);
+				String date = rs.getString(6);
+				int comID = rs.getInt(7);
+				Blog_Comment blog_Comment = new Blog_Comment(blogID,name,comment,memberID,date,comID);
+				blogComments.add(blog_Comment);
+		}
+			return blogComments;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		
+		
+		return blogComments;
 	}
 
 }
