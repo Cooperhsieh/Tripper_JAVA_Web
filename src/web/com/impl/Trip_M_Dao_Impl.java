@@ -143,7 +143,7 @@ public class Trip_M_Dao_Impl implements Trip_M_Dao {
 	public List<Trip_M> getAll() {
 		List<Trip_M> tripMs = new ArrayList<Trip_M>();
 
-		String sql = "SELECT * FROM Tripper.Trip_M where STATUS = 1; " ;
+		String sql = "SELECT * FROM Tripper.Trip_M where STATUS = 1 order by TRIP_ID desc ;" ;
 
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql);) {
@@ -211,7 +211,7 @@ public class Trip_M_Dao_Impl implements Trip_M_Dao {
 		List<Trip_M> tripMs = new ArrayList<Trip_M>();
 
 		String sql = "SELECT * FROM Tripper.Trip_M \n" + 
-				"where Trip_M.MEMBER_ID = ?  and  Trip_M.BLOGSTATUS = 0 order by M_DATETIME desc";
+				"where Trip_M.MEMBER_ID = ?  and  Trip_M.BLOGSTATUS = 0 order by TRIP_ID desc";
 
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql);) {

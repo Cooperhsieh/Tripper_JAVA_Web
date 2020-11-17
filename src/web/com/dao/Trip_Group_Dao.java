@@ -2,6 +2,7 @@ package web.com.dao;
 
 import java.util.List;
 
+import web.com.bean.Blog_Comment;
 import web.com.bean.Member;
 import web.com.bean.TripGroupMember;
 import web.com.bean.Trip_Group;
@@ -36,6 +37,14 @@ public interface Trip_Group_Dao {
 //取得揪團成員列表
 	List<Member> getMbrList(String tripId);
 //取得成員申請列表
-	List<Member> getApplicationList(String tripId);	
+	List<Member> getApplicationList(String tripId);
+//新增佈告欄留言
+	int insertB_Comment(Blog_Comment blog_Comment);
+//刪除佈告欄留言
+	int deleteComment(int comID);
+//更新佈告欄留言
+	int updateComment(Blog_Comment blog_Comment);
+//抓取佈告欄資訊
+	public List<Blog_Comment> findCommentById(String blogId);
 	
 }
