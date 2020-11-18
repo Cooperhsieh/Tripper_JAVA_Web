@@ -25,6 +25,5 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/firebaseServlet.json"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
