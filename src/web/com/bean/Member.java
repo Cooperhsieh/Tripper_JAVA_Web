@@ -24,8 +24,12 @@ public class Member implements Serializable {
 	private Timestamp createTime ;
 	private Timestamp modifyTime ;
 	private Timestamp lastTime ;
+	private int status ;
 	
 	
+	
+	
+
 	public Member(String account,String password) {
 		this.account = account;
 		this.password = password ;
@@ -56,6 +60,15 @@ public class Member implements Serializable {
 		this.account = account;
 		this.password = password;
 		this.nickName = nickName;
+	}
+	
+	public Member(int id,String account,String password,String nickName,int status) {
+		super();
+		this.id = id;
+		this.account = account;
+		this.password = password;
+		this.nickName = nickName;
+		this.status = status ;
 	}
 
 
@@ -132,6 +145,14 @@ public class Member implements Serializable {
 
 	public void setLoginType(int loginType) {
 		this.loginType = loginType;
+	}
+	
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
 	}
 	
 }

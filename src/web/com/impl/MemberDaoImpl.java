@@ -249,7 +249,7 @@ public class MemberDaoImpl implements MemberDao {
 	public int insertManager(Member member) {
 		int confirm = selectManagerAccount(member) ;
 		int count = 0;
-		String sql = "INSERT INTO MANAGER" + "(ACCOUNT_ID,PASSWORD,NICKNAME)" + "VALUES(?,?,?);";
+		String sql = "INSERT INTO MANAGER" + "(ACCOUNT_ID,PASSWORD,NICKNAME,STATUS)" + "VALUES(?,?,?,?);";
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql)) {
 			if(confirm ==0) {
@@ -257,6 +257,7 @@ public class MemberDaoImpl implements MemberDao {
 			ps.setString(1, member.getAccount());
 			ps.setString(2, member.getPassword());
 			ps.setString(3, member.getNickName());
+			ps.setInt(4, member.getStatus());
 
 			count = ps.executeUpdate();
 			}
@@ -267,23 +268,23 @@ public class MemberDaoImpl implements MemberDao {
 	}
 	@Override
 	public int selectManagerAandP(Member member) {
-		String sql = "SELECT * FROM MANAGER ;";
-		int count = 0 ;
+		String sql = "SELECT status FROM MANAGER where ACCOUNT_ID = ? and PASSWORD = ? ;";
+		int count = 2 ;
 		
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql);)
 		{
+			ps.setString(1, member.getAccount());
+			ps.setString(2, member.getPassword());
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) { //如果使用者名稱和密碼都正確
-				if(rs.getString("ACCOUNT_ID").equals(member.getAccount()) && rs.getString("PASSWORD").equals(member.getPassword())) {
-					count = 1 ;
+				 count = rs.getInt(1);
 				}
-			}
-			
+					
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return count;  //帳號密碼正確回傳1
+		return count;  //帳號密碼正確回傳status
 	}
 	@Override
 	public int selectManagerAccount(Member member) {
