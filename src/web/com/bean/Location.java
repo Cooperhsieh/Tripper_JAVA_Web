@@ -47,7 +47,7 @@ public class Location implements Serializable{
 		this.locId = locId;
 		this.name = name;
 		this.address = address;
-	}
+	} 
 
 
 
