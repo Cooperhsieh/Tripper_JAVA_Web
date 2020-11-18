@@ -40,44 +40,6 @@ public class BlogImpl implements BlogDao{
 		dataSource = ServiceLocator.getInstance().getDataSource();
 	}
 
-//	@Override
-//	public List<BlogD> getAll() {
-//		
-//		String sql = "SELECT Blog_M.BLOG_TITLE,Blog_M.BLOG_DESC,Blog_D.BLOG_NOTE,Location.NAME ,Trip_M.D_COUNT,Blog_M.LOC_ID, Blog_M.BLOG_ID FROM Blog_M \n" + 
-//				"LEFT JOIN Blog_D ON Blog_D.LOC_ID = Blog_M.LOC_ID\n" + 
-//				"LEFT JOIN Location ON Blog_M.LOC_ID = Location.LOC_ID\n" + 
-//				"LEFT JOIN Trip_M ON Blog_M.TRIP_ID = Trip_M.TRIP_ID";
-//		
-//		List<BlogD> bList = new ArrayList<>();
-//		try(
-//				
-//				Connection connection = dataSource.getConnection();
-//				PreparedStatement ps = connection.prepareStatement(sql);
-//	
-//				){
-//			ResultSet rs = ps.executeQuery();
-//			while (rs.next()) {
-//				String blogTittle = rs.getString(1);
-//				String blogDesc = rs.getString(2);
-//				String blogNote = rs.getString(3);
-//				String locName = rs.getString(4);
-//			    int dayCount = rs.getInt(5);
-//			    int locId= rs.getInt(6);
-//			    int blogID= rs.getInt(7);
-//			    
-//			    BlogM blog = new BlogM(blogTittle, blogDesc);
-//			    bList.add(blog);
-//				
-//			}
-//			return bList;
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		}
-//		
-//		
-//		 
-//		return bList;
-//	}
 
 	@Override
 	public byte[] getImage(String id) {
@@ -365,9 +327,10 @@ public class BlogImpl implements BlogDao{
 	@Override
 	public List<BlogFinish> getMyBlog(String memberId) {
 		List<BlogFinish> blogMList = new ArrayList<BlogFinish>();
-		String sql = "SELECT BLOG_ID,BLOG_TITLE,BLOG_DESC,Trip_M.S_DATE,Trip_M.S_TIME FROM TRIPPER.Blog_M\n" + 
-				"Left join Trip_M on Trip_M.TRIP_ID = Blog_M.BLOG_ID\n" + 
-				"Where Blog_M.USER_ID = ?" ;
+		String sql = "SELECT BLOG_ID,BLOG_TITLE,BLOG_DESC,Trip_M.S_DATE,Trip_M.S_TIME,Member.NICKNAME FROM TRIPPER.Blog_M\n" + 
+				"				Left join Trip_M on Trip_M.TRIP_ID = Blog_M.BLOG_ID\n" + 
+				"                Left join Member on Member.MEMBER_ID = Blog_M.USER_ID\n" + 
+				"				Where Blog_M.USER_ID = ?;";
 
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql);) {
@@ -380,8 +343,9 @@ public class BlogImpl implements BlogDao{
 				String blogId = rs.getString(2);
 				String sDate = rs.getString(1);
 				String sTime = rs.getString(5);
+				String name = rs.getString(6);
 				
-				BlogFinish blogFinish = new BlogFinish(sDate, blogId,blogTitle , memberId,blogInfo,sTime);
+				BlogFinish blogFinish = new BlogFinish(sDate, blogId,blogTitle,memberId,blogInfo,name);
 				blogMList.add(blogFinish);
 			}
 			return blogMList;

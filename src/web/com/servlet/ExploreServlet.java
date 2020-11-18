@@ -16,6 +16,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import web.com.bean.Explore;
+import web.com.bean.Like;
 import web.com.bean.Location;
 import web.com.bean.Member;
 import web.com.dao.ExploreDao;
@@ -50,8 +51,13 @@ public class ExploreServlet extends HttpServlet {
 		String action = jsonObject.get("action").getAsString();
 		
 		if (action.equals("getAll")) {
-			List<Explore> explores = exploreDao.getAll();
+			String loginUser = jsonObject.get("loginUserId").getAsString();
+			List<Explore> explores = exploreDao.getAll(loginUser);
 			writeText(response, gson.toJson(explores));
+		}else if(action.equals("getLikes")) {
+			String blogId = jsonObject.get("blogId").getAsString();
+			List<Like> likes = exploreDao.getAllLikes(blogId);
+			writeText(response,gson.toJson(likes));
 		}else if(action.equals("getHotSpot")) {
 				List<Location> locations = exploreDao.getHotLocationAll();
 				writeText(response, gson.toJson(locations));
@@ -83,15 +89,16 @@ public class ExploreServlet extends HttpServlet {
 		 System.out.println("output: " + outText);
 	}
 
-	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		if (exploreDao == null) {
-			exploreDao = new ExploreImpl();
-		}
-		List<Explore> explores = exploreDao.getAll();
-		writeText(response, new Gson().toJson(explores));
-	}
+//	@Override
+//	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+//		
+//		if (exploreDao == null) {
+//			exploreDao = new ExploreImpl();
+//		}
+//		String loginUser
+//		List<Explore> explores = exploreDao.getAll();
+//		writeText(response, new Gson().toJson(explores));
+//	}
 	
 
 }
