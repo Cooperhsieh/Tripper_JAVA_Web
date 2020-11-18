@@ -9,9 +9,11 @@ import web.com.bean.Goal;
  * 
  * @author Weixiang
  * @version 建立時間:Oct 27, 2020
+ * @version 修改時間:Nov 12, 2020
  * 
  */
 
 public interface GoalDao {
 	List<Goal> getGoalByMember(int memberId);
+	List<Goal> getGoalTable();
 }

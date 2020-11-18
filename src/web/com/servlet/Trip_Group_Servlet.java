@@ -14,6 +14,9 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import web.com.bean.Blog_Comment;
+import web.com.bean.Blog_Note;
+import web.com.bean.Member;
 import web.com.bean.TripGroupMember;
 import web.com.bean.Trip_Group;
 import web.com.dao.Trip_Group_Dao;
@@ -58,14 +61,50 @@ public class Trip_Group_Servlet extends HttpServlet {
 		if (action.equals("update")) {
 			List<Trip_Group> tripGroups = tripGroupDao.getAll();
 			writeText(response, gson.toJson(tripGroups));
-
+//若找得到自己ID 便把想參加按鈕gone掉
+		} else if(action.equals("getMyGroup")) {
+			String tripId = jsonObject.get("trip_Id").getAsString();
+			String memberId = jsonObject.get("memberId").getAsString();
+			int checkCount = tripGroupDao.selectMyGroup(tripId, memberId);
+			writeText(response, String.valueOf(checkCount));		
+		}else if(action.equals("getGroupCount")) {
+			String trip_Id = jsonObject.get("trip_Id").getAsString();
+			System.out.println("trip_Id ::" + trip_Id);
+			int mcount = tripGroupDao.selectMCountByTripID(trip_Id);
+			writeText(response, String.valueOf(mcount));
+		}else if(action.equals("getGroupMbrList")) {
+			String tripId = jsonObject.get("tripId").getAsString();
+			List<Member> mbrList = tripGroupDao.getMbrList(tripId);
+			writeText(response, gson.toJson(mbrList));
+		}else if(action.equals("getApplicationList")) {
+			String tripId = jsonObject.get("tripId").getAsString();
+			List<Member> mbrList = tripGroupDao.getApplicationList(tripId);
+			writeText(response, gson.toJson(mbrList));
+		}
 		
-
-		
-
-		
-
-		} else {
+		else if(action.equals("getCommentNote")) {
+			String id = jsonObject.get("id").getAsString();
+			List<Blog_Comment> comments = tripGroupDao.findCommentById(id);
+			writeText(response, gson.toJson(comments));
+		}else if(action.equals("deleteComment")) {
+			int comId  = jsonObject.get("comId").getAsInt();
+			int count1 = tripGroupDao.deleteComment(comId);
+			writeText(response, String.valueOf(count1));
+		}else if(action.equals("updateComment")) {
+				String commentJson = jsonObject.get("comment").getAsString();
+				System.out.println("commentJson" + commentJson);
+				Blog_Comment blog_Comment = gson.fromJson(commentJson, Blog_Comment.class);
+				int count2 = tripGroupDao.updateComment(blog_Comment);
+				writeText(response, String.valueOf(count2));
+		}else if(action.equals("insertBlogComment")) {
+		     String b_commentJson= jsonObject.get("blog_comment").getAsString();
+		     System.out.println("Blog_Comment ::"+ b_commentJson);
+		     Blog_Comment blog_Comment = gson.fromJson(b_commentJson, Blog_Comment.class);
+		     int count3 = 0 ;
+		     count3 = tripGroupDao.insertB_Comment(blog_Comment);
+		     writeText(response, String.valueOf(count3));
+	       }		
+		else {
 			writeText(response, "");
 		}
 

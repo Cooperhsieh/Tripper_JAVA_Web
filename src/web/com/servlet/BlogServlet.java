@@ -96,7 +96,10 @@ public class BlogServlet extends HttpServlet {
 			Blog_Pic blog_Pic = new Blog_Pic();
 			Encoder encoder = Base64.getEncoder();
 			spotImages = blogDao.getSpotImages(loc_Id, blog_Id);
+			
 			if (spotImages.size() != 0) {
+				
+				blog_Pic.setLocId(loc_Id);
 				if (spotImages.get(0) != null) {
 					String img1 = encoder.encodeToString(spotImages.get(0));
 					blog_Pic.setPic1(img1);
@@ -114,6 +117,7 @@ public class BlogServlet extends HttpServlet {
 					blog_Pic.setPic4(img4);
 				}
 			}
+			
 			System.out.println("spotImages::" + blog_Pic);
 			writeText(response, gson.toJson(blog_Pic));
 		}
@@ -140,7 +144,7 @@ public class BlogServlet extends HttpServlet {
 			}
 			count = blogDao.insertImage(image1, image2, image3, image4, blog_Pic.getBlogId(), blog_Pic.getLocId());
 			writeText(response, String.valueOf(count));
-		}else if (action.equals("UpdateImage")) {
+		}else if (action.equals("updateImage")) {
 			String blogPic_json = jsonObject.get("blogPic").getAsString();
 			System.out.println("BlogPic ::" + blogPic_json);
 			Blog_Pic blog_Pic = gson.fromJson(blogPic_json, Blog_Pic.class);
@@ -148,23 +152,31 @@ public class BlogServlet extends HttpServlet {
 			byte[] image1 = null, image2 = null, image3 = null, image4 = null;
 			if (blog_Pic.getPic1() != null && !blog_Pic.getPic1().isEmpty()) {
 				image1 = Base64.getMimeDecoder().decode(blog_Pic.getPic1());
+			}else {
+				image1 = null ;
 			}
 			if (blog_Pic.getPic2() != null && !blog_Pic.getPic2().isEmpty()) {
 				image2 = Base64.getMimeDecoder().decode(blog_Pic.getPic2());
+			}else {
+				image2 = null ;
 			}
 			if (blog_Pic.getPic3() != null && !blog_Pic.getPic3().isEmpty()) {
 				image3 = Base64.getMimeDecoder().decode(blog_Pic.getPic3());
+			}else {
+				image3 = null ;
 			}
 			if (blog_Pic.getPic4() != null && !blog_Pic.getPic4().isEmpty()) {
 				image4 = Base64.getMimeDecoder().decode(blog_Pic.getPic4());
+			}else {
+				image4 = null ;
 			}
 			count = blogDao.updateImage(blog_Pic,image1,image2,image3,image4);
 			writeText(response, String.valueOf(count));
-		} else if (action.equals("updateBlog")|| action.equals("blogUpdate")) {
+		} 
+			else if (action.equals("updateBlog")|| action.equals("blogUpdate")) {
 			String blogFinish = jsonObject.get("blogFinish").getAsString();
 			System.out.println("BlogFinish ::" + blogFinish);
 			BlogFinish blogFinsh = gson.fromJson(blogFinish, BlogFinish.class);
-			
 			byte[] image = null;
 			// 檢查是否有上傳圖片
 			if (jsonObject.get("imageBase64") != null) {
@@ -179,10 +191,11 @@ public class BlogServlet extends HttpServlet {
 			}else if (action.equals("blogUpdate")) {
 				count = blogDao.update(blogFinsh, image);
 			}
-			
 			writeText(response, String.valueOf(count));
 
-		} else if (action.equals("getImage")) {
+		}
+			
+			else if (action.equals("getImage")) {
 
 			OutputStream os = response.getOutputStream();
 			String id = jsonObject.get("id").getAsString();
@@ -237,6 +250,29 @@ public class BlogServlet extends HttpServlet {
 			int count = 0;
 			count=blogDao.updateB_Note(blog_Note);
 			writeText(response, String.valueOf(count));
+		}else if(action.equals("deleteComment")) {
+			int comId  = jsonObject.get("comId").getAsInt();
+			int count = blogDao.deleteComment(comId);
+			writeText(response, String.valueOf(count));
+		}else if(action.equals("updateComment")) {
+				String commentJson = jsonObject.get("comment").getAsString();
+				System.out.println("commentJson" + commentJson);
+				Blog_Comment blog_Comment = gson.fromJson(commentJson, Blog_Comment.class);
+				int count = blogDao.updateComment(blog_Comment);
+				writeText(response, String.valueOf(count));
+		}else if(action.equals("getImage1")) {
+			OutputStream os = response.getOutputStream();
+			String locID = jsonObject.get("id").getAsString();
+			int imageSize = jsonObject.get("imageSize").getAsInt();
+			byte[] image = blogDao.getSpotImage(locID);
+			if(image != null) {
+				image = ImageUtil.shrink(image, imageSize);
+				response.setContentLength(image.length);
+				response.setContentType("image/jpeg");
+				os.write(image);
+				
+			}
+		
 		}else {
 
 				writeText(response, "");

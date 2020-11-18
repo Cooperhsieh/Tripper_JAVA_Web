@@ -17,6 +17,7 @@ import web.com.util.ServiceLocator;
  * 
  * @author Weixiang
  * @version 建立時間:Oct 27, 2020
+ * @version 修改時間:Nov 12, 2020
  * 
  */
 
@@ -60,6 +61,29 @@ public class GoalDaoImpl implements GoalDao {
 			e.printStackTrace();
 		}
 		return goals;
+	}
+
+	@Override
+	public List<Goal> getGoalTable() {
+		String sql = " select * from Goal; ";
+		List<Goal> goalList = new ArrayList<Goal>();
+		Goal goal = null;
+		try (Connection connection = dataSource.getConnection();
+				PreparedStatement ps = connection.prepareStatement(sql);) {
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				int goalId = rs.getInt("GOAL_ID");
+				String goalName = rs.getString("GOAL_NAME");
+				int goalCond1 = rs.getInt("GOAL_COND1");
+				int goalCond2 = rs.getInt("GOAL_COND2");
+				int goalCond3 = rs.getInt("GOAL_COND3");
+				goal = new Goal(goalId, goalName, goalCond1, goalCond2, goalCond3);
+				goalList.add(goal);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return goalList;
 	}
 	
 }

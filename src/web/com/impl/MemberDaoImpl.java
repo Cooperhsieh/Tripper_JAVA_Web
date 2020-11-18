@@ -244,5 +244,65 @@ public class MemberDaoImpl implements MemberDao {
 		}
 		return count;
 	}
-	
+//新增管理者帳號	
+	@Override
+	public int insertManager(Member member) {
+		int confirm = selectManagerAccount(member) ;
+		int count = 0;
+		String sql = "INSERT INTO MANAGER" + "(ACCOUNT_ID,PASSWORD,NICKNAME,STATUS)" + "VALUES(?,?,?,?);";
+		try (Connection connection = dataSource.getConnection();
+				PreparedStatement ps = connection.prepareStatement(sql)) {
+			if(confirm ==0) {
+			
+			ps.setString(1, member.getAccount());
+			ps.setString(2, member.getPassword());
+			ps.setString(3, member.getNickName());
+			ps.setInt(4, member.getStatus());
+
+			count = ps.executeUpdate();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return count; //成功註冊回傳1
+	}
+	@Override
+	public int selectManagerAandP(Member member) {
+		String sql = "SELECT status FROM MANAGER where ACCOUNT_ID = ? and PASSWORD = ? ;";
+		int count = 2 ;
+		
+		try (Connection connection = dataSource.getConnection();
+				PreparedStatement ps = connection.prepareStatement(sql);)
+		{
+			ps.setString(1, member.getAccount());
+			ps.setString(2, member.getPassword());
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) { //如果使用者名稱和密碼都正確
+				 count = rs.getInt(1);
+				}
+					
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return count;  //帳號密碼正確回傳status
+	}
+	@Override
+	public int selectManagerAccount(Member member) {
+		String sql = "SELECT * FROM MANAGER ;";
+		int count = 0;
+		try (Connection connection = dataSource.getConnection();
+				PreparedStatement ps = connection.prepareStatement(sql);) {
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				if(rs.getString("ACCOUNT_ID").equals(member.getAccount())) {
+					count = 1 ;
+				}
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return count;  //有重複使用者回傳1
+	}
+
 }

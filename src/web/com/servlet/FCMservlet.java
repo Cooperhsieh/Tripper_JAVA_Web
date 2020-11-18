@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.List;
 
@@ -27,6 +28,7 @@ import web.com.bean.AppMessage;
 import web.com.bean.Notify;
 import web.com.dao.FCMDao;
 import web.com.impl.FCMDaolmpl;
+import web.com.util.ImageUtil;
 import web.com.util.SettingUtil;
 
 @WebServlet("/FCMServlet")
@@ -107,7 +109,7 @@ public class FCMservlet extends HttpServlet {
 			int count = fcmDao.insertChatMsg(message);
 			String senderName = fcmDao.getSenderName(message);
 			message.setMsgTitle(senderName);
-			sendSingleFcm(message, token);
+			sendChatFcm(message, token);
 			writeText(response, count + "");
 		}
 	//取得聊天訊息		
@@ -116,6 +118,18 @@ public class FCMservlet extends HttpServlet {
 			int recieverId = jsonObject.get("recirverId").getAsInt();
 			List<Notify> chats = fcmDao.getChat(memberId, recieverId);
 			writeText(response, gson.toJson(chats));
+			}else if(action.equals("getImage")) {
+				OutputStream os = response.getOutputStream();
+				String locID = jsonObject.get("id").getAsString();
+				int imageSize = jsonObject.get("imageSize").getAsInt();
+				byte[] image = fcmDao.getSpotImage(locID);
+				if(image != null) {
+					image = ImageUtil.shrink(image, imageSize);
+					response.setContentLength(image.length);
+					response.setContentType("image/jpeg");
+					os.write(image);
+					
+				}
 		}
 	}
 
@@ -137,6 +151,7 @@ public class FCMservlet extends HttpServlet {
 		String body = msg.getMsgBody();
 		String data = msg.getMsgType();
 		
+		
 		// 主要設定訊息標題跟內容，client app一定要在背景時才會自動顯示
 		Notification notification = Notification.builder()
 							.setTitle(title)
@@ -146,6 +161,34 @@ public class FCMservlet extends HttpServlet {
 		Message message = Message.builder()
 				.setNotification(notification)
 				.putData("data", data)
+				.setToken(token)
+				.build();
+		String msgCode = "";
+		try {
+			msgCode = FirebaseMessaging.getInstance().send(message);
+		} catch (FirebaseMessagingException e) {
+			e.printStackTrace();
+		}
+		System.out.println("### msgCode:: " + msgCode);
+	}
+	
+	private void sendChatFcm(AppMessage msg, String token) {
+		String title = msg.getMsgTitle();
+		String body = msg.getMsgBody();
+		String sendId = msg.getSendId()+"";
+	
+				
+		// 主要設定訊息標題跟內容，client app一定要在背景時才會自動顯示
+		Notification notification = Notification.builder()
+							.setTitle(title)
+							.setBody(body)
+							.build();
+		// 發送notification message
+		Message message = Message.builder()
+				.setNotification(notification)
+				.putData("data", "CHAT_TYPE")
+				.putData("sendId", sendId)
+				.putData("sendName", title)
 				.setToken(token)
 				.build();
 		String msgCode = "";

@@ -16,9 +16,12 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import web.com.bean.Explore;
+import web.com.bean.Like;
+import web.com.bean.Location;
 import web.com.bean.Member;
 import web.com.dao.ExploreDao;
 import web.com.impl.ExploreImpl;
+import web.com.util.ImageUtil;
 
 
 
@@ -48,8 +51,16 @@ public class ExploreServlet extends HttpServlet {
 		String action = jsonObject.get("action").getAsString();
 		
 		if (action.equals("getAll")) {
-			List<Explore> explores = exploreDao.getAll();
+			String loginUser = jsonObject.get("loginUserId").getAsString();
+			List<Explore> explores = exploreDao.getAll(loginUser);
 			writeText(response, gson.toJson(explores));
+		}else if(action.equals("getLikes")) {
+			String blogId = jsonObject.get("blogId").getAsString();
+			List<Like> likes = exploreDao.getAllLikes(blogId);
+			writeText(response,gson.toJson(likes));
+		}else if(action.equals("getHotSpot")) {
+				List<Location> locations = exploreDao.getHotLocationAll();
+				writeText(response, gson.toJson(locations));
 			}else if(action.equals("getImage")) {
 				OutputStream os = response.getOutputStream();
 				int id = jsonObject.get("id").getAsInt();
@@ -57,18 +68,15 @@ public class ExploreServlet extends HttpServlet {
 				int imageSize = jsonObject.get("imageSize").getAsInt();
 				byte[] image = exploreDao.getImage(id);
 				if(image != null) {
-					image = web.com.util.ImageUtil.shrink(image, imageSize);
+					image = ImageUtil.shrink(image, imageSize);
 					response.setContentLength(image.length);
 					response.setContentType("image/jpeg");
 					os.write(image);
 					
 				}else {
 					writeText(response, "");
-				}}
-				else if(action.equals("selectAll")) {
-			
-					List<Member> member =exploreDao.selectAll();
-					writeText(response, gson.toJson(member));
+				}
+				
 			
 		}
 		
@@ -81,15 +89,16 @@ public class ExploreServlet extends HttpServlet {
 		 System.out.println("output: " + outText);
 	}
 
-	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		if (exploreDao == null) {
-			exploreDao = new ExploreImpl();
-		}
-		List<Explore> explores = exploreDao.getAll();
-		writeText(response, new Gson().toJson(explores));
-	}
+//	@Override
+//	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+//		
+//		if (exploreDao == null) {
+//			exploreDao = new ExploreImpl();
+//		}
+//		String loginUser
+//		List<Explore> explores = exploreDao.getAll();
+//		writeText(response, new Gson().toJson(explores));
+//	}
 	
 
 }

@@ -30,11 +30,12 @@ public class LocationImpl implements LocationDao{
 	@Override
 	public int insert(Location loc, byte[] image) {		
 		int count = 0;
-		String sql = "insert into LOCATION ( " 
-				+ " LOC_ID, NAME, ADDRESS, LOC_PIC, LOC_TYPE, " // 5
-				+ " CITY, INFO, LONGITUDE, LATITUDE, CREATE_ID, " // 10
-				+ " M_USER_ID "  
-				+ " ) values ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
+
+		String sql = "insert into LOCATION ( " +
+				"LOC_ID, NAME, ADDRESS, LOC_PIC, " // 4
+				+ "CITY, INFO, LONGITUDE, LATITUDE, CREATE_ID, " // 10
+				+ "M_USER_ID" + 
+				") values ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
 		
 		try(Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql);) {
@@ -42,13 +43,13 @@ public class LocationImpl implements LocationDao{
 			ps.setString(2, loc.getName());
 			ps.setString(3, loc.getAddress());
 			ps.setBytes(4, image);
-			ps.setString(5, loc.getLocType());
-			ps.setString(6, loc.getCity());
-			ps.setString(7, loc.getInfo());
-			ps.setDouble(8, loc.getLongitude());
-			ps.setDouble(9, loc.getLatitude());
-			ps.setInt(10, loc.getCreateId());
-			ps.setInt(11, loc.getUseId());
+//			ps.setString(5, loc.getLocType());
+			ps.setString(5, loc.getCity());
+			ps.setString(6, loc.getInfo());
+			ps.setDouble(7, loc.getLongitude());
+			ps.setDouble(8, loc.getLatitude());
+			ps.setInt(9, loc.getCreateId());
+			ps.setInt(10, loc.getUseId());
 			count = ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();

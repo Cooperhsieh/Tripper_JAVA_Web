@@ -2,30 +2,41 @@ package web.com.bean;
 
 import java.io.Serializable;
 
-public class BlogFinish implements Serializable {
-	private String trip_Id ;
+
+
+
+public class BlogFinish implements Serializable  {
+    private String trip_Id ;
     private String blog_title ;
     private String blog_Info ;
     private String memberId ;
-    private int status ;
     private String startDate;
     private String startTime;
+    private String nickName;
+    private int status ;
+
+    public BlogFinish(String blog_title, String blog_desc) {
+        this.blog_title = blog_title;
+        this.blog_Info = blog_desc;
+    }
 
 
-    public BlogFinish(String trip_Id, String blog_title, String blog_Info, String memberId) {
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public BlogFinish(String trip_Id, String blog_title, String blog_Info, String memberId, String nickName ) {
         this.trip_Id = trip_Id;
         this.blog_title = blog_title;
         this.blog_Info = blog_Info;
         this.memberId = memberId;
+        this.nickName = nickName;
     }
-    
-    public BlogFinish(String trip_Id, String blog_title, String blog_Info, String memberId , int status) {
-        this.trip_Id = trip_Id;
-        this.blog_title = blog_title;
-        this.blog_Info = blog_Info;
-        this.memberId = memberId;
-        this.status = status ;
-    }
+
 
     public BlogFinish(String trip_Id, String blog_title, String blog_Info, String memberId, String startDate, String startTime) {
         this.trip_Id = trip_Id;
@@ -35,9 +46,15 @@ public class BlogFinish implements Serializable {
         this.startDate = startDate;
         this.startTime = startTime;
     }
-    public BlogFinish(String blog_title, String blog_desc) {
-    	this.blog_title = blog_title;
-    	this.blog_Info = blog_desc;
+
+    public BlogFinish(String trip_Id, String blog_title, String blog_Info, String memberId, int status ) {
+        this.trip_Id = trip_Id;
+        this.blog_title = blog_title;
+        this.blog_Info = blog_Info;
+        this.memberId = memberId;
+        this.status = status;
+
+
     }
 
     public String getStartTime() {
@@ -55,6 +72,7 @@ public class BlogFinish implements Serializable {
     public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
+
 
     public String getTrip_Id() {
         return trip_Id;
@@ -88,14 +106,11 @@ public class BlogFinish implements Serializable {
         this.memberId = memberId;
     }
 
+    public int getStatus() {
+        return status;
+    }
 
-	public int getStatus() {
-		return status;
-	}
-
-
-	public void setStatus(int status) {
-		this.status = status;
-	}
-    
+    public void setStatus(int status) {
+        this.status = status;
+    }
 }

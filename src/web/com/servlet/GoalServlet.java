@@ -57,6 +57,9 @@ public class GoalServlet extends HttpServlet {
 			int memberId = jsonObject.get("memberId").getAsInt();
 			List<Goal> goals = goalDao.getGoalByMember(memberId);
 			writeText(response, gson.toJson(goals));
+		} else if (action.equals("getGoalTable")) {
+			List<Goal> goalList = goalDao.getGoalTable();
+			writeText(response, gson.toJson(goalList));
 		}
 	}   
     
@@ -68,7 +71,6 @@ public class GoalServlet extends HttpServlet {
 		out.close();
 	}
 	
-	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -79,5 +81,7 @@ public class GoalServlet extends HttpServlet {
 		int memberId = jsonObject.get("memberId").getAsInt();
 		List<Goal> goals = goalDao.getGoalByMember(memberId);
 		writeText(response, new Gson().toJson(goals));
+		List<Goal> goalList = goalDao.getGoalTable();
+		writeText(response, new Gson().toJson(goalList));
 	}
 }

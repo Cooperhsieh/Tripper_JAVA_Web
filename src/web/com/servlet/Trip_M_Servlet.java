@@ -59,8 +59,15 @@ public class Trip_M_Servlet extends HttpServlet {
 		if (action.equals("getAll")) {
 			List<Trip_M> tripMs = tripMDao.getAll();
 			writeText(response, gson.toJson(tripMs));
+		}
+// 顯示已參加的揪團		
+		else if(action.equals("getMyGroup")) {
+			String memberId = jsonObject.get("memberId").getAsString();
+			List<Trip_M> trip_Ms = tripMDao.getMyGroup(memberId);
+			writeText(response, gson.toJson(trip_Ms));
+		}
 //抓取個人的行程資訊
-		} else if (action.equals("getMyTrip")) {
+		 else if (action.equals("getMyTrip")) {
 			String memberId = jsonObject.get("memberId").getAsString();
 			List<Trip_M> tripMs_mime = tripMDao.getMyTrip(memberId);
 			writeText(response, gson.toJson(tripMs_mime));
@@ -80,8 +87,9 @@ public class Trip_M_Servlet extends HttpServlet {
 
 		} else if (action.equals("updateTrip")) {
 			String tripId1 = jsonObject.get("tripId").getAsString();
+			int blogStatus = jsonObject.get("blogStatus").getAsInt();
 			System.out.println("tripID"+tripId1);
-			int count = tripMDao.changeBlogStatus(tripId1);
+			int count = tripMDao.changeBlogStatus(blogStatus,tripId1);
 			writeText(response, String.valueOf(count));
 		}	
 			else if (action.equals("tripMDelete")) {

@@ -30,4 +30,11 @@ public interface MemberDao {
 		int selectAandP(Member member);
 	//更改密碼
 		int updatePassword(String account,String newPassword);
+	//新增管理者帳號
+		int insertManager(Member member ) ;
+	//檢查管理者資訊
+		//檢查密碼
+		int selectManagerAandP(Member member);
+	//檢查管理者帳號是否存在	
+		int selectManagerAccount(Member member);	
 }
