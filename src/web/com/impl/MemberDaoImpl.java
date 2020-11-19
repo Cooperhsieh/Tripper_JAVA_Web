@@ -257,7 +257,7 @@ public class MemberDaoImpl implements MemberDao {
 			ps.setString(1, member.getAccount());
 			ps.setString(2, member.getPassword());
 			ps.setString(3, member.getNickName());
-			ps.setInt(4, member.getStatus());
+			//ps.setInt(4, member.getStatus());
 
 			count = ps.executeUpdate();
 			}
