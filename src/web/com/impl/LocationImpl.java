@@ -30,6 +30,7 @@ public class LocationImpl implements LocationDao{
 	@Override
 	public int insert(Location loc, byte[] image) {		
 		int count = 0;
+
 		String sql = "insert into LOCATION ( " +
 				"LOC_ID, NAME, ADDRESS, LOC_PIC, " // 4
 				+ "CITY, INFO, LONGITUDE, LATITUDE, CREATE_ID, " // 10

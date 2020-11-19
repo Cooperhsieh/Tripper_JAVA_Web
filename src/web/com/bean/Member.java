@@ -24,7 +24,7 @@ public class Member implements Serializable {
 	private Timestamp createTime ;
 	private Timestamp modifyTime ;
 	private Timestamp lastTime ;
-	private int status ;
+	//private int status ;
 	
 	
 	
@@ -68,7 +68,7 @@ public class Member implements Serializable {
 		this.account = account;
 		this.password = password;
 		this.nickName = nickName;
-		this.status = status ;
+		//this.status = status ;
 	}
 
 
@@ -147,12 +147,12 @@ public class Member implements Serializable {
 		this.loginType = loginType;
 	}
 	
-	public int getStatus() {
-		return status;
-	}
-
-	public void setStatus(int status) {
-		this.status = status;
-	}
+//	public int getStatus() {
+//		return status;
+//	}
+//
+//	public void setStatus(int status) {
+//		this.status = status;
+//	}
 	
 }
