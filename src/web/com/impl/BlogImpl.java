@@ -362,7 +362,7 @@ public class BlogImpl implements BlogDao{
 				String sTime = rs.getString(5);
 				String name = rs.getString(6);
 				
-				BlogFinish blogFinish = new BlogFinish(sDate, blogId,blogTitle,memberId,blogInfo,name);
+				BlogFinish blogFinish = new BlogFinish(sDate, blogId,blogTitle,memberId,blogInfo,sTime,name);
 				blogMList.add(blogFinish);
 			}
 			return blogMList;
