@@ -60,11 +60,34 @@ public class ExploreImpl implements ExploreDao{
 	public List<Explore> getAll(String logingUser) {
        Explore explore = null;
 
-		String sql = "SELECT distinct B.BLOG_TITLE, B.USER_ID,B.BLOG_ID, Member.NICKNAME,B.BLOG_DESC,B.C_DATETIME\n" + 
-				"				 ,(select count(*) from ArticleGood AC where AC.articleId = B.BLOG_ID) as articleGoodCount\n" + 
-				"                 ,(select case count(*) when 0 then 0 else 1 end from ArticleGood AG where AG.articleId = B.BLOG_ID and AG.userId = ? ) as articleGoodStatus\n" + 
-				"				FROM  Blog_M B\n" + 
-				"								LEFT JOIN Member ON  B.USER_ID = Member.MEMBER_ID";
+		String sql = "SELECT \n" + 
+				"    B.BLOG_TITLE,\n" + 
+				"    B.USER_ID,\n" + 
+				"    B.BLOG_ID,\n" + 
+				"    Member.NICKNAME,\n" + 
+				"    B.BLOG_DESC,\n" + 
+				"    B.C_DATETIME,\n" + 
+				"    (SELECT \n" + 
+				"            COUNT(*)\n" + 
+				"        FROM\n" + 
+				"            ArticleGood AC\n" + 
+				"        WHERE\n" + 
+				"            AC.articleId = B.BLOG_ID) AS articleGoodCount,\n" + 
+				"    (SELECT \n" + 
+				"            CASE COUNT(*)\n" + 
+				"                    WHEN 0 THEN 0\n" + 
+				"                    ELSE 1\n" + 
+				"                END\n" + 
+				"        FROM\n" + 
+				"            ArticleGood AG\n" + 
+				"        WHERE\n" + 
+				"            AG.articleId = B.BLOG_ID\n" + 
+				"                AND AG.userId = ? ) AS articleGoodStatus\n" + 
+				"FROM\n" + 
+				"    Blog_M B\n" + 
+				"        LEFT JOIN\n" + 
+				"    Member ON B.USER_ID = Member.MEMBER_ID\n" + 
+				"ORDER BY C_DATETIME DESC";
 
 		List<Explore> exploreslList = new ArrayList<>();
 		try(    
