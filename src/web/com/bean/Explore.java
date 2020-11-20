@@ -21,7 +21,17 @@ public class Explore implements Serializable {
         this.articleGoodCount = articleGoodCount;
     }
 
-    public boolean isArticleGoodStatus() {
+    public Explore(String blogId, String userId, String nickName, String tittleName, String blogDesc, String dateTime) {
+		super();
+		this.blogId = blogId;
+		this.userId = userId;
+		this.nickName = nickName;
+		this.tittleName = tittleName;
+		this.blogDesc = blogDesc;
+		this.dateTime = dateTime;
+	}
+
+	public boolean isArticleGoodStatus() {
         return articleGoodStatus;
     }
 

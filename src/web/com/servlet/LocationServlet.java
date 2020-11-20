@@ -129,8 +129,21 @@ public class LocationServlet extends HttpServlet {
 		if( locDao == null) {
 			locDao =  new LocationImpl();
 		}
-		List<Location> locations = locDao.getAll();
-		writeText(response, new Gson().toJson(locations));
+		request.setCharacterEncoding("UTF-8");
+		System.out.println("###id:: " + request.getParameter("id"));
+		
+		String locId = request.getParameter("id").toString();
+		int imageSize = 414;
+		//System.out.println("imageSize::" + imageSize);
+		byte[] image = locDao.getImageById(locId);
+		OutputStream os = response.getOutputStream();
+		if(image != null) {
+			image = ImageUtil.shrink(image, imageSize);
+			response.setContentType(SettingUtil.IMAGE_JPEG);
+			response.setContentLength(image.length);
+			os.write(image);
+		}
+		//writeText(response, new Gson().toJson(locations));
 	}
 	
 	

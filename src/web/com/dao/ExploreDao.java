@@ -18,7 +18,9 @@ public interface ExploreDao {
 //	Explore findById(int id);
 
 	List<Explore> getAll(String logingUser);
-
+	
+	List<Explore> getAllIos();
+	
 	byte[] getImage(int id);
 
 	List<Member> selectAll();

@@ -64,8 +64,11 @@ public class FriendsServlet extends HttpServlet {
 		} else if (action.equals("search")) {
 			int memberId = jsonObject.get("memberId").getAsInt();
 			String account = jsonObject.get("account").getAsString();	
-			Friends friend = friendsDao.findSearchFriend(memberId, account);
-			writeText(response, gson.toJson(friend));
+			Friends friends = friendsDao.findSearchFriend(memberId, account);
+			System.out.println("### friend name::" + friends.getAccount());
+			Gson newGson = new Gson();
+			writeText(response, newGson.toJson(friends));
+			//writeText(response, gson.toJson(friend));
 		} else if(action.equals("insert")) {
 			// 加入好友
 			int memberId = jsonObject.get("memberId").getAsInt();
@@ -99,14 +102,14 @@ public class FriendsServlet extends HttpServlet {
 		out.close();
 	}
     
-    @Override
-		protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if (friendsDao == null) {
-			friendsDao = new FriendsDaoImpl();
-		}
-		JsonObject jsonObject = new JsonObject();
-		int MemberId = jsonObject.get("MemberId").getAsInt();
-		List<Member> friends = friendsDao.getAll(MemberId);
-		writeText(response, new Gson().toJson(friends));
-	}
+//    @Override
+//		protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+//		if (friendsDao == null) {
+//			friendsDao = new FriendsDaoImpl();
+//		}
+//		JsonObject jsonObject = new JsonObject();
+//		int MemberId = jsonObject.get("MemberId").getAsInt();
+//		List<Member> friends = friendsDao.getAll(MemberId);
+//		writeText(response, new Gson().toJson(friends));
+//	}
 }

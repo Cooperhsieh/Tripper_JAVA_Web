@@ -208,6 +208,38 @@ public class ExploreImpl implements ExploreDao{
 	}
 
 
+	@Override
+	public List<Explore> getAllIos() {
+       Explore explore = null;
+
+		String sql = "	SELECT distinct Blog_M.BLOG_TITLE, Blog_M.USER_ID,Blog_M.BLOG_ID, Member.NICKNAME,Blog_M.BLOG_DESC,Blog_M.C_DATETIME FROM  Blog_M\n" + 
+				"Left JOIN Member ON ( Blog_M.USER_ID = Member.MEMBER_ID ) ;" ;
+
+		List<Explore> exploreslList = new ArrayList<>();
+		try(    
+				Connection connection = dataSource.getConnection();
+				PreparedStatement ps = connection.prepareStatement(sql);
+		){
+	
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				
+				String titleName = rs.getString(1);
+				String userID = rs.getString(2);
+				String blogID = rs.getString(3);
+			    String blogDesc = rs.getString(5);
+				String nickName = rs.getString(4);
+				String date = rs.getString(6);
+				
+			    explore = new Explore(blogID, userID, nickName, titleName,blogDesc,date);
+				exploreslList.add(explore);
+			}
+			return exploreslList;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return exploreslList;
+	}
 	
 	
 }

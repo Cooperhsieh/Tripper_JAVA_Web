@@ -54,6 +54,9 @@ public class ExploreServlet extends HttpServlet {
 			String loginUser = jsonObject.get("loginUserId").getAsString();
 			List<Explore> explores = exploreDao.getAll(loginUser);
 			writeText(response, gson.toJson(explores));
+		}else if(action.equals("getAllIos")){ 
+			List<Explore> explores = exploreDao.getAllIos();
+			writeText(response, gson.toJson(explores));
 		}else if(action.equals("getLikes")) {
 			String blogId = jsonObject.get("blogId").getAsString();
 			List<Like> likes = exploreDao.getAllLikes(blogId);
@@ -61,7 +64,7 @@ public class ExploreServlet extends HttpServlet {
 		}else if(action.equals("getHotSpot")) {
 				List<Location> locations = exploreDao.getHotLocationAll();
 				writeText(response, gson.toJson(locations));
-			}else if(action.equals("getImage")) {
+		}else if(action.equals("getImage")) {
 				OutputStream os = response.getOutputStream();
 				int id = jsonObject.get("id").getAsInt();
 //				String blogId = jsonObject.get("blogId").getAsString();
