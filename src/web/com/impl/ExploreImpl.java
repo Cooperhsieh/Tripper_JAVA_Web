@@ -233,9 +233,9 @@ public class ExploreImpl implements ExploreDao{
 
 	@Override
 	public List<Explore> getAllIos() {
-       Explore explore = null;
+       Explore explore = null;      
 
-		String sql = "	SELECT distinct Blog_M.BLOG_TITLE, Blog_M.USER_ID,Blog_M.BLOG_ID, Member.NICKNAME,Blog_M.BLOG_DESC,Blog_M.C_DATETIME FROM  Blog_M\n" + 
+		String sql = "	SELECT distinct Blog_M.BLOG_TITLE, Blog_M.USER_ID,Blog_M.BLOG_ID, Member.NICKNAME,Blog_M.BLOG_DESC,DATE_FORMAT(Blog_M.C_DATETIME,'%Y/%m/%d') FROM  Blog_M\n" + 
 				"Left JOIN Member ON ( Blog_M.USER_ID = Member.MEMBER_ID ) ;" ;
 
 		List<Explore> exploreslList = new ArrayList<>();

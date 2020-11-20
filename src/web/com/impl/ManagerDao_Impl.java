@@ -36,7 +36,7 @@ public class ManagerDao_Impl implements ManagerDao {
 	
 		List<Member> memberList = new ArrayList<Member>();
 		Member member = null;
-		String sql = "select * from MANAGER " ;
+		String sql = "SELECT MEMBER_ID , ACCOUNT_ID , PASSWORD , NICKNAME , TOKEN_ID , DATE_FORMAT(C_DATETIME,'%Y-%m-%d') ,STATUS FROM MANAGER ; " ;
 		
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement ps = connection.prepareStatement(sql); ){
@@ -47,8 +47,10 @@ public class ManagerDao_Impl implements ManagerDao {
 				String account = rs.getString(2);
 				String password =rs.getString(3);
 				String nickName = rs.getString(4);
+				String dateIos = rs.getString(6);
+				int statusIos = rs.getInt(7);
 				
-				member = new Member(memberId, account, password, nickName);
+				member = new Member(memberId, account, password, nickName , dateIos ,statusIos);
 				memberList.add(member);
 				
 			}
