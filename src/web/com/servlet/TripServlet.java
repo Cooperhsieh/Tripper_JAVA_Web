@@ -137,14 +137,14 @@ public class TripServlet extends HttpServlet {
 					writeText(response, String.valueOf(count));
 				}
 				// 判斷是否有開啟揪團，0 未開放, 1 開放, 2 已結束, 3 取消
-				if (groupStat == 1) {
-					Trip_Group tripGroup = new Trip_Group(SettingUtil.getTransId(), tripMaster.getTripId(),
-							tripMaster.getMemberId());
-					count = tripGroupDao.insert(tripGroup);
-					if (count <= 0) {
-						writeText(response, String.valueOf(count));
-					}
-				}
+//				if (groupStat == 1) {
+//					Trip_Group tripGroup = new Trip_Group(SettingUtil.getTransId(), tripMaster.getTripId(),
+//							tripMaster.getMemberId());
+//					count = tripGroupDao.insert(tripGroup);
+//					if (count <= 0) {
+//						writeText(response, String.valueOf(count));
+//					}
+//				}
 
 				// 附檔資料
 				tripDetailDao = new Trip_D_Dao_Impl();
